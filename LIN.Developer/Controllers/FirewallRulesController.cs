@@ -1,7 +1,4 @@
-﻿using LIN.Types.Developer.Enumerations;
-using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Controllers;
+﻿namespace LIN.Developer.Controllers;
 
 
 [Route("firewallRules")]
@@ -14,11 +11,26 @@ public class FirewallRulesController : Controller
     /// </summary>
     /// <param name="modelo">Modelo</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] FirewallRuleDataModel modelo)
+    public async Task<HttpCreateResponse> Create([FromBody] FirewallRuleDataModel modelo, [FromHeader] string token)
     {
 
+        // Verificación de los parámetros
         if (modelo.ProjectID <= 0 || !IP.ValidateIPv4(modelo.IPInicio) || !IP.ValidateIPv4(modelo.IPFinal))
             return new(Responses.InvalidParam);
+
+        // Verifica si un perfil tiene acceso a un proyecto
+        var access = await ProjectsController.HaveAccess(modelo.ProjectID, token);
+
+        // Respuesta
+        if (access.Response != Responses.Success)
+        {
+            return new CreateResponse()
+            {
+                Message = access.Message,
+                Response = access.Response
+            };
+        }
+
 
         // Organización del modelo
         modelo.ID = 0;
@@ -38,11 +50,24 @@ public class FirewallRulesController : Controller
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     [HttpGet("read/bad")]
-    public async Task<HttpReadAllResponse<FirewallBlockLogDataModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
+    public async Task<HttpReadAllResponse<FirewallBlockLogDataModel>> ReadAllBad([FromHeader] int id, [FromHeader] string token)
     {
 
         if (id <= 0)
             return new(Responses.InvalidParam);
+
+        // Verifica si un perfil tiene acceso a un proyecto
+        var access = await ProjectsController.HaveAccess(id, token);
+
+        // Respuesta
+        if (access.Response != Responses.Success)
+        {
+            return new ReadAllResponse<FirewallBlockLogDataModel>()
+            {
+                Message = access.Message,
+                Response = access.Response
+            };
+        }
 
         var response = await Data.BlockedIPs.ReadAll(id);
 
@@ -53,7 +78,7 @@ public class FirewallRulesController : Controller
 
 
     /// <summary>
-    /// Obtiene los accesos rechazados de un proyecto
+    /// Elimina el historias de accesos rechazados
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     [HttpDelete("delete/bad")]
@@ -62,6 +87,20 @@ public class FirewallRulesController : Controller
 
         if (id <= 0)
             return new(Responses.InvalidParam);
+
+        // Verifica si un perfil tiene acceso a un proyecto
+        var access = await ProjectsController.HaveAccess(id, token);
+
+        // Respuesta
+        if (access.Response != Responses.Success)
+        {
+            return new ReadAllResponse<FirewallBlockLogDataModel>()
+            {
+                Message = access.Message,
+                Response = access.Response
+            };
+        }
+
 
         var response = await Data.BlockedIPs.Delete(id);
 
@@ -76,11 +115,24 @@ public class FirewallRulesController : Controller
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     [HttpGet("read/all")]
-    public async Task<HttpReadAllResponse<FirewallRuleDataModel>> ReadAll([FromHeader] int id)
+    public async Task<HttpReadAllResponse<FirewallRuleDataModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
     {
 
         if (id <= 0)
             return new(Responses.InvalidParam);
+
+        // Verifica si un perfil tiene acceso a un proyecto
+        var access = await ProjectsController.HaveAccess(id, token);
+
+        // Respuesta
+        if (access.Response != Responses.Success)
+        {
+            return new ReadAllResponse<FirewallRuleDataModel>()
+            {
+                Message = access.Message,
+                Response = access.Response
+            };
+        }
 
         var response = await Data.FirewallRules.ReadAll(id);
 
