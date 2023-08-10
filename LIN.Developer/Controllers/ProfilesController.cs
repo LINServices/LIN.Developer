@@ -169,7 +169,7 @@ public class ProfilesController : ControllerBase
             return response;
 
 
-        response.Token = Jwt.Generate(response.Model);
+      
 
         return response;
 
