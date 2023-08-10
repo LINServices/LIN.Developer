@@ -1,3 +1,5 @@
+using LIN.Types.Developer.Enumerations;
+
 namespace LIN.Developer.Controllers.Profile;
 
 
@@ -30,7 +32,7 @@ public class ProfileController : ControllerBase
         if (otpRes.Response != Responses.Success)
         {
             context.CloseActions(connectionKey);
-            return new(Responses.DontHavePermissions);
+            return new(Responses.Unauthorized);
         }
 
 
@@ -117,7 +119,7 @@ public class ProfileController : ControllerBase
         if (data.Model.Estado != ProfileStatus.Waiting)
         {
             context.CloseActions(connectionKey);
-            return new(Responses.DontHavePermissions);
+            return new(Responses.Unauthorized);
         }
 
 

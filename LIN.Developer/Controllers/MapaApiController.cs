@@ -1,4 +1,5 @@
 ﻿using LIN.Developer.ApiModels;
+using LIN.Types.Developer.Models;
 using Newtonsoft.Json;
 
 namespace LIN.Developer.Controllers;

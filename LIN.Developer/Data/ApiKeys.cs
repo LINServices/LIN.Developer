@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data;
 
 
 public static class ApiKeys

@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Services;
+﻿using LIN.Types.Developer.Enumerations;
+
+namespace LIN.Developer.Services;
 
 
 public class Firewall
@@ -58,7 +60,7 @@ public class Firewall
 
         // Si hay algún error
         if (projectID.Response != Responses.Success)
-            return new(Responses.DontHavePermissions)
+            return new(Responses.Unauthorized)
             {
                 Message = projectID.Message
             };

@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("project")]
@@ -43,7 +46,7 @@ public class ProjectsController : Controller
         var (isValid, _, profile) = Jwt.Validate(token);
 
         if (!isValid)
-            return new(Responses.DontHavePermissions);
+            return new(Responses.Unauthorized);
 
         if (profile <= 0 || token.IsNullOrEmpty())
             return new(Responses.InvalidParam);
@@ -52,7 +55,7 @@ public class ProjectsController : Controller
 
         // Token invalido
         if (!isValid)
-            return new(Responses.DontHavePermissions);
+            return new(Responses.Unauthorized);
 
         var response = await Data.Projects.ReadAll(profile);
 
@@ -80,7 +83,7 @@ public class ProjectsController : Controller
 
         // Token invalido
         if (!isValid)
-            return new(Responses.DontHavePermissions);
+            return new(Responses.Unauthorized);
 
         var response = await Data.Projects.Read(id, profile);
 
@@ -102,7 +105,7 @@ public class ProjectsController : Controller
         var (isValid, _, _) = Jwt.Validate(token);
 
         if (!isValid)
-            return new(Responses.DontHavePermissions);
+            return new(Responses.Unauthorized);
 
 
         // Respuesta

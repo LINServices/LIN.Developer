@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("key/uses")]

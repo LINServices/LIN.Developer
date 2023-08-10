@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Data.Query;
+﻿using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data.Query;
 
 
 internal static class Transactions

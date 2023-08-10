@@ -20,7 +20,7 @@ public class IAController : ControllerBase
         try
         {
 
-            Http.GetPlatform(http);
+            Services.Http.GetPlatform(http);
 
             // Conexión a BD
             var (context, contextKey) = Conexión.GetOneConnection();
@@ -35,7 +35,7 @@ public class IAController : ControllerBase
             if (evaluación.Response != Responses.Success)
             {
                 context.CloseActions(contextKey);
-                var value = new ReadOneResponse<LangEnum>(Responses.DontHavePermissions, LangEnum.Undefined)
+                var value = new ReadOneResponse<LangEnum>(Responses.Unauthorized, LangEnum.Undefined)
                 {
                     Message = evaluación.Message
                 };
@@ -108,7 +108,7 @@ public class IAController : ControllerBase
     {
         try
         {
-            Http.GetPlatform(http);
+            Services.Http.GetPlatform(http);
             // Conexión a BD
             var (context, contextKey) = Conexión.GetOneConnection();
 
@@ -122,7 +122,7 @@ public class IAController : ControllerBase
             if (evaluation.Response != Responses.Success)
             {
                 context.CloseActions(contextKey);
-                var value = new ReadOneResponse<Sexos>(Responses.DontHavePermissions, Sexos.Undefined)
+                var value = new ReadOneResponse<Sexos>(Responses.Unauthorized, Sexos.Undefined)
                 {
                     Message = evaluation.Message
                 };
@@ -192,7 +192,7 @@ public class IAController : ControllerBase
     {
         try
         {
-            Http.GetPlatform(http);
+            Services.Http.GetPlatform(http);
             //Load sample data
             var sampleData = new SentimentIA.ModelInput()
             {
@@ -237,7 +237,7 @@ public class IAController : ControllerBase
     public async Task<HttpReadOneResponse<ProductCategories>> VisionPredict([FromBody] byte[] imageByte, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
 
-        Http.GetPlatform(http);
+        Services.Http.GetPlatform(http);
 
         // Conexión a BD
         var (context, contextKey) = Conexión.GetOneConnection();
@@ -313,7 +313,7 @@ public class IAController : ControllerBase
     {
         try
         {
-            Http.GetPlatform(http);
+            Services.Http.GetPlatform(http);
             // Pagar con
             IPayWith payWith = (pay == PayWith.Key)
                                ? new PayKey(access, http)

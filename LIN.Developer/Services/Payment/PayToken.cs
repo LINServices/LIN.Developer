@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Services.Payment;
+﻿using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Services.Payment;
 
 
 public class PayToken : IPayWith
@@ -68,7 +70,7 @@ public class PayToken : IPayWith
             return new()
             {
                Message = "El token a caducado o es invalido",
-               Response = Responses.DontHavePermissions
+               Response = Responses.Unauthorized
             };
         }
 

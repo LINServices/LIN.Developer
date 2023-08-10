@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("billing")]
@@ -37,7 +40,7 @@ public class BillingsController : Controller
         var (isValid, account, profile) = Jwt.Validate(token);
 
         if (!isValid)
-            return new(Responses.DontHavePermissions);
+            return new(Responses.Unauthorized);
         
         var transaction = new TransactionDataModel()
         {

@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data;
 
 
 public class Context : DbContext

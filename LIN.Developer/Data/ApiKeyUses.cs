@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data;
 
 
 public static class ApiKeyUses
@@ -88,7 +91,7 @@ public static class ApiKeyUses
                 if (profile == null)
                 {
                     dbTransaction.Rollback();
-                    return new(Responses.DontHavePermissions);
+                    return new(Responses.Unauthorized);
                 }
 
                 data.Valor = Pricing.Discount(data.Valor, profile.Discont);
@@ -97,7 +100,7 @@ public static class ApiKeyUses
                 if (profile == null || profile.Credito - data.Valor < 0m)
                 {
                     dbTransaction.Rollback();
-                    return new(Responses.DontHaveCredits);
+                    return new(Responses.WithoutCredits);
                 }
 
 

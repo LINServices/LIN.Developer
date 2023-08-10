@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data;
 
 
 public static class Projects
@@ -213,7 +216,7 @@ public static class Projects
                 return new(Responses.Success, true);
 
             // Retorna el resultado
-            return new(Responses.DontHavePermissions, false);
+            return new(Responses.Unauthorized, false);
 
         }
         catch (Exception ex)
