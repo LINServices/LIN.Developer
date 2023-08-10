@@ -1,7 +1,4 @@
-﻿using LIN.Types.Developer.Enumerations;
-using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data;
 
 
 public static class Projects
@@ -41,6 +38,24 @@ public static class Projects
         context.CloseActions(connectionKey);
         return response;
     }
+
+
+
+    /// <summary>
+    /// Obtiene si un usuario tiene autorización para ver un proyecto y su contenido
+    /// </summary>
+    /// <param name="id">ID del proyecto</param>
+    /// <param name="profile">ID del perfil</param>
+    public async static Task<ReadOneResponse<bool>> HaveAuthorization(int id, int profile)
+    {
+        // Obtiene la conexión
+        (Conexión context, string connectionKey) = Conexión.GetOneConnection();
+
+        var response = await HaveAuthorization(id, profile, context);
+        context.CloseActions(connectionKey);
+        return response;
+    }
+
 
 
     /// <summary>
@@ -127,6 +142,41 @@ public static class Projects
 
             // Retorna
             return new(Responses.Success, projects);
+
+        }
+        catch (Exception ex)
+        {
+            ServerLogger.LogError(ex.Message);
+        }
+
+
+        return new();
+    }
+
+
+
+
+    /// <summary>
+    /// Obtiene si un usuario tiene autorización para ver un proyecto y su contenido
+    /// </summary>
+    /// <param name="projectID">ID del proyecto</param>
+    /// <param name="profileID">ID del perfil</param>
+    /// <param name="context">Contexto de conexión</param>
+    public async static Task<ReadOneResponse<bool>> HaveAuthorization(int projectID, int profileID, Conexión context)
+    {
+        // Ejecución
+        try
+        {
+
+            var access = await (from P in context.DataBase.Proyectos
+                                where P.ID == projectID && P.ProfileID == profileID
+                                where P.Estado == ProjectStatus.Normal
+                                select P.ID).FirstOrDefaultAsync();
+
+
+            return (access <= 0) ? new(Responses.Unauthorized, false)
+                                 : new(Responses.Success, true);
+               
 
         }
         catch (Exception ex)
