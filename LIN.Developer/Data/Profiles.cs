@@ -151,6 +151,9 @@ public static class Profiles
         }
         catch (Exception ex)
         {
+            if (ex.InnerException!.Message.Contains("Cannot insert duplicate key row in object"))
+                return new(Responses.ExistAccount);
+
             ServerLogger.LogError(ex.Message);
         }
 

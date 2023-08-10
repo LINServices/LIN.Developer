@@ -11,8 +11,18 @@ public class ProfilesController : ControllerBase
     /// </summary>
     /// <param name="modelo">Modelo</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Generate([FromBody] ProfileDataModel modelo)
+    public async Task<HttpCreateResponse> Generate([FromBody] ProfileDataModel modelo, [FromHeader] string token)
     {
+
+        if (modelo == null)
+            return new(Responses.InvalidParam);
+
+        // Respuesta de LIN Auth
+        var tokenResponse = await Access.Auth.Controllers.Account.Login(token);
+
+        // Validación de la respuesta
+        if (tokenResponse.Response != Responses.Success)
+            return new(Responses.Unauthorized);
 
         // General
         decimal defaultCreditos = 500m;
@@ -21,16 +31,37 @@ public class ProfilesController : ControllerBase
         modelo.ID = 0;
         modelo.Credito = 0;
         modelo.Estado = ProfileStatus.Waiting;
+        modelo.UserID = tokenResponse.Model.ID;
+        modelo.Discont = 0;
+
 
         if (modelo.Email == null || !LIN.Modules.Mail.Validar(modelo.Email))
             return new CreateResponse(Responses.InvalidParam);
 
 
-
         var response = await Data.Profiles.Create(modelo);
 
-        if (response.Response != Responses.Success)
-            return response;
+
+        switch (response.Response)
+        {
+            case Responses.ExistAccount:
+                return new CreateResponse()
+                {
+                    Response = Responses.ExistAccount,
+                    Message = "Ya existe el perfil"
+                };
+            case Responses.Success:
+                break;
+
+            default:
+                return new CreateResponse()
+                {
+                    Response = response.Response,
+                    Message = "Hubo un error"
+                };
+
+        }
+
 
 
 
@@ -100,7 +131,7 @@ public class ProfilesController : ControllerBase
         if (response.Model.Estado != AccountStatus.Normal)
             return new(Responses.NotExistAccount);
 
-        
+
 
         var profile = await Data.Profiles.ReadByUser(response.Model.ID);
 
@@ -169,7 +200,7 @@ public class ProfilesController : ControllerBase
             return response;
 
 
-      
+
 
         return response;
 

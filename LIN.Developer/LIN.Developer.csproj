@@ -48,6 +48,13 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
 
+
+
+	<ItemGroup>
+		<Content Update="wwwroot\Models\**" CopyToPublishDirectory="Never" />
+	</ItemGroup>
+  
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.9" />
@@ -75,10 +82,5 @@
     <Using Include="System.Drawing" />
     <Using Include="System.Reflection" />
     <Using Include="System.Text" />
-  </ItemGroup>
-  <ItemGroup Label="LangsIA">
-    <None Include="wwwroot\Models\EmoSense.mlnet" />
-    <None Include="wwwroot\Models\LangsIA.mlnet" />
-    <None Include="wwwroot\Models\NombreIA.mlnet" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,4 @@
-﻿using LIN.Types.Developer.Enumerations;
-using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Controllers;
+﻿namespace LIN.Developer.Controllers;
 
 
 [Route("apiKey")]
