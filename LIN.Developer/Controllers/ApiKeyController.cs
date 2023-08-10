@@ -17,7 +17,7 @@ public class ApiKeyController : Controller
 
 
         // Verifica el acceso
-        var haveAccess = await HaveAccess(modelo.ProjectID, token);
+        var haveAccess = await ProjectsController.HaveAccess(modelo.ProjectID, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -52,7 +52,7 @@ public class ApiKeyController : Controller
     {
 
         // Verifica el acceso
-        var haveAccess = await HaveAccess(id, token);
+        var haveAccess = await ProjectsController.HaveAccess(id, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -96,7 +96,7 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-        var haveAccess = await HaveAccess(keyModel.Model.ProjectID, token);
+        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.ProjectID, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -139,7 +139,7 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-        var haveAccess = await HaveAccess(keyModel.Model.ProjectID, token);
+        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.ProjectID, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -154,54 +154,6 @@ public class ApiKeyController : Controller
         var response = await Data.ApiKeys.UpdateState(key, estado);
         return response;
     }
-
-
-
-
-
-
-
-
-    private static async Task<ResponseBase> HaveAccess(int project, string token)
-    {
-
-        // Validación del JWT
-        var (isValid, _, profile) = Jwt.Validate(token);
-
-        if (!isValid)
-            return new ResponseBase()
-            {
-                Message = "Token invalido",
-                Response = Responses.Unauthorized
-            };
-
-        // Validación del parámetro
-        if (project <= 0)
-            return new ResponseBase()
-            {
-                Message = "ID del proyecto es invalido",
-                Response = Responses.InvalidParam
-            };
-
-        // Tiene acceso al proyecto
-        var have = await Data.Projects.HaveAuthorization(project, profile);
-
-        // Si no tubo acceso
-        if (have.Response != Responses.Success)
-            return new ResponseBase()
-            {
-                Message = "No tienes acceso a este proyecto",
-                Response = Responses.Unauthorized
-            };
-
-
-        return new ResponseBase(Responses.Success);
-
-    }
-
-
-
-
 
 
 }

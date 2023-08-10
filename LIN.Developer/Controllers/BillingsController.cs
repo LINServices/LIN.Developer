@@ -14,11 +14,18 @@ public class BillingsController : Controller
     /// </summary>
     /// <param name="id">ID del perfil</param>
     [HttpGet("read/all")]
-    public async Task<HttpReadAllResponse<TransactionDataModel>> ReadAll([FromHeader] int id)
+    public async Task<HttpReadAllResponse<TransactionDataModel>> ReadAll([FromHeader] string token)
     {
 
+        // Token
+        var (isValid, _, profile) = Jwt.Validate(token);
+
+        // Validación de token
+        if (!isValid)
+            return new(Responses.Unauthorized);
+
         // Obtiene el usuario
-        var response = await Data.Transactions.ReadAll(id);
+        var response = await Data.Transactions.ReadAll(profile);
 
         // Retorna el resultado
         return response;
