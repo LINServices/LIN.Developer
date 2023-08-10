@@ -1,7 +1,4 @@
-﻿using LIN.Types.Developer.Enumerations;
-using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Controllers;
+﻿namespace LIN.Developer.Controllers;
 
 
 [Route("project")]
@@ -14,17 +11,31 @@ public class ProjectsController : Controller
     /// </summary>
     /// <param name="modelo">Modelo</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] ProjectDataModel modelo)
+    public async Task<HttpCreateResponse> Create([FromBody] ProjectDataModel modelo, [FromHeader] string token)
     {
 
         // Validaciones
         if (modelo.ProfileID <= 0 || modelo.Nombre.Length <= 0)
             return new(Responses.InvalidParam);
 
+        // Validación de token
+        var (isValid, _, profile) = Jwt.Validate(token);
+
+        // Si es invalido
+        if (!isValid)
+        {
+            return new CreateResponse()
+            {
+                Message = "Token invalido",
+                Response = Responses.Unauthorized
+            };
+        }
+
         // Organización del modelo
         modelo.ID = 0;
         modelo.Creacion = DateTime.Now;
         modelo.Estado = ProjectStatus.Normal;
+        modelo.ProfileID = profile;
 
         // Respuesta
         var response = await Data.Projects.Create(modelo);
@@ -79,12 +90,23 @@ public class ProjectsController : Controller
             return new(Responses.InvalidParam);
 
         // Valida el token
-        var (isValid, _, profile) = Jwt.Validate(token);
+        var access = await HaveAccess(id, token);
 
-        // Token invalido
-        if (!isValid)
-            return new(Responses.Unauthorized);
 
+        // Si es invalido
+        if (access.Response != Responses.Success)
+        {
+            return new ReadOneResponse<ProjectDataModel>
+            {
+                Message = access.Message,
+                Response = access.Response
+            };
+        }
+
+        // Obtiene el profile
+        (_, _, int profile) = Jwt.Validate(token);
+
+        // Obtiene los proyectos
         var response = await Data.Projects.Read(id, profile);
 
         return response;
@@ -102,11 +124,18 @@ public class ProjectsController : Controller
     public async Task<HttpReadOneResponse<bool>> Delete([FromHeader] int id, [FromHeader] string token)
     {
 
-        var (isValid, _, _) = Jwt.Validate(token);
+        // Validación de token
+        var (isValid, _, profile) = Jwt.Validate(token);
 
+        // Si es invalido
         if (!isValid)
-            return new(Responses.Unauthorized);
-
+        {
+            return new ReadOneResponse<bool>()
+            {
+                Message = "Token invalido",
+                Response = Responses.Unauthorized
+            };
+        }
 
         // Respuesta
         var response = await Data.Projects.Delete(id);
