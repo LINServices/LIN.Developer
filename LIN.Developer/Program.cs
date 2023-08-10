@@ -10,6 +10,10 @@ global using Microsoft.IdentityModel.Tokens;
 global using LIN.Modules;
 global using LIN.Developer.Data.Query;
 global using Http.ResponsesList;
+global using LIN.Types.Auth.Abstracts;
+global using LIN.Types.Auth.Models;
+global using LIN.Types.Auth.Enumerations;
+
 
 try
 {

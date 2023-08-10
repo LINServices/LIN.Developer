@@ -74,6 +74,86 @@ public class ProfilesController : ControllerBase
 
 
 
+
+
+
+    /// <summary>
+    /// Iniciar sesión
+    /// </summary>
+    /// <param name="user">Usuario</param>
+    /// <param name="password">Contraseña</param>
+    [HttpGet("login")]
+    public async Task<HttpReadOneResponse<AuthModel<ProfileDataModel>>> Login([FromQuery] string user, [FromQuery] string password)
+    {
+
+        // Comprobación
+        if (!user.Any() || !password.Any())
+            return new(Responses.InvalidParam);
+
+
+        // Login en LIN Server
+        var response = await Access.Auth.Controllers.Account.Login(user, password);
+
+        if (response.Response != Responses.Success)
+            return new(response.Response);
+
+        if (response.Model.Estado != AccountStatus.Normal)
+            return new(Responses.NotExistAccount);
+
+        
+
+        var profile = await Data.Profiles.ReadByUser(response.Model.ID);
+
+
+        var httpResponse = new ReadOneResponse<AuthModel<ProfileDataModel>>()
+        {
+            Response = Responses.Success,
+            Message = "Success",
+
+        };
+
+        if (profile.Response == Responses.Success)
+        {
+            // Genera el token
+            var token = Jwt.Generate(profile.Model);
+
+            httpResponse.Token = token;
+            httpResponse.Model.Profile = profile.Model;
+        }
+
+        httpResponse.Model.Account = response.Model;
+        httpResponse.Model.LINAuthToken = response.Token;
+
+
+
+
+        return httpResponse;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /// <summary>
     /// Obtiene un perfil
     /// </summary>
