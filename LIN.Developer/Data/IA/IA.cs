@@ -9,7 +9,7 @@ public static class IA
     /// Categoriza el idioma de un string
     /// </summary>
     /// <param name="value">Texto</param>
-    public static LangEnum Lang(string value)
+    public static Languajes Lang(string value)
     {
         try
         {
@@ -25,9 +25,9 @@ public static class IA
             // Manejo
             return predict switch
             {
-                0 => LangEnum.Spain,
-                1 => LangEnum.English,
-                _ => LangEnum.Undefined,
+                0 => Languajes.Spain,
+                1 => Languajes.English,
+                _ => Languajes.Undefined,
             };
         }
         catch (Exception ex)
@@ -35,7 +35,7 @@ public static class IA
             ServerLogger.LogError("Lingua IA: " + ex.Message);
         }
 
-        return LangEnum.Undefined;
+        return Languajes.Undefined;
     }
 
 
@@ -44,7 +44,7 @@ public static class IA
     /// Categoriza el genero de un nombre
     /// </summary>
     /// <param name="value">Nombre</param>
-    public static Sexos Gender(string value)
+    public static Genders Gender(string value)
     {
         try
         {
@@ -60,9 +60,9 @@ public static class IA
             // Manejo
             return predict switch
             {
-                0 => Sexos.Female,
-                1 => Sexos.Male,
-                _ => Sexos.Undefined,
+                0 => Genders.Female,
+                1 => Genders.Male,
+                _ => Genders.Undefined,
             };
         }
         catch (Exception ex)
@@ -70,7 +70,7 @@ public static class IA
             ServerLogger.LogError("Genderize: " + ex.Message);
         }
 
-        return Sexos.Undefined;
+        return Genders.Undefined;
     }
 
 
@@ -79,7 +79,7 @@ public static class IA
     /// Categoriza el sentimiento de un texto
     /// </summary>
     /// <param name="value">Texto</param>
-    public static Sentiment Sentiment(string value)
+    public static Sentiments Sentiment(string value)
     {
         try
         {
@@ -95,10 +95,10 @@ public static class IA
             // Manejo
             return predict switch
             {
-                0 => Shared.Enumerations.Sentiment.Negative,
-                1 => Shared.Enumerations.Sentiment.Positive,
-                4 => Shared.Enumerations.Sentiment.Positive,
-                _ => Shared.Enumerations.Sentiment.Undefined
+                0 => Types.Enumerations.Sentiments.Negative,
+                1 => Types.Enumerations.Sentiments.Positive,
+                4 => Types.Enumerations.Sentiments.Positive,
+                _ => Types.Enumerations.Sentiments.Undefined
             };
         }
         catch (Exception ex)
@@ -106,7 +106,7 @@ public static class IA
             ServerLogger.LogError("EmoSense: " + ex.Message);
         }
 
-        return Shared.Enumerations.Sentiment.Undefined;
+        return Types.Enumerations.Sentiments.Undefined;
     }
 
 
@@ -115,7 +115,7 @@ public static class IA
     /// Categoriza el sentimiento de un texto
     /// </summary>
     /// <param name="value">Texto</param>
-    public static Sentiment EmoSenses(string value)
+    public static Sentiments EmoSenses(string value)
     {
         try
         {
@@ -132,10 +132,10 @@ public static class IA
             // Manejo
             return predict switch
             {
-                0 => Shared.Enumerations.Sentiment.Negative,
-                1 => Shared.Enumerations.Sentiment.Positive,
-                4 => Shared.Enumerations.Sentiment.Positive,
-                _ => Shared.Enumerations.Sentiment.Undefined
+                0 => Types.Enumerations.Sentiments.Negative,
+                1 => Types.Enumerations.Sentiments.Positive,
+                4 => Types.Enumerations.Sentiments.Positive,
+                _ => Types.Enumerations.Sentiments.Undefined
             };
         }
         catch (Exception ex)
@@ -143,7 +143,7 @@ public static class IA
             ServerLogger.LogError("EmoSense: " + ex.Message);
         }
 
-        return Shared.Enumerations.Sentiment.Undefined;
+        return Types.Enumerations.Sentiments.Undefined;
     }
 
 

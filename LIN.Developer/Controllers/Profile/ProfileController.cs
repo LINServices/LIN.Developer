@@ -97,7 +97,7 @@ public class ProfileController : ControllerBase
     {
 
         // Valida los parametros
-        if (id <= 0 || !LIN.Shared.Validations.Mail.Validar(newEmail))
+        if (id <= 0 || !LIN.Modules.Mail.Validar(newEmail))
             return new(Responses.InvalidParam);
 
 

@@ -66,7 +66,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Tipos\Http\Http.csproj" />
     <ProjectReference Include="..\..\..\Tipos\LIN.Modules\LIN.Modules.csproj" />
-    <ProjectReference Include="..\..\..\Tipos\LIN.Shared\LIN.Shared.csproj" />
     <ProjectReference Include="..\..\..\Tipos\LIN.Types.Developer\LIN.Types.Developer.csproj" />
     <ProjectReference Include="..\..\..\Tipos\LIN.Types\LIN.Types.csproj" />
   </ItemGroup>

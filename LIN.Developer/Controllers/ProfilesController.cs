@@ -1,6 +1,3 @@
-using LIN.Types.Developer.Enumerations;
-using LIN.Types.Developer.Models;
-
 namespace LIN.Developer.Controllers;
 
 
@@ -20,13 +17,12 @@ public class ProfilesController : ControllerBase
         // General
         decimal defaultCreditos = 500m;
 
-
-        // Organizacion del modelo
+        // Organización del modelo
         modelo.ID = 0;
         modelo.Credito = 0;
         modelo.Estado = ProfileStatus.Waiting;
 
-        if (modelo.Email == null || !LIN.Shared.Validations.Mail.Validar(modelo.Email))
+        if (modelo.Email == null || !LIN.Modules.Mail.Validar(modelo.Email))
             return new CreateResponse(Responses.InvalidParam);
 
 

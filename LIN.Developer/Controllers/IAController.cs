@@ -15,7 +15,7 @@ public class IAController : ControllerBase
     /// <param name="apiKey">ApiKey</param>
     /// <param name="http">Contexto HTTP</param>
     [HttpPost("predict/Lang")]
-    public async Task<HttpReadOneResponse<LangEnum>> LangPredict([FromBody] string content, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
+    public async Task<HttpReadOneResponse<Languajes>> LangPredict([FromBody] string content, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
         try
         {
@@ -35,7 +35,7 @@ public class IAController : ControllerBase
             if (evaluación.Response != Responses.Success)
             {
                 context.CloseActions(contextKey);
-                var value = new ReadOneResponse<LangEnum>(Responses.Unauthorized, LangEnum.Undefined)
+                var value = new ReadOneResponse<Languajes>(Responses.Unauthorized, Languajes.Undefined)
                 {
                     Message = evaluación.Message
                 };
@@ -59,7 +59,7 @@ public class IAController : ControllerBase
             // Evalúa el cobro
             if (result.Response != Responses.Success)
             {
-                var responseA = new ReadOneResponse<LangEnum>()
+                var responseA = new ReadOneResponse<Languajes>()
                 {
                     Response = result.Response,
                     Message = "No se pudo efectuar el cobro."
@@ -72,7 +72,7 @@ public class IAController : ControllerBase
             var lang = Data.IA.IA.Lang(content);
 
             // Respuesta
-            var response = new ReadOneResponse<LangEnum>()
+            var response = new ReadOneResponse<Languajes>()
             {
                 Response = Responses.Success,
                 Model = lang
@@ -84,10 +84,10 @@ public class IAController : ControllerBase
         {
         }
         // Respuesta fatal
-        var responseFatal = new ReadOneResponse<LangEnum>()
+        var responseFatal = new ReadOneResponse<Languajes>()
         {
             Response = Responses.Undefined,
-            Model = LangEnum.Undefined,
+            Model = Languajes.Undefined,
             Message = "Hubo un error en el servidor, intenta mas tarde"
         };
 
@@ -104,7 +104,7 @@ public class IAController : ControllerBase
     /// <param name="apiKey">ApiKey</param>
     /// <param name="http">Contexto HTTP</param>
     [HttpPost("predict/Name")]
-    public async Task<HttpReadOneResponse<Sexos>> NamePredict([FromBody] string name, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
+    public async Task<HttpReadOneResponse<Genders>> NamePredict([FromBody] string name, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
         try
         {
@@ -122,7 +122,7 @@ public class IAController : ControllerBase
             if (evaluation.Response != Responses.Success)
             {
                 context.CloseActions(contextKey);
-                var value = new ReadOneResponse<Sexos>(Responses.Unauthorized, Sexos.Undefined)
+                var value = new ReadOneResponse<Genders>(Responses.Unauthorized, Genders.Undefined)
                 {
                     Message = evaluation.Message
                 };
@@ -145,7 +145,7 @@ public class IAController : ControllerBase
             // Evalúa el cobro
             if (result.Response != Responses.Success)
             {
-                var responseA = new ReadOneResponse<Sexos>()
+                var responseA = new ReadOneResponse<Genders>()
                 {
                     Response = result.Response,
                     Message = "No se pudo efectuar el cobro."
@@ -157,7 +157,7 @@ public class IAController : ControllerBase
             var sex = Data.IA.IA.Gender(name);
 
 
-            var response = new ReadOneResponse<Sexos>()
+            var response = new ReadOneResponse<Genders>()
             {
                 Response = Responses.Success,
                 Model = sex,
@@ -169,10 +169,10 @@ public class IAController : ControllerBase
         {
         }
 
-        var responseFatal = new ReadOneResponse<Sexos>()
+        var responseFatal = new ReadOneResponse<Genders>()
         {
             Response = Responses.Undefined,
-            Model = Sexos.Undefined,
+            Model = Genders.Undefined,
             Message = "Hubo un error en el servidor, intenta mas tarde"
         };
         return responseFatal;
@@ -188,7 +188,7 @@ public class IAController : ControllerBase
     /// <param name="apiKey">ApiKey</param>
     /// <param name="http">Contexto HTTP</param>
     [HttpPost("predict/Sentiment")]
-    public ActionResult<HttpReadOneResponse<Sentiment>> SentimentPredict([FromBody] string text, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
+    public ActionResult<HttpReadOneResponse<Sentiments>> SentimentPredict([FromBody] string text, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
         try
         {
@@ -203,7 +203,7 @@ public class IAController : ControllerBase
             var ia = Data.IA.IA.Sentiment(text);
 
             // Manejo
-            var response = new ReadOneResponse<Sentiment>()
+            var response = new ReadOneResponse<Sentiments>()
             {
                 Response = Responses.Success,
                 Model = ia,
@@ -215,10 +215,10 @@ public class IAController : ControllerBase
         }
 
 
-        var responseFatal = new ReadOneResponse<Sentiment>()
+        var responseFatal = new ReadOneResponse<Sentiments>()
         {
             Response = Responses.Undefined,
-            Model = Sentiment.Undefined,
+            Model = Sentiments.Undefined,
             Message = "Hubo un error en el servidor, intenta mas tarde"
         };
         return StatusCode(500, responseFatal);
@@ -376,8 +376,8 @@ public class IAController : ControllerBase
             Response = Responses.Undefined,
             Model = new()
             {
-                Languaje = LangEnum.Undefined,
-                Sentiment = Sentiment.Undefined
+                Languaje = Languajes.Undefined,
+                Sentiment = Sentiments.Undefined
             },
             Message = "Hubo un error en el servidor, intenta mas tarde"
         };
