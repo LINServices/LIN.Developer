@@ -1,6 +1,4 @@
-﻿using LIN.Types.Developer.Enumerations;
-
-namespace LIN.Developer.Services;
+﻿namespace LIN.Developer.Services;
 
 
 public class Firewall

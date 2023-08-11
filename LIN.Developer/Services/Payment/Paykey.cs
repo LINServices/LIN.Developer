@@ -33,26 +33,26 @@ public class PayKey : IPayWith
     /// <summary>
     /// Realiza el cobro
     /// </summary>
-    public async Task<ResponseBase> Pay(TransactionDataModel transaccion)
+    public async Task<ResponseBase> Pay(TransactionDataModel transaction)
     {
 
-        // Conexion a BD
-        var (context, conexionKey) = Conexión.GetOneConnection();
+        // Conexión a BD
+        var (context, conationKey) = Conexión.GetOneConnection();
 
         // Obtiene la IP
         var myIP = Firewall.HttpIPv4(httpContext);
 
-        // Evalua el firewall
-        var evaluacion = await Firewall.EvaluateFirewall(_key, context, myIP);
+        // Evalúa el firewall
+        var evaluation = await Firewall.EvaluateFirewall(_key, context, myIP);
 
         // Respuesta
-        if (evaluacion.Response != Responses.Success)
+        if (evaluation.Response != Responses.Success)
         {
-            context.CloseActions(conexionKey);
+            context.CloseActions(conationKey);
             return new()
             {
                 Response = Responses.Undefined,
-                Message = evaluacion.Message
+                Message = evaluation.Message
             };
         }
 
@@ -61,13 +61,13 @@ public class PayKey : IPayWith
         ApiKeyUsesDataModel uso = new()
         {
             ID = 0,
-            Valor = transaccion.Valor
+            Valor = transaction.Valor
         };
 
         // realiza el cobro
         var result = await Data.ApiKeyUses.GenerateUses(uso, _key, context);
 
-        // Evalua el cobro
+        // Evalúa el cobro
         if (result.Response != Responses.Success)
         {
             return new()

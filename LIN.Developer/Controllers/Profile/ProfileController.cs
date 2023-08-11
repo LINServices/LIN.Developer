@@ -1,5 +1,3 @@
-using LIN.Types.Developer.Enumerations;
-
 namespace LIN.Developer.Controllers.Profile;
 
 
@@ -9,23 +7,23 @@ public class ProfileController : ControllerBase
 
 
     /// <summary>
-    /// Valida el codigo OTP para activar el perfil
+    /// Valida el código OTP para activar el perfil
     /// </summary>
-    /// <param name="id">ID del pefil</param>
-    /// <param name="otp">Codigo OTP</param>
+    /// <param name="id">ID del perfil</param>
+    /// <param name="otp">Código OTP</param>
     [HttpPost("validate/otp")]
     public async Task<ResponseBase> ValidateOTP([FromHeader] int id, [FromHeader] string otp)
     {
 
-        // Valida los parametros
+        // Valida los parámetros
         if (id <= 0 || otp.Length <= 0)
             return new(Responses.InvalidParam);
 
 
-        // Conexion
+        // Conexión
         var (context, connectionKey) = Conexión.GetOneConnection();
 
-        // Cambia el estado del codigo OTP
+        // Cambia el estado del código OTP
         var otpRes = await Data.OTP.UpdateState(id, otp, context);
 
         // Valida la respuesta
@@ -36,7 +34,7 @@ public class ProfileController : ControllerBase
         }
 
 
-        // Cambia el estado del pefil desarrollador
+        // Cambia el estado del perfil desarrollador
         var perfilRes = await Data.Profiles.UpdateState(id, ProfileStatus.Normal);
 
 
@@ -52,7 +50,7 @@ public class ProfileController : ControllerBase
         var profile = await Data.Profiles.ReadBy(id);
 
 
-        // Evaluacion de la respuesta
+        // Evaluación de la respuesta
         if (profile.Response != Responses.Success)
         {
             context.CloseActions(connectionKey);
@@ -60,12 +58,12 @@ public class ProfileController : ControllerBase
         }
 
 
-        // Evaluacion de Promocion
+        // Evaluación de Promoción
         if (Services.Promocion.Promocion.IsPromotionMail(profile.Model.Email ?? ""))
         {
 
             // Modelo
-            var promocion = new TransactionDataModel()
+            var promotion = new TransactionDataModel()
             {
                 ID = 0,
                 Description = "Bonus",
@@ -75,7 +73,7 @@ public class ProfileController : ControllerBase
                 Fecha = DateTime.Now
             };
 
-            _ = Data.Transactions.Generate(promocion, context,  true);
+            _ = Data.Transactions.Generate(promotion, context,  true);
 
         }
 
@@ -96,12 +94,12 @@ public class ProfileController : ControllerBase
     public async Task<ResponseBase> ReplaceMail([FromHeader] int id, [FromQuery] string newEmail)
     {
 
-        // Valida los parametros
+        // Valida los parámetros
         if (id <= 0 || !LIN.Modules.Mail.Validar(newEmail))
             return new(Responses.InvalidParam);
 
 
-        // Obtiene una conexion
+        // Obtiene una conexión
         var (context, connectionKey) = Conexión.GetOneConnection();
 
         // Obtiene la data
@@ -133,7 +131,7 @@ public class ProfileController : ControllerBase
             context.CloseActions(connectionKey);
             return new(Responses.Undefined)
             {
-                Message = "No se pudo actualizar el correo electronico"
+                Message = "No se pudo actualizar el correo electrónico"
             };
 
         }
@@ -154,22 +152,22 @@ public class ProfileController : ControllerBase
         var saveOTP = await Data.OTP.Create(otpModel, context);
 
 
-        // Evalua
+        // Evalúa
         if (saveOTP.Response != Responses.Success)
         {
             context.CloseActions(connectionKey);
             return new(Responses.Undefined)
             {
-                Message = "No se pudo crear el codigo OTP."
+                Message = "No se pudo crear el código OTP."
             };
         }
 
 
-        // Cierra la conexion BD
+        // Cierra la conexión BD
         context.CloseActions(connectionKey);
 
 
-        // Envia el codigo al nuevo mail
+        // Envía el código al nuevo mail
         EmailWorker.SendCode(newEmail, otpModel.OTP);
 
 

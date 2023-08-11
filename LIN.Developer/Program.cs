@@ -113,7 +113,6 @@ try
 
     app.Run();
 }
-catch (Exception ex)
+catch
 {
-    ServerLogger.LogError("");
 }

@@ -61,7 +61,7 @@ public class PayToken : IPayWith
     /// <summary>
     /// Realiza el cobro
     /// </summary>
-    public async Task<ResponseBase> Pay(TransactionDataModel transaccion)
+    public async Task<ResponseBase> Pay(TransactionDataModel transacción)
     {
 
         // Token invalido
@@ -76,14 +76,14 @@ public class PayToken : IPayWith
 
        
         // ID del perfil
-        transaccion.ProfileID = _profile;
-        transaccion.Valor = Pricing.ToNegative(transaccion.Valor);
+        transacción.ProfileID = _profile;
+        transacción.Valor = Pricing.ToNegative(transacción.Valor);
 
-        // Efectua
-        var res = await Data.Transactions.Generate(transaccion);
+        // Efectúa
+        var res = await Data.Transactions.Generate(transacción);
 
 
-        // Validacion
+        // Validación
         var response = new ResponseBase()
         {
             Response = res.Response,

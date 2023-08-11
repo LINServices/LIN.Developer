@@ -19,7 +19,7 @@ public class Jwt
         // Clave del JWT
         var clave = Configuration.GetConfiguration("jwt:key");
 
-        // Configuracion
+        // Configuración
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(clave));
 
         // Credenciales
@@ -32,11 +32,11 @@ public class Jwt
             new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
         };
 
-        // Expiracion del token
-        var expiracion = DateTime.Now.AddHours(5);
+        // Expiración del token
+        var expiration = DateTime.Now.AddHours(5);
 
         // Token
-        var token = new JwtSecurityToken(null, null, claims, null, expiracion, credentials);
+        var token = new JwtSecurityToken(null, null, claims, null, expiration, credentials);
 
         // Genera el token
         return new JwtSecurityTokenHandler().WriteToken(token);

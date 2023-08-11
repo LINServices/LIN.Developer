@@ -1,7 +1,5 @@
-﻿using Azure.Core;
-using Tensorflow;
+﻿namespace LIN.Developer.Services;
 
-namespace LIN.Developer.Services;
 
 public class Http
 {
@@ -10,7 +8,7 @@ public class Http
     /// <summary>
     /// Obtiene la IP desde un IHttpContext
     /// </summary>
-    /// <param name="http">Conexto</param>
+    /// <param name="http">Contexto</param>
     public static Platforms GetPlatform(IHttpContextAccessor http)
     {
 

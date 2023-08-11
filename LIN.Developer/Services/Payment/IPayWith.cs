@@ -8,7 +8,7 @@ public interface IPayWith
 
 
     /// <summary>
-    /// Metodo Pagar
+    /// Método Pagar
     /// </summary>
     public Task<ResponseBase> Pay(TransactionDataModel transaccion);
 

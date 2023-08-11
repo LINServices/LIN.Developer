@@ -1,7 +1,4 @@
-﻿using LIN.Types.Developer.Enumerations;
-using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Controllers;
+﻿namespace LIN.Developer.Controllers;
 
 
 [Route("billing")]
@@ -44,7 +41,7 @@ public class BillingsController : Controller
     {
 
         // Obtiene el usuario
-        var (isValid, account, profile) = Jwt.Validate(token);
+        var (isValid, _, profile) = Jwt.Validate(token);
 
         if (!isValid)
             return new(Responses.Unauthorized);
