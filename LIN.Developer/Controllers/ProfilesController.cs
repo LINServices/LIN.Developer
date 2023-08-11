@@ -18,7 +18,7 @@ public class ProfilesController : ControllerBase
             return new(Responses.InvalidParam);
 
         // Respuesta de LIN Auth
-        var tokenResponse = await Access.Auth.Controllers.Account.Login(token);
+        var tokenResponse = await Access.Auth.Controllers.Authentication.Login(token);
 
         // Validación de la respuesta
         if (tokenResponse.Response != Responses.Success)
@@ -106,8 +106,6 @@ public class ProfilesController : ControllerBase
 
 
 
-
-
     /// <summary>
     /// Iniciar sesión
     /// </summary>
@@ -123,7 +121,7 @@ public class ProfilesController : ControllerBase
 
 
         // Login en LIN Server
-        var response = await Access.Auth.Controllers.Account.Login(user, password);
+        var response = await Access.Auth.Controllers.Authentication.Login(user, password);
 
         if (response.Response != Responses.Success)
             return new(response.Response);
@@ -165,7 +163,51 @@ public class ProfilesController : ControllerBase
 
 
 
+    /// <summary>
+    /// Iniciar sesión
+    /// </summary>
+    /// <param name="token">Token</param>
+    [HttpGet("login/token")]
+    public async Task<HttpReadOneResponse<AuthModel<ProfileDataModel>>> LoginToken([FromQuery] string token)
+    {
 
+        // Login en LIN Server
+        var response = await Access.Auth.Controllers.Authentication.Login(token);
+
+        if (response.Response != Responses.Success)
+            return new(response.Response);
+
+        if (response.Model.Estado != AccountStatus.Normal)
+            return new(Responses.NotExistAccount);
+
+
+
+        var profile = await Data.Profiles.ReadByUser(response.Model.ID);
+
+
+        var httpResponse = new ReadOneResponse<AuthModel<ProfileDataModel>>()
+        {
+            Response = Responses.Success,
+            Message = "Success",
+
+        };
+
+        if (profile.Response == Responses.Success)
+        {
+            // Genera el token
+            var tokenAcceso = Jwt.Generate(profile.Model);
+
+            httpResponse.Token = tokenAcceso;
+            httpResponse.Model.Profile = profile.Model;
+        }
+
+        httpResponse.Model.Account = response.Model;
+        httpResponse.Model.LINAuthToken = response.Token;
+
+
+        return httpResponse;
+
+    }
 
 
 
@@ -190,7 +232,7 @@ public class ProfilesController : ControllerBase
     /// </summary>
     /// <param name="id">ID de la cuenta</param>
     [HttpGet("read")]
-    public async Task<HttpReadOneResponse<ProfileDataModel>> ReadOneByID([FromHeader] int id)
+    public async Task<HttpReadOneResponse<ProfileDataModel>> Read([FromHeader] int id)
     {
 
         // Obtiene el usuario
@@ -198,9 +240,6 @@ public class ProfilesController : ControllerBase
 
         if (response.Response != Responses.Success)
             return response;
-
-
-
 
         return response;
 

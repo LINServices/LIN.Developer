@@ -124,16 +124,16 @@ public class ProjectsController : Controller
     public async Task<HttpReadOneResponse<bool>> Delete([FromHeader] int id, [FromHeader] string token)
     {
 
-        // Validación de token
-        var (isValid, _, profile) = Jwt.Validate(token);
+        // Valida los permisos del perfil en un proyecto
+        var access = await HaveAccess(id, token);
 
-        // Si es invalido
-        if (!isValid)
+        // Validación
+        if (access.Response != Responses.Success)
         {
             return new ReadOneResponse<bool>()
             {
-                Message = "Token invalido",
-                Response = Responses.Unauthorized
+                Message = access.Message,
+                Response = access.Response
             };
         }
 
