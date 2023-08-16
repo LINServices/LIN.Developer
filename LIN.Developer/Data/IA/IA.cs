@@ -1,5 +1,5 @@
 ﻿namespace LIN.Developer.Data.IA;
-
+using LIN.Types.Inventory.Enumerations;
 
 public static class IA
 {
@@ -189,7 +189,7 @@ public static class IA
                 "Moda" => ProductCategories.Moda,
                 "Salud" => ProductCategories.Salud,
                 "Mascotas" => ProductCategories.Animales,
-                "Tecnologia" => ProductCategories.Tecnologia,
+                "Tecnologia" => ProductCategories.Tecnología,
                 _ => ProductCategories.Undefined
             };
 

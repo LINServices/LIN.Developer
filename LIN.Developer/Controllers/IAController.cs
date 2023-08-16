@@ -1,5 +1,5 @@
 using LIN.Developer.Services.Payment;
-
+using LIN.Types.Inventory.Enumerations;
 namespace LIN.Developer.Controllers;
 
 
