@@ -237,7 +237,7 @@ public static class Profiles
         {
 
             var res = await (from P in context.DataBase.Profiles
-                             where P.UserID == id
+                             where P.AccountID == id
                              select new
                              {
                                  P.ID,

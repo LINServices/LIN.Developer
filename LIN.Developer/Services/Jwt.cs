@@ -29,7 +29,7 @@ public class Jwt
         var claims = new[]
         {
             new Claim(ClaimTypes.PrimarySid, user.ID.ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
+            new Claim(ClaimTypes.NameIdentifier, user.AccountID.ToString())
         };
 
         // Expiración del token

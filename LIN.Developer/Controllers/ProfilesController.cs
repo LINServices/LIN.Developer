@@ -31,7 +31,7 @@ public class ProfilesController : ControllerBase
         modelo.ID = 0;
         modelo.Credito = 0;
         modelo.Estado = ProfileStatus.Waiting;
-        modelo.UserID = tokenResponse.Model.ID;
+        modelo.AccountID = tokenResponse.Model.ID;
         modelo.Discont = 0;
 
 

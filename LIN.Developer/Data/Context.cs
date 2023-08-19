@@ -78,7 +78,7 @@ public class Context : DbContext
            .IsUnique();
 
         modelBuilder.Entity<ProfileDataModel>()
-           .HasIndex(e => e.UserID)
+           .HasIndex(e => e.AccountID)
            .IsUnique();
 
         modelBuilder.Entity<ProfileDataModel>()

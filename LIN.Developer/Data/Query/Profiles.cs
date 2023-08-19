@@ -16,7 +16,7 @@ public static class Profiles
     {
 
         var query = (from D in context.DataBase.Profiles
-                    where D.UserID == id && D.Estado == ProfileStatus.Normal
+                    where D.AccountID == id && D.Estado == ProfileStatus.Normal
                     select D).Take(1);
 
         return query;
@@ -34,7 +34,7 @@ public static class Profiles
     {
 
         var query = (from D in context.DataBase.Profiles
-                    where D.UserID == id
+                    where D.AccountID == id
                      select D).Take(1);
 
         return query;
