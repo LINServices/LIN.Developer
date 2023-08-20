@@ -47,7 +47,7 @@ try
 
     Conexión.SetStringConnection(sqlConnection);
 
-
+    LIN.Access.Auth.Build.SetAuth(builder.Configuration["lin:app"] ?? "");
     try
     {
         // SQL Server
