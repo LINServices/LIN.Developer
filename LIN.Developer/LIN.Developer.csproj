@@ -3,51 +3,10 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Configurations>Debug;Release;AZURE;SOMEE</Configurations>
     <SignAssembly>False</SignAssembly>
-	  <EnableMLUnsupportedPlatformTargetCheck>false</EnableMLUnsupportedPlatformTargetCheck>
-	  <Platforms>AnyCPU;x86</Platforms>
 	  
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SOMEE|AnyCPU'">
-    <Optimize>False</Optimize>
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SOMEE|x86'">
-    <Optimize>False</Optimize>
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='AZURE|AnyCPU'">
-    <Optimize>False</Optimize>
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='AZURE|x86'">
-    <Optimize>False</Optimize>
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-    <Optimize>True</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
-    <WarningLevel>9999</WarningLevel>
-    <NoWarn />
-    <Optimize>True</Optimize>
-  </PropertyGroup>
-
+  
 
 
 	<ItemGroup>
@@ -68,7 +27,6 @@
     <PackageReference Include="Microsoft.ML.Vision" Version="2.0.1" />
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.11.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="TorchSharp-cpu" Version="0.99.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\AccesoAPI\LIN.Access.Auth\LIN.Access.Auth.csproj" />
