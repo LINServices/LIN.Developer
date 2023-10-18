@@ -39,7 +39,7 @@ try
     // Add services to the container.
     string sqlConnection = "";
 
-#if SOMEE
+#if RELEASE
     sqlConnection = builder.Configuration["ConnectionStrings:Somee"] ?? "";
 #elif AZURE
     sqlConnection = builder.Configuration["ConnectionStrings:Azure"] ?? "";
