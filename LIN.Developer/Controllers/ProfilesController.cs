@@ -151,7 +151,10 @@ public class ProfilesController : ControllerBase
         }
 
         httpResponse.Model.Account = response.Model;
-        httpResponse.Model.LINAuthToken = response.Token;
+        httpResponse.Model.TokenCollection = new()
+        {
+            {"identity", response.Token}
+        };
 
 
 
@@ -202,8 +205,10 @@ public class ProfilesController : ControllerBase
         }
 
         httpResponse.Model.Account = response.Model;
-        httpResponse.Model.LINAuthToken = response.Token;
-
+        httpResponse.Model.TokenCollection = new()
+        {
+            {"identity", response.Token}
+        };
 
         return httpResponse;
 
