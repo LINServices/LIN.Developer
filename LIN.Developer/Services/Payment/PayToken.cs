@@ -76,7 +76,10 @@ public class PayToken : IPayWith
 
        
         // ID del perfil
-        transacción.ProfileID = _profile;
+        transacción.Profile = new()
+        {
+            ID = _profile,
+        };
         transacción.Valor = Pricing.ToNegative(transacción.Valor);
 
         // Efectúa

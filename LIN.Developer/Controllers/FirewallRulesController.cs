@@ -15,11 +15,11 @@ public class FirewallRulesController : Controller
     {
 
         // Verificación de los parámetros
-        if (modelo.ProjectID <= 0 || !IP.ValidateIPv4(modelo.IPInicio) || !IP.ValidateIPv4(modelo.IPFinal))
+        if (modelo.Project.ID <= 0 || !IP.ValidateIPv4(modelo.IPInicio) || !IP.ValidateIPv4(modelo.IPFinal))
             return new(Responses.InvalidParam);
 
         // Verifica si un perfil tiene acceso a un proyecto
-        var access = await ProjectsController.HaveAccess(modelo.ProjectID, token);
+        var access = await ProjectsController.HaveAccess(modelo.Project.ID, token);
 
         // Respuesta
         if (access.Response != Responses.Success)

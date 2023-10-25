@@ -15,9 +15,8 @@ public class ApiKeyController : Controller
     public async Task<HttpCreateResponse> Create([FromBody] ApiKeyDataModel modelo, [FromHeader] string token)
     {
 
-
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(modelo.ProjectID, token);
+        var haveAccess = await ProjectsController.HaveAccess(modelo.Project.ID, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -96,7 +95,7 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.ProjectID, token);
+        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -139,7 +138,7 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.ProjectID, token);
+        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)

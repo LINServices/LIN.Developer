@@ -16,7 +16,7 @@ internal static class Transactions
 
         // Query
         var query = from TR in context.DataBase.Transactions
-                    where TR.ProfileID == id
+                    where TR.Profile.ID == id
                     orderby TR.Fecha descending
                     select TR;
 

@@ -18,7 +18,7 @@ public static class FirewallRule
 
         // Lista de IP
         var query = from IP in context.DataBase.FirewallRule
-                         where IP.ProjectID == id && IP.Status == FirewallRuleStatus.Normal
+                         where IP.Project.ID == id && IP.Status == FirewallRuleStatus.Normal
                          select IP;
 
         return query;

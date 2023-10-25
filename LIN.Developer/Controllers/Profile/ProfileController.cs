@@ -69,7 +69,10 @@ public class ProfileController : ControllerBase
                 Description = "Bonus",
                 Valor = 300m,
                 Tipo = TransactionTypes.Bonus,
-                ProfileID = id,
+                Profile = new()
+                {
+                    ID = id
+                },
                 Fecha = DateTime.Now
             };
 
@@ -143,7 +146,10 @@ public class ProfileController : ControllerBase
             ID = 0,
             OTP = KeyGen.GenerateOTP(5),
             Vencimiento = DateTime.Now.AddMinutes(10),
-            ProfileID = data.Model.ID,
+            Profile = new()
+            {
+               ID = data.Model.ID
+            },
             Estado = OTPStatus.actived
         };
 

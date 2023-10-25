@@ -74,6 +74,8 @@ public static class FirewallRules
         // Ejecución
         try
         {
+
+            context.DataBase.Attach(data.Project);
             var res = await context.DataBase.FirewallRule.AddAsync(data);
             context.DataBase.SaveChanges();
 

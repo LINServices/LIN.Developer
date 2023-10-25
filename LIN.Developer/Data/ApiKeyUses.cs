@@ -67,7 +67,7 @@ public static class ApiKeyUses
             {
 
                 // Obtiene la llave
-                var key = await context.DataBase.ApiKeys.FindAsync(data.KeyID);
+                var key = await context.DataBase.ApiKeys.FindAsync(data.Key.ID);
 
                 // Evalúa la llave
                 if (key == null || key.Status != ApiKeyStatus.Actived)
@@ -77,7 +77,7 @@ public static class ApiKeyUses
                 }
 
                 // Obtiene el proyecto
-                var project = await context.DataBase.Proyectos.FindAsync(key.ProjectID);
+                var project = await context.DataBase.Proyectos.FindAsync(key.Project.ID);
 
                 // Si no existe
                 if (project == null)
@@ -86,7 +86,7 @@ public static class ApiKeyUses
                     return new(Responses.NotExistProfile);
                 }
 
-                var profile = await context.DataBase.Profiles.FindAsync(project.ProfileID);
+                var profile = await context.DataBase.Profiles.FindAsync(project.Profile.ID);
 
                 if (profile == null)
                 {
@@ -110,7 +110,10 @@ public static class ApiKeyUses
                     Description = "Usado en un servicio LIN",
                     Fecha = DateTime.Now,
                     ID = 0,
-                    ProfileID = profile.ID,
+                    Profile = new()
+                    {
+                        ID = profile.ID, 
+                    },
                     Tipo = TransactionTypes.UsedService,
                     Valor = Pricing.ToNegative(data.Valor)
                 };
@@ -125,10 +128,10 @@ public static class ApiKeyUses
                     return new();
                 }
 
-                data.TransactionID = responseTransaction.LastID;
+                data.Transaction.ID = responseTransaction.LastID;
 
                 // Agrega el uso
-                await context.DataBase.ApikeyUses.AddAsync(data);
+                await context.DataBase.ApiKeyUses.AddAsync(data);
 
                 // Guarda los cambios
                 context.DataBase.SaveChanges();
@@ -179,7 +182,7 @@ public static class ApiKeyUses
                 return new(Responses.InvalidApiKey);
             }
 
-            data.KeyID = apiKey;
+            data.Key.ID = apiKey;
             return await GenerateUses(data, context);
         }
         catch (Exception ex)

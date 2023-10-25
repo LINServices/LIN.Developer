@@ -39,7 +39,7 @@ public class KeyUsesController : Controller
 
         // Organización del modelo
         modelo.ID = 0;
-        modelo.TransactionID = 0;
+        modelo.Transaction.ID = 0;
 
         var response = await Data.ApiKeyUses.GenerateUses(modelo, apiKey, context);
 
@@ -99,7 +99,7 @@ public class KeyUsesController : Controller
             {
                 Description = "Regalo",
                 Fecha = DateTime.Now,
-                ProfileID = id,
+                Profile = new() {ID = id },
                 Tipo = TransactionTypes.Recharge,
                 Valor = credito
             };

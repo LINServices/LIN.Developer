@@ -52,7 +52,7 @@ public static class ApiKeys
     {
 
         var query = from AK in context.DataBase.ApiKeys
-                    where AK.ProjectID == id && AK.Status != ApiKeyStatus.Deleted
+                    where AK.Project.ID == id && AK.Status != ApiKeyStatus.Deleted
                     select AK;
 
         return query;
@@ -71,7 +71,7 @@ public static class ApiKeys
 
         var query = (from K in context.DataBase.ApiKeys
                      where K.Key == key && K.Status == ApiKeyStatus.Actived
-                     select K.ProjectID).Take(1);
+                     select K.Project.ID).Take(1);
 
         return query;
     }

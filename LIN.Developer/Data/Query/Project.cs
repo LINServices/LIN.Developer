@@ -17,7 +17,7 @@ public static class Project
     {
 
         var query = from P in context.DataBase.Proyectos
-                    where P.ProfileID == id && P.Estado == ProjectStatus.Normal
+                    where P.Profile.ID == id && P.Estado == ProjectStatus.Normal
                     select P;
 
         return query;

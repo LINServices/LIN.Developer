@@ -102,10 +102,13 @@ public static class Projects
     {
 
         data.ID = 0;
+        data.IPs = new();
+        data.Keys = new();
 
         // Ejecución
         try
         {
+            context.DataBase.Attach(data.Profile);
             var res = await context.DataBase.Proyectos.AddAsync(data);
             context.DataBase.SaveChanges();
 
@@ -169,7 +172,7 @@ public static class Projects
         {
 
             var access = await (from P in context.DataBase.Proyectos
-                                where P.ID == projectID && P.ProfileID == profileID
+                                where P.ID == projectID && P.Profile.ID == profileID
                                 where P.Estado == ProjectStatus.Normal
                                 select P.ID).FirstOrDefaultAsync();
 
@@ -246,7 +249,7 @@ public static class Projects
 
             // Consulta
             var rules = await (from R in context.DataBase.FirewallRule
-                               where R.ProjectID == id
+                               where R.Project.ID == id
                                where R.Status == FirewallRuleStatus.Normal
                                select R).ToListAsync();
 
@@ -311,7 +314,7 @@ public static class Projects
 
                 // Obtiene las llaves
                 var keys = await (from K in context.DataBase.ApiKeys
-                                  where K.ProjectID == project.ID
+                                  where K.Project.ID == project.ID
                                   select K).ToListAsync();
 
                 // Estado de las llaves

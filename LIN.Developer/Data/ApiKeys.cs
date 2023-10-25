@@ -109,6 +109,8 @@ public static class ApiKeys
         // Ejecución
         try
         {
+            context.DataBase.Attach(data.Project);
+
             var res = await context.DataBase.ApiKeys.AddAsync(data);
             context.DataBase.SaveChanges();
             return new(Responses.Success, data.ID);

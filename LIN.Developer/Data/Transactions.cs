@@ -70,7 +70,7 @@ public class Transactions
             {
 
                 // Obtiene el perfil
-                var profile = await context.DataBase.Profiles.FindAsync(data.ProfileID);
+                var profile = await context.DataBase.Profiles.FindAsync(data.Profile.ID);
 
                 // Si no existe
                 if (profile == null)

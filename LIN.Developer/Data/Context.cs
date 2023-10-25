@@ -35,7 +35,7 @@ public class Context : DbContext
     /// <summary>
     /// Acceso a los usos en servicios
     /// </summary>
-    public DbSet<ApiKeyUsesDataModel> ApikeyUses { get; set; }
+    public DbSet<ApiKeyUsesDataModel> ApiKeyUses { get; set; }
 
 
 
@@ -47,7 +47,7 @@ public class Context : DbContext
 
 
     /// <summary>
-    /// Transacciones de los creditos
+    /// Transacciones de los créditos
     /// </summary>
     public DbSet<TransactionDataModel> Transactions { get; set; }
 
@@ -95,7 +95,28 @@ public class Context : DbContext
         modelBuilder.Entity<FirewallBlockLogDataModel>()
           .HasKey(e => new { e.IPv4, e.ProyectoID });
 
-  
+
+
+        modelBuilder.Entity<ApiKeyUsesDataModel>()
+            .HasOne(apiUse => apiUse.Transaction)
+            .WithOne(p=>p.Use)
+            .HasForeignKey<TransactionDataModel>(t => t.UseID);
+
+
+        modelBuilder.Entity<TransactionDataModel>()
+            .HasOne(p => p.Profile)
+            .WithMany()
+            .HasForeignKey(p=>p.ProfileID)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+
+
+
+
+
+
+
+
         // Nombres de las tablas
         modelBuilder.Entity<ApiKeyDataModel>().ToTable("API_KEYS");
         modelBuilder.Entity<ApiKeyUsesDataModel>().ToTable("API_USAGES");

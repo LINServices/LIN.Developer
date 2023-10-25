@@ -16,7 +16,7 @@ public static class OTP
     {
         var time = DateTime.Now;
         var query = from OTP in context.DataBase.OTP
-                    where OTP.ProfileID == id && OTP.Vencimiento > time && OTP.Estado == OTPStatus.actived
+                    where OTP.Profile.ID == id && OTP.Vencimiento > time && OTP.Estado == OTPStatus.actived
                     select OTP;
 
         return query;

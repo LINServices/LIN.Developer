@@ -15,7 +15,7 @@ public class ProjectsController : Controller
     {
 
         // Validaciones
-        if (modelo.ProfileID <= 0 || modelo.Nombre.Length <= 0)
+        if (modelo.Nombre.Length <= 0)
             return new(Responses.InvalidParam);
 
         // Validación de token
@@ -35,7 +35,10 @@ public class ProjectsController : Controller
         modelo.ID = 0;
         modelo.Creacion = DateTime.Now;
         modelo.Estado = ProjectStatus.Normal;
-        modelo.ProfileID = profile;
+        modelo.Profile = new()
+        {
+            ID = profile
+        };
 
         // Respuesta
         var response = await Data.Projects.Create(modelo);

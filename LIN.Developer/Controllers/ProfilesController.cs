@@ -71,7 +71,10 @@ public class ProfilesController : ControllerBase
         {
             Estado = OTPStatus.actived,
             OTP = otpCode,
-            ProfileID = response.LastID,
+            Profile = new()
+            {
+                ID = response.LastID
+            },
             Vencimiento = DateTime.Now.AddMinutes(10),
         };
 
@@ -91,7 +94,10 @@ public class ProfilesController : ControllerBase
             Description = "LIN Gift",
             Valor = defaultCreditos,
             Tipo = TransactionTypes.Gift,
-            ProfileID = response.LastID,
+            Profile = new()
+            {
+                ID = response.LastID
+            },
             Fecha = DateTime.Now
         };
 
