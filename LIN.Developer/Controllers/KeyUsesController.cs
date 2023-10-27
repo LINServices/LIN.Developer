@@ -13,7 +13,7 @@ public class KeyUsesController : Controller
     /// <param name="apiKey">Llave de acceso</param>
     /// <param name="http">Contexto HTTP</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] ApiKeyUsesDataModel modelo, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
+    public async Task<HttpCreateResponse> Create([FromBody] BillingItemModel modelo, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
 
 
@@ -68,7 +68,7 @@ public class KeyUsesController : Controller
             if (modelo == null)
                 return false;
 
-            modelo.Credito = credito;
+            modelo.Credits = credito;
             conexion.DataBase.SaveChanges();
             return true;
 

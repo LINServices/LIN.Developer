@@ -29,10 +29,10 @@ public class ProfilesController : ControllerBase
 
         // Organización del modelo
         modelo.ID = 0;
-        modelo.Credito = 0;
+        modelo.Credits = 0;
         modelo.Estado = ProfileStatus.Waiting;
         modelo.AccountID = tokenResponse.Model.ID;
-        modelo.Discont = 0;
+        modelo.Discount = 0;
 
 
         if (modelo.Email == null || !LIN.Modules.Mail.Validar(modelo.Email))

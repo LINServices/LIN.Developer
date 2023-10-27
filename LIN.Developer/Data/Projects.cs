@@ -246,7 +246,7 @@ public static class Projects
         {
 
             // Consulta
-            var rules = await (from R in context.DataBase.FirewallRule
+            var rules = await (from R in context.DataBase.FirewallRules
                                where R.Project.ID == id
                                where R.Status == FirewallRuleStatus.Normal
                                select R).ToListAsync();

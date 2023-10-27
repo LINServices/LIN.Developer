@@ -14,7 +14,7 @@ public class ApiKeyController : Controller
     /// <param name="modelo">Modelo</param>
     /// <param name="token">Token de acceso</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] ApiKeyDataModel modelo, [FromHeader] int Id, [FromHeader] string token)
+    public async Task<HttpCreateResponse> Create([FromBody] KeyModel modelo, [FromHeader] int Id, [FromHeader] string token)
     {
 
         // Verifica el acceso
@@ -52,7 +52,7 @@ public class ApiKeyController : Controller
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     [HttpGet("read/all")]
-    public async Task<HttpReadAllResponse<ApiKeyDataModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
+    public async Task<HttpReadAllResponse<KeyModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
     {
 
         // Verifica el acceso
@@ -61,7 +61,7 @@ public class ApiKeyController : Controller
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
         {
-            return new ReadAllResponse<ApiKeyDataModel>()
+            return new ReadAllResponse<KeyModel>()
             {
                 Message = haveAccess.Message,
                 Response = haveAccess.Response

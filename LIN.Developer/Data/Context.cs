@@ -1,22 +1,19 @@
-﻿using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data;
 
 
 public class Context : DbContext
 {
 
-
     /// <summary>
-    /// Acceso a las Api keys
+    /// Acceso a las keys.
     /// </summary>
-    public DbSet<ApiKeyDataModel> ApiKeys { get; set; }
+    public DbSet<KeyModel> Keys { get; set; }
 
 
     /// <summary>
     /// Reglas del firewall
     /// </summary>
-    public DbSet<FirewallRuleDataModel> FirewallRule { get; set; }
+    public DbSet<FirewallRuleModel> FirewallRules { get; set; }
 
 
     /// <summary>
@@ -35,7 +32,7 @@ public class Context : DbContext
     /// <summary>
     /// Acceso a los usos en servicios
     /// </summary>
-    public DbSet<ApiKeyUsesDataModel> ApikeyUses { get; set; }
+    public DbSet<BillingItemModel> BillingItems { get; set; }
 
 
 
@@ -73,7 +70,7 @@ public class Context : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        modelBuilder.Entity<ApiKeyDataModel>()
+        modelBuilder.Entity<KeyModel>()
            .HasIndex(e => e.Key)
            .IsUnique();
 
@@ -85,7 +82,7 @@ public class Context : DbContext
           .HasIndex(e => e.Email)
           .IsUnique();
 
-        modelBuilder.Entity<FirewallRuleDataModel>()
+        modelBuilder.Entity<FirewallRuleModel>()
            .HasIndex(e => e.ID)
            .IsUnique();
 
@@ -96,14 +93,70 @@ public class Context : DbContext
           .HasKey(e => new { e.IPv4, e.ProyectoID });
 
 
-        // Nombres de las tablas
-        modelBuilder.Entity<ApiKeyDataModel>().ToTable("API_KEYS");
-        modelBuilder.Entity<ApiKeyUsesDataModel>().ToTable("API_USAGES");
-        modelBuilder.Entity<ProfileDataModel>().ToTable("DEVELOPERS_PROFILES");
-        modelBuilder.Entity<TransactionDataModel>().ToTable("TRANSACTIONS");
-        modelBuilder.Entity<FirewallRuleDataModel>().ToTable("FIREWALL_RULES");
-        modelBuilder.Entity<ProjectDataModel>().ToTable("PROJECTS");
+
+        modelBuilder.Entity<BillingItemModel>()
+            .HasOne(T => T.Key)
+            .WithMany()
+            .HasForeignKey(t => t.KeyId);
+
+        modelBuilder.Entity<BillingItemModel>()
+           .HasOne(T => T.Transaction)
+           .WithMany()
+           .HasForeignKey(t => t.TransactionId);
+
+
+        modelBuilder.Entity<FirewallRuleModel>()
+          .HasOne(T => T.Project)
+          .WithMany()
+          .HasForeignKey(t => t.ProjectId);
+
+        modelBuilder.Entity<KeyModel>()
+          .HasOne(T => T.Project)
+          .WithMany()
+          .HasForeignKey(t => t.ProjectId);
+
+        modelBuilder.Entity<OTPDataModel>()
+          .HasOne(T => T.Profile)
+          .WithMany()
+          .HasForeignKey(t => t.ProfileId);
+
+
+        modelBuilder.Entity<ProfileDataModel>()
+          .HasMany(T => T.Transactions)
+          .WithMany();
+
+
+        modelBuilder.Entity<ProjectDataModel>()
+         .HasMany(T => T.FirewallRules)
+         .WithMany();
+
+        modelBuilder.Entity<ProjectDataModel>()
+         .HasMany(T => T.Keys)
+         .WithMany();
+
+
+        modelBuilder.Entity<TransactionDataModel>()
+         .HasOne(T => T.Billing)
+         .WithMany()
+         .HasForeignKey(t => t.BillingId);
+
+        modelBuilder.Entity<TransactionDataModel>()
+        .HasOne(T => T.Profile)
+        .WithMany()
+        .HasForeignKey(t => t.ProfileID);
+
+
+
+
+        // Nombres de las tablas.
+        modelBuilder.Entity<BillingItemModel>().ToTable("BILLING_ITEMS");
         modelBuilder.Entity<FirewallBlockLogDataModel>().ToTable("FIREWALL_BLOCKS");
+        modelBuilder.Entity<FirewallRuleModel>().ToTable("FIREWALL_RULES");
+        modelBuilder.Entity<KeyModel>().ToTable("KEYS");
+        modelBuilder.Entity<OTPDataModel>().ToTable("OTPS");
+        modelBuilder.Entity<ProfileDataModel>().ToTable("PROFILES");
+        modelBuilder.Entity<ProjectDataModel>().ToTable("PROJECTS");
+        modelBuilder.Entity<TransactionDataModel>().ToTable("TRANSACTIONS");
 
     }
 

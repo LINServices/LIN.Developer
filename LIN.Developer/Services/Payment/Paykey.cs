@@ -58,7 +58,7 @@ public class PayKey : IPayWith
 
 
         // Modelo del USO
-        ApiKeyUsesDataModel uso = new()
+        BillingItemModel uso = new()
         {
             ID = 0,
             Valor = transaction.Valor

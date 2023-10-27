@@ -44,7 +44,7 @@ public class IAController : ControllerBase
             }
 
             // Modelo del USO
-            ApiKeyUsesDataModel uso = new()
+            BillingItemModel uso = new()
             {
                 ID = 0,
                 Valor = Abstractions.PriceTable.LangIA
@@ -131,7 +131,7 @@ public class IAController : ControllerBase
             }
 
             // Modelo del USO
-            ApiKeyUsesDataModel uso = new()
+            BillingItemModel uso = new()
             {
                 ID = 0,
                 Valor = Abstractions.PriceTable.NamesIA
@@ -267,7 +267,7 @@ public class IAController : ControllerBase
         {
 
             // Modelo del USO
-            ApiKeyUsesDataModel uso = new()
+            BillingItemModel uso = new()
             {
                 ID = 0,
                 Valor = Abstractions.PriceTable.VisionIA

@@ -15,7 +15,7 @@ public static class ApiKeyUses
     /// Genera un uso en una api key
     /// </summary>
     /// <param name="data">Modelo del uso</param>
-    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data)
+    public async static Task<CreateResponse> GenerateUses(BillingItemModel data)
     {
         // Obtiene la conexión
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
@@ -33,7 +33,7 @@ public static class ApiKeyUses
     /// </summary>
     /// <param name="data">Modelo del uso</param>
     /// <param name="key">String de la llave</param>
-    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data, string key)
+    public async static Task<CreateResponse> GenerateUses(BillingItemModel data, string key)
     {
         // Obtiene la conexión
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
@@ -54,7 +54,7 @@ public static class ApiKeyUses
     /// </summary>
     /// <param name="data">Modelo del uso de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data, Conexión context)
+    public async static Task<CreateResponse> GenerateUses(BillingItemModel data, Conexión context)
     {
 
         // Modelo
@@ -165,7 +165,7 @@ public static class ApiKeyUses
     /// <param name="data">Modelo del uso</param>
     /// <param name="key">String de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data, string key, Conexión context)
+    public async static Task<CreateResponse> GenerateUses(BillingItemModel data, string key, Conexión context)
     {
 
         // Ejecución

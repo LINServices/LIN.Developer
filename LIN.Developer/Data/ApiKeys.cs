@@ -15,7 +15,7 @@ public static class ApiKeys
     /// Crea una Api Key en la base de datos
     /// </summary>
     /// <param name="data">Modelo de la llave</param>
-    public async static Task<CreateResponse> Create(ApiKeyDataModel data)
+    public async static Task<CreateResponse> Create(KeyModel data)
     {
 
         // Obtiene la conexión
@@ -33,7 +33,7 @@ public static class ApiKeys
     /// Obtiene las llaves asociadas a un proyecto
     /// </summary>
     /// <param name="id">ID del proyecto</param>
-    public async static Task<ReadAllResponse<ApiKeyDataModel>> ReadAll(int id)
+    public async static Task<ReadAllResponse<KeyModel>> ReadAll(int id)
     {
 
         // Obtiene la conexión
@@ -69,7 +69,7 @@ public static class ApiKeys
     /// Obtiene una api key
     /// </summary>
     /// <param name="key">String de la llave</param>
-    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(string key)
+    public async static Task<ReadOneResponse<KeyModel>> ReadBy(string key)
     {
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
         var response = await ReadBy(key, context);
@@ -83,7 +83,7 @@ public static class ApiKeys
     /// Obtiene una api key
     /// </summary>
     /// <param name="key">ID de la llave</param>
-    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(int key)
+    public async static Task<ReadOneResponse<KeyModel>> ReadBy(int key)
     {
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
         var response = await ReadBy(key, context);
@@ -101,7 +101,7 @@ public static class ApiKeys
     /// </summary>
     /// <param name="data">Modelo del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> Create(ApiKeyDataModel data, Conexión context)
+    public async static Task<CreateResponse> Create(KeyModel data, Conexión context)
     {
 
         data.ID = 0;
@@ -109,7 +109,7 @@ public static class ApiKeys
         // Ejecución
         try
         {
-            var res = await context.DataBase.ApiKeys.AddAsync(data);
+            var res = await context.DataBase.Keys.AddAsync(data);
             context.DataBase.SaveChanges();
             return new(Responses.Success, data.ID);
         }
@@ -128,7 +128,7 @@ public static class ApiKeys
     /// </summary>
     /// <param name="key">String de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(string key, Conexión context)
+    public async static Task<ReadOneResponse<KeyModel>> ReadBy(string key, Conexión context)
     {
         // Ejecución
         try
@@ -158,7 +158,7 @@ public static class ApiKeys
     /// </summary>
     /// <param name="id">ID de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(int id, Conexión context)
+    public async static Task<ReadOneResponse<KeyModel>> ReadBy(int id, Conexión context)
     {
         // Ejecución
         try
@@ -187,7 +187,7 @@ public static class ApiKeys
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadAllResponse<ApiKeyDataModel>> ReadAll(int id, Conexión context)
+    public async static Task<ReadAllResponse<KeyModel>> ReadAll(int id, Conexión context)
     {
 
         // Ejecución
@@ -219,7 +219,7 @@ public static class ApiKeys
         // Ejecución
         try
         {
-            var modelo = await context.DataBase.ApiKeys.FindAsync(key);
+            var modelo = await context.DataBase.Keys.FindAsync(key);
 
             if (modelo == null)
             {

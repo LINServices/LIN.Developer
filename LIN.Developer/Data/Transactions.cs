@@ -87,7 +87,7 @@ public class Transactions
 
 
                 // Agrega los valores 
-                profile.Credito += data.Valor;
+                profile.Credits += data.Valor;
 
                 // Guarda los cambios
                 context.DataBase.SaveChanges();
