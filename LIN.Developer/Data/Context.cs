@@ -102,18 +102,25 @@ public class Context : DbContext
         modelBuilder.Entity<BillingItemModel>()
            .HasOne(T => T.Transaction)
            .WithMany()
-           .HasForeignKey(t => t.TransactionId);
+           .HasForeignKey(t => t.TransactionId)
+           .OnDelete(DeleteBehavior.NoAction);
+        
 
 
         modelBuilder.Entity<FirewallRuleModel>()
           .HasOne(T => T.Project)
           .WithMany()
-          .HasForeignKey(t => t.ProjectId);
+          .HasForeignKey(t => t.ProjectId)
+          .OnDelete(DeleteBehavior.NoAction);
+          
 
         modelBuilder.Entity<KeyModel>()
           .HasOne(T => T.Project)
           .WithMany()
-          .HasForeignKey(t => t.ProjectId);
+          .HasForeignKey(t => t.ProjectId)
+          .OnDelete(DeleteBehavior.NoAction);
+
+
 
         modelBuilder.Entity<OTPDataModel>()
           .HasOne(T => T.Profile)
@@ -143,9 +150,14 @@ public class Context : DbContext
         modelBuilder.Entity<TransactionDataModel>()
         .HasOne(T => T.Profile)
         .WithMany()
-        .HasForeignKey(t => t.ProfileID);
+        .HasForeignKey(t => t.ProfileID)
+        .OnDelete(DeleteBehavior.NoAction);
+        
 
-
+        modelBuilder.Entity<ProjectDataModel>()
+       .HasOne(T => T.Profile)
+       .WithMany()
+       .HasForeignKey(t => t.ProfileID);
 
 
         // Nombres de las tablas.

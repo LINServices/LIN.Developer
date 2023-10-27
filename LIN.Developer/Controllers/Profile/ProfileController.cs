@@ -57,30 +57,6 @@ public class ProfileController : ControllerBase
             return new(Responses.NotExistProfile);
         }
 
-
-        // Evaluación de Promoción
-        if (Services.Promocion.Promocion.IsPromotionMail(profile.Model.Email ?? ""))
-        {
-
-            // Modelo
-            var promotion = new TransactionDataModel()
-            {
-                ID = 0,
-                Description = "Bonus",
-                Valor = 300m,
-                Tipo = TransactionTypes.Bonus,
-                Profile = new()
-                {
-                    ID = id
-                },
-                Fecha = DateTime.Now
-            };
-
-            _ = Data.Transactions.Generate(promotion, context,  true);
-
-        }
-
-
         // Correcto
         return new(Responses.Success);
 

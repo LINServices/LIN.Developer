@@ -49,59 +49,59 @@ public class ProjectsController : Controller
 
 
 
-    /// <summary>
-    /// Obtiene los proyectos asociados a un perfil
-    /// </summary>
-    /// <param name="token">Token de acceso</param>
-    [HttpGet("read/all")]
-    public async Task<HttpReadOneResponse<ProjectHttpResponse>> ReadAll([FromHeader] string token, [FromHeader] string tokenAuth)
-    {
+    ///// <summary>
+    ///// Obtiene los proyectos asociados a un perfil
+    ///// </summary>
+    ///// <param name="token">Token de acceso</param>
+    //[HttpGet("read/all")]
+    //public async Task<HttpReadOneResponse<ProjectHttpResponse>> ReadAll([FromHeader] string token, [FromHeader] string tokenAuth)
+    //{
 
-        var (isValid, _, profile) = Jwt.Validate(token);
+    //    var (isValid, _, profile) = Jwt.Validate(token);
 
-        if (!isValid)
-            return new(Responses.Unauthorized);
+    //    if (!isValid)
+    //        return new(Responses.Unauthorized);
 
-        if (profile <= 0 || token.IsNullOrEmpty())
-            return new(Responses.InvalidParam);
-
-
-        // Obtener apps
-        var apps = await Access.Auth.Controllers.Applications.ReadAll(tokenAuth);
+    //    if (profile <= 0 || token.IsNullOrEmpty())
+    //        return new(Responses.InvalidParam);
 
 
-
-        var onj = new LIN.Types.Developer.Models.ProjectHttpResponse
-        {
-            Applications = new()
-        };
+    //    // Obtener apps
+    //    var apps = await Access.Auth.Controllers.Applications.ReadAll(tokenAuth);
 
 
-        foreach (var app in apps.Models)
-        {
 
-            onj.Applications.Add(new ProjectApplication()
-            {
-                AppKey = app.Key,
-                Name = app.Name,
-                ID = app.ID.ToString()
-            });
-        }
+    //    var onj = new LIN.Types.Developer.Models.ProjectHttpResponse
+    //    {
+    //        Applications = new()
+    //    };
 
 
-        // Token invalido
-        if (!isValid)
-            return new(Responses.Unauthorized);
+    //    foreach (var app in apps.Models)
+    //    {
 
-        var response = await Data.Projects.ReadAll(profile);
+    //        onj.Applications.Add(new ProjectApplication()
+    //        {
+    //            AppKey = app.Key,
+    //            Name = app.Name,
+    //            ID = app.ID.ToString()
+    //        });
+    //    }
 
-        return new ReadOneResponse<ProjectHttpResponse>()
-        {
-            Model= onj,
-            Response = Responses.Success
-        };
 
-    }
+    //    // Token invalido
+    //    if (!isValid)
+    //        return new(Responses.Unauthorized);
+
+    //    var response = await Data.Projects.ReadAll(profile);
+
+    //    return new ReadOneResponse<ProjectHttpResponse>()
+    //    {
+    //        Model= onj,
+    //        Response = Responses.Success
+    //    };
+
+    //}
 
 
 

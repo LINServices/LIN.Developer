@@ -1,6 +1,4 @@
-﻿using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Services.Payment;
+﻿namespace LIN.Developer.Services.Payment;
 
 
 public class PayKey : IPayWith
@@ -61,7 +59,11 @@ public class PayKey : IPayWith
         BillingItemModel uso = new()
         {
             ID = 0,
-            Valor = transaction.Valor
+            Transaction = new()
+            {
+                Valor = transaction.Valor
+            }
+
         };
 
         // realiza el cobro

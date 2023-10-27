@@ -47,7 +47,10 @@ public class IAController : ControllerBase
             BillingItemModel uso = new()
             {
                 ID = 0,
-                Valor = Abstractions.PriceTable.LangIA
+                Transaction = new()
+                {
+                  Valor = Abstractions.PriceTable.LangIA
+                }
             };
 
             // realiza el cobro
@@ -134,7 +137,11 @@ public class IAController : ControllerBase
             BillingItemModel uso = new()
             {
                 ID = 0,
-                Valor = Abstractions.PriceTable.NamesIA
+                Transaction = new()
+                {
+Valor = Abstractions.PriceTable.NamesIA
+                }
+                
             };
 
             // realiza el cobro
@@ -270,7 +277,11 @@ public class IAController : ControllerBase
             BillingItemModel uso = new()
             {
                 ID = 0,
-                Valor = Abstractions.PriceTable.VisionIA
+                Transaction = new()
+                {
+  Valor = Abstractions.PriceTable.VisionIA
+                }
+              
             };
 
             // Genera el uso

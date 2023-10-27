@@ -71,7 +71,7 @@ public static class ApiKeys
 
         var query = (from K in context.DataBase.Keys
                      where K.Key == key && K.Status == ApiKeyStatus.Actived
-                     select K.ProjectID).Take(1);
+                     select K.ProjectId).Take(1);
 
         return query;
     }

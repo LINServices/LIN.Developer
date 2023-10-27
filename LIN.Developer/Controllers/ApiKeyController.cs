@@ -1,6 +1,4 @@
-﻿using LIN.Developer.MongoDBModels;
-
-namespace LIN.Developer.Controllers;
+﻿namespace LIN.Developer.Controllers;
 
 
 [Route("apiKey")]
