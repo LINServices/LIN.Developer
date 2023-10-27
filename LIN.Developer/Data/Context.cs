@@ -8,6 +8,12 @@ public class Context : DbContext
 
 
     /// <summary>
+    /// Acceso a las Api keys
+    /// </summary>
+    public DbSet<ApiKeyDataModel> ApiKeys { get; set; }
+
+
+    /// <summary>
     /// Reglas del firewall
     /// </summary>
     public DbSet<FirewallRuleDataModel> FirewallRule { get; set; }
@@ -29,7 +35,7 @@ public class Context : DbContext
     /// <summary>
     /// Acceso a los usos en servicios
     /// </summary>
-    public DbSet<ApiKeyUsesDataModel> ApiKeyUses { get; set; }
+    public DbSet<ApiKeyUsesDataModel> ApikeyUses { get; set; }
 
 
 
@@ -41,7 +47,7 @@ public class Context : DbContext
 
 
     /// <summary>
-    /// Transacciones de los créditos
+    /// Transacciones de los creditos
     /// </summary>
     public DbSet<TransactionDataModel> Transactions { get; set; }
 
@@ -90,28 +96,8 @@ public class Context : DbContext
           .HasKey(e => new { e.IPv4, e.ProyectoID });
 
 
-
-        modelBuilder.Entity<ApiKeyUsesDataModel>()
-            .HasOne(apiUse => apiUse.Transaction)
-            .WithOne(p=>p.Use)
-            .HasForeignKey<TransactionDataModel>(t => t.UseID);
-
-
-        modelBuilder.Entity<TransactionDataModel>()
-            .HasOne(p => p.Profile)
-            .WithMany()
-            .HasForeignKey(p=>p.ProfileID)
-            .OnDelete(DeleteBehavior.Restrict);
-        
-
-
-
-
-
-
-
-
         // Nombres de las tablas
+        modelBuilder.Entity<ApiKeyDataModel>().ToTable("API_KEYS");
         modelBuilder.Entity<ApiKeyUsesDataModel>().ToTable("API_USAGES");
         modelBuilder.Entity<ProfileDataModel>().ToTable("DEVELOPERS_PROFILES");
         modelBuilder.Entity<TransactionDataModel>().ToTable("TRANSACTIONS");
