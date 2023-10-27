@@ -143,8 +143,7 @@ public class ProfilesController : ControllerBase
         var httpResponse = new ReadOneResponse<AuthModel<ProfileDataModel>>()
         {
             Response = Responses.Success,
-            Message = "Success",
-
+            Message = "Success"
         };
 
         if (profile.Response == Responses.Success)

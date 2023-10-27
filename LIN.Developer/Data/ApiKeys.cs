@@ -1,4 +1,5 @@
-﻿using LIN.Types.Developer.Enumerations;
+﻿using LIN.Developer.MongoDBModels;
+using LIN.Types.Developer.Enumerations;
 using LIN.Types.Developer.Models;
 
 namespace LIN.Developer.Data;
@@ -15,14 +16,12 @@ public static class ApiKeys
     /// Crea una Api Key en la base de datos
     /// </summary>
     /// <param name="data">Modelo de la llave</param>
-    public async static Task<CreateResponse> Create(ApiKeyDataModel data)
+    public async static Task<CreateResponse> Create(KeyModel data)
     {
 
         // Obtiene la conexión
-        (Conexión context, string connectionKey) = Conexión.GetOneConnection();
-
+        var context =  new MongoDBConnection();
         var response = await Create(data, context);
-        context.CloseActions(connectionKey);
         return response;
 
     }
@@ -101,19 +100,19 @@ public static class ApiKeys
     /// </summary>
     /// <param name="data">Modelo del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> Create(ApiKeyDataModel data, Conexión context)
+    public async static Task<CreateResponse> Create(KeyModel data, MongoDBConnection context)
     {
-
-        data.ID = 0;
 
         // Ejecución
         try
         {
-            context.DataBase.Attach(data.Project);
 
-            var res = await context.DataBase.ApiKeys.AddAsync(data);
-            context.DataBase.SaveChanges();
-            return new(Responses.Success, data.ID);
+            var db = context.DBConnection.GetDatabase("Cluster0");
+            var collection = db.GetCollection<KeyModel>("keys");
+
+            collection.InsertOne(data);
+
+            return new(Responses.Success);
         }
         catch (Exception ex)
         {
@@ -136,14 +135,14 @@ public static class ApiKeys
         try
         {
 
-            var res = await Query.ApiKeys.ReadBy(key, context).FirstOrDefaultAsync();
+            //var res = await Query.ApiKeys.ReadBy(key, context).FirstOrDefaultAsync();
 
-            if (res == null)
-            {
-                return new(Responses.InvalidApiKey);
-            }
+            //if (res == null)
+            //{
+            //    return new(Responses.InvalidApiKey);
+            //}
 
-            return new(Responses.Success, res);
+            //return new(Responses.Success, res);
         }
         catch (Exception ex)
         {
@@ -165,14 +164,14 @@ public static class ApiKeys
         // Ejecución
         try
         {
-            var res = await Query.ApiKeys.ReadBy(id, context).FirstOrDefaultAsync();
+            //var res = await Query.ApiKeys.ReadBy(id, context).FirstOrDefaultAsync();
 
-            if (res == null)
-            {
-                return new(Responses.InvalidApiKey);
-            }
+            //if (res == null)
+            //{
+            //    return new(Responses.InvalidApiKey);
+            //}
 
-            return new(Responses.Success, res);
+            //return new(Responses.Success, res);
         }
         catch (Exception ex)
         {
@@ -195,10 +194,10 @@ public static class ApiKeys
         // Ejecución
         try
         {
-            // retorna la lista
-            var lista = await Query.ApiKeys.ReadAll(id, context).ToListAsync();
+            //// retorna la lista
+            //var lista = await Query.ApiKeys.ReadAll(id, context).ToListAsync();
 
-            return new(Responses.Success, lista);
+            //return new(Responses.Success, lista);
         }
         catch (Exception ex)
         {
@@ -221,16 +220,16 @@ public static class ApiKeys
         // Ejecución
         try
         {
-            var modelo = await context.DataBase.ApiKeys.FindAsync(key);
+            //var modelo = await context.DataBase.ApiKeys.FindAsync(key);
 
-            if (modelo == null)
-            {
-                return new(Responses.NotRows);
-            }
+            //if (modelo == null)
+            //{
+            //    return new(Responses.NotRows);
+            //}
 
-            modelo.Status = estado;
-            context.DataBase.SaveChanges();
-            return new(Responses.Success);
+            //modelo.Status = estado;
+            //context.DataBase.SaveChanges();
+            //return new(Responses.Success);
         }
         catch (Exception ex)
         {
@@ -253,18 +252,18 @@ public static class ApiKeys
         try
         {
 
-            var id = await Query.ApiKeys.GetProjectID(key, context).FirstOrDefaultAsync();
+            //var id = await Query.ApiKeys.GetProjectID(key, context).FirstOrDefaultAsync();
 
 
-            // Si es un ID invalido
-            if (id <= 0)
-                return new(Responses.NotRows, 0)
-                {
-                    Message = $"La llave '{key}' es invalida o esta desactivada."
-                };
+            //// Si es un ID invalido
+            //if (id <= 0)
+            //    return new(Responses.NotRows, 0)
+            //    {
+            //        Message = $"La llave '{key}' es invalida o esta desactivada."
+            //    };
 
-            // Correcto
-            return new(Responses.Success, id);
+            //// Correcto
+            //return new(Responses.Success, id);
 
         }
         catch (Exception ex)

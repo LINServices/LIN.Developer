@@ -102,8 +102,6 @@ public static class Projects
     {
 
         data.ID = 0;
-        data.IPs = new();
-        data.Keys = new();
 
         // Ejecución
         try
@@ -217,7 +215,7 @@ public static class Projects
             var ips = await Query.FirewallRule.ReadAll(project.ID, context).ToListAsync();
 
             // Agrega las IP
-            project.IPs = ips ?? new();
+           // project.IPs = ips ?? new();
 
             // Retorna
             return new(Responses.Success, project);
@@ -312,18 +310,18 @@ public static class Projects
                 project.Estado = ProjectStatus.Deleted;
 
 
-                // Obtiene las llaves
-                var keys = await (from K in context.DataBase.ApiKeys
-                                  where K.Project.ID == project.ID
-                                  select K).ToListAsync();
+                //// Obtiene las llaves
+                //var keys = await (from K in context.DataBase.ApiKeys
+                //                  where K.Project.ID == project.ID
+                //                  select K).ToListAsync();
 
-                // Estado de las llaves
-                foreach (var key in keys)
-                    key.Status = ApiKeyStatus.Deleted;
+                //// Estado de las llaves
+                //foreach (var key in keys)
+                //    key.Status = ApiKeyStatus.Deleted;
 
-                // Guarda los cambios
-                context.DataBase.SaveChanges();
-                transaction.Commit();
+                //// Guarda los cambios
+                //context.DataBase.SaveChanges();
+                //transaction.Commit();
 
 
                 // Retorna el resultado

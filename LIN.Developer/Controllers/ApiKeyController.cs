@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Developer.MongoDBModels;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("apiKey")]
@@ -12,11 +14,11 @@ public class ApiKeyController : Controller
     /// <param name="modelo">Modelo</param>
     /// <param name="token">Token de acceso</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] ApiKeyDataModel modelo, [FromHeader] string token)
+    public async Task<HttpCreateResponse> Create([FromBody] ApiKeyDataModel modelo, [FromHeader] int Id, [FromHeader] string token)
     {
 
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(modelo.Project.ID, token);
+        var haveAccess = await ProjectsController.HaveAccess(Id, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -28,13 +30,16 @@ public class ApiKeyController : Controller
             };
         }
 
-        // Organización del modelo
-        modelo.ID = 0;
-        modelo.Status = ApiKeyStatus.Actived;
-        modelo.Key = KeyGen.Generate(35, "pk.");
+        var keyModel = new KeyModel()
+        {
+            Key = KeyGen.Generate(35, "pk."),
+            Status = ApiKeyStatus.Actived,
+            Nombre = modelo.Nombre
+        };
+
 
         // Respuesta
-        var response = await Data.ApiKeys.Create(modelo);
+        var response = await Data.ApiKeys.Create(keyModel);
 
         return response;
 
@@ -95,17 +100,17 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
+        //var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
 
-        // Si no hay acceso
-        if (haveAccess.Response != Responses.Success)
-        {
-            return new ReadAllResponse<ApiKeyDataModel>()
-            {
-                Message = haveAccess.Message,
-                Response = haveAccess.Response
-            };
-        }
+        //// Si no hay acceso
+        //if (haveAccess.Response != Responses.Success)
+        //{
+        //    return new ReadAllResponse<ApiKeyDataModel>()
+        //    {
+        //        Message = haveAccess.Message,
+        //        Response = haveAccess.Response
+        //    };
+        //}
 
 
         var response = await Data.ApiKeys.UpdateState(key, ApiKeyStatus.Deleted);
@@ -138,17 +143,17 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
+      //  var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
 
-        // Si no hay acceso
-        if (haveAccess.Response != Responses.Success)
-        {
-            return new ReadAllResponse<ApiKeyDataModel>()
-            {
-                Message = haveAccess.Message,
-                Response = haveAccess.Response
-            };
-        }
+        //// Si no hay acceso
+        //if (haveAccess.Response != Responses.Success)
+        //{
+        //    return new ReadAllResponse<ApiKeyDataModel>()
+        //    {
+        //        Message = haveAccess.Message,
+        //        Response = haveAccess.Response
+        //    };
+        //}
 
         var response = await Data.ApiKeys.UpdateState(key, estado);
         return response;

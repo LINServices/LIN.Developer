@@ -8,12 +8,6 @@ public class Context : DbContext
 
 
     /// <summary>
-    /// Acceso a las Api keys
-    /// </summary>
-    public DbSet<ApiKeyDataModel> ApiKeys { get; set; }
-
-
-    /// <summary>
     /// Reglas del firewall
     /// </summary>
     public DbSet<FirewallRuleDataModel> FirewallRule { get; set; }
@@ -118,7 +112,6 @@ public class Context : DbContext
 
 
         // Nombres de las tablas
-        modelBuilder.Entity<ApiKeyDataModel>().ToTable("API_KEYS");
         modelBuilder.Entity<ApiKeyUsesDataModel>().ToTable("API_USAGES");
         modelBuilder.Entity<ProfileDataModel>().ToTable("DEVELOPERS_PROFILES");
         modelBuilder.Entity<TransactionDataModel>().ToTable("TRANSACTIONS");
