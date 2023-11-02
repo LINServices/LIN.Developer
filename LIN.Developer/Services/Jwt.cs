@@ -1,5 +1,4 @@
-﻿using LIN.Types.Developer.Models;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace LIN.Developer.Services;
@@ -10,9 +9,9 @@ public class Jwt
 
 
     /// <summary>
-    /// Genera un token JSON
+    /// Genera un token JSON.
     /// </summary>
-    /// <param name="user">Modelo de usuario</param>
+    /// <param name="user">Modelo de usuario.</param>
     internal static string Generate(ProfileDataModel user)
     {
 
@@ -47,7 +46,7 @@ public class Jwt
     /// <summary>
     /// Valida un token JSON
     /// </summary>
-    /// <param name="token">Token a validar</param>
+    /// <param name="token">Token a validar.</param>
     internal static (bool isValid, int account, int profile) Validate(string token)
     {
         try
