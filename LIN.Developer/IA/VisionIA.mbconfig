@@ -1,0 +1,63 @@
+﻿{
+  "TrainingTime": 2147482,
+  "Scenario": "ImageClassification",
+  "DataSource": {
+    "Type": "Folder",
+    "Version": 1,
+    "FolderPath": "D:\\DataIA\\Imagesv4"
+  },
+  "Environment": {
+    "Type": "Azure",
+    "Version": 1,
+    "SubscriptionID": "2dd05a89-ff73-44e4-afda-25a7981978c9",
+    "ResourceGroupName": "lindev_group",
+    "WorkspaceName": "LINVision",
+    "ComputeName": "VisonIA",
+    "Location": "eastus",
+    "ExperimentName": "ImagenClas"
+  },
+  "RunHistory": {
+    "Version": 1,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "DNN + SE-ResNeXt-50",
+        "Score": 0.85,
+        "RuntimeInSeconds": 1732.5930492
+      }
+    ],
+    "Pipeline": {
+      "parameter": {
+        "0": {
+          "OutputColumnName": "input1",
+          "InputColumnName": "input1",
+          "ImageHeight": 224,
+          "ImageWidth": 224,
+          "CropAnchor": "Center",
+          "Resizing": "IsoCrop"
+        },
+        "1": {
+          "OutputColumnName": "input1",
+          "InputColumnName": "input1",
+          "ColorsToExtract": "Rgb",
+          "OrderOfExtraction": "ARGB",
+          "OutputAsFloatArray": true
+        },
+        "2": {
+          "ModelFile": "D:\\LIN Services\\Servicios\\LIN.Developer\\LIN.Developer\\IA\\VisionIA.onnx",
+          "FallbackToCpu": true
+        }
+      },
+      "estimators": [
+        "ResizeImages",
+        "ExtractPixels",
+        "ApplyOnnxModel"
+      ]
+    },
+    "MetricName": "accuracy"
+  },
+  "Type": "TrainingConfig",
+  "Version": 2
+}
