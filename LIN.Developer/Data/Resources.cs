@@ -112,12 +112,9 @@ public static class Resources
 
             return new(Responses.Success, data.ID);
         }
-        catch (Exception ex)
-        {
-            
+        catch
+        { 
         }
-
-
         return new();
     }
 
@@ -145,7 +142,7 @@ public static class Resources
             return new(Responses.Success, projects);
 
         }
-        catch (Exception ex)
+        catch 
         {
             
         }
