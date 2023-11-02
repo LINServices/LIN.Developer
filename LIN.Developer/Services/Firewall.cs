@@ -63,7 +63,7 @@ public class Firewall
         int id = projectID.Model;
 
         // Comprueba si el proyecto tiene reglas firewall para una IP
-        var has = await Data.Projects.HasFirewallFor(id, ip, contextConnection);
+        var has = await Data.Resources.HasFirewallFor(id, ip, contextConnection);
 
         // Evalúa el Has
         if (has.Response != Responses.Success)

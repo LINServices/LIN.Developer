@@ -41,7 +41,7 @@ public class ProjectsController : Controller
         };
 
         // Respuesta
-        var response = await Data.Projects.Create(modelo);
+        var response = await Data.Resources.Create(modelo);
 
         return response;
 
@@ -136,7 +136,7 @@ public class ProjectsController : Controller
         (_, _, int profile) = Jwt.Validate(token);
 
         // Obtiene los proyectos
-        var response = await Data.Projects.Read(id, profile);
+        var response = await Data.Resources.Read(id, profile);
 
         return response;
 
@@ -167,7 +167,7 @@ public class ProjectsController : Controller
         }
 
         // Respuesta
-        var response = await Data.Projects.Delete(id);
+        var response = await Data.Resources.Delete(id);
 
         return response;
 
@@ -204,7 +204,7 @@ public class ProjectsController : Controller
             };
 
         // Tiene acceso al proyecto
-        var have = await Data.Projects.HaveAuthorization(project, profile);
+        var have = await Data.Resources.HaveAuthorization(project, profile);
 
         // Si no tubo acceso
         if (have.Response != Responses.Success)

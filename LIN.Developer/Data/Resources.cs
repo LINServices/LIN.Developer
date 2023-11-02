@@ -1,7 +1,7 @@
 ﻿namespace LIN.Developer.Data;
 
 
-public static class Projects
+public static class Resources
 {
 
 
