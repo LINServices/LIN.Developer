@@ -1,11 +1,17 @@
-
 try
 {
 
+    // Crear el constructor.
     var builder = WebApplication.CreateBuilder(args);
 
+    // Servicios.
     builder.Services.AddSignalR();
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddHttpContextAccessor();
 
+    // CORS.
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowAnyOrigin",
@@ -17,47 +23,28 @@ try
             });
     });
 
+    // Conexión SQL.
+    {
 
+        // Conexión SQL.
+        string sqlConnection = string.Empty;
 
+        // Obtiene la cadena de conexión.
+        sqlConnection = builder.Configuration["ConnectionStrings:Somee"] ?? "";
 
-    // Add services to the container.
-    string sqlConnection = "";
+        // Establecer.
+        Conexión.SetStringConnection(sqlConnection);
 
-#if RELEASE
-    sqlConnection = builder.Configuration["ConnectionStrings:Somee"] ?? "";
-#elif AZURE
-    sqlConnection = builder.Configuration["ConnectionStrings:Azure"] ?? "";
-#endif
+    }
 
-    Conexión.SetStringConnection(sqlConnection);
-
+    // Llave de la app en Identity.
     LIN.Access.Auth.Build.SetAuth(builder.Configuration["lin:app"] ?? "");
-    try
-    {
-        // SQL Server
-        builder.Services.AddDbContext<LIN.Developer.Data.Context>(options =>
-        {
-            options.UseSqlServer(sqlConnection);
-        });
-    }
-    catch (Exception ex)
-    {
-        ServerLogger.LogError("Error" + ex.Message);
-    }
+   
 
-
-
-
-    builder.Services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.AddHttpContextAccessor();
-
-
+    // Crea la aplicación.
     var app = builder.Build();
 
-
+    // Asegura la creación de la base de datos.
     try
     {
         // Si la base de datos no existe
@@ -71,22 +58,15 @@ try
     }
 
 
-
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-    }
-
-
+    // Uso de Swagger.
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    // Otras políticas.
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseCors("AllowAnyOrigin");
-
     app.UseAuthorization();
-
     app.MapControllers();
 
     // Inicia las conexiones
