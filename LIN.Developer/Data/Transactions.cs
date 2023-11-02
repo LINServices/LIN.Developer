@@ -1,6 +1,4 @@
-﻿using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data;
 
 
 public class Transactions
@@ -69,6 +67,8 @@ public class Transactions
             try
             {
 
+      
+
                 // Obtiene el perfil
                 var profile = await context.DataBase.Profiles.FindAsync(data.Profile.ID);
 
@@ -84,7 +84,6 @@ public class Transactions
 
                 // Guarda el origen
                 context.DataBase.SaveChanges();
-
 
                 // Agrega los valores 
                 profile.Credits += data.Valor;

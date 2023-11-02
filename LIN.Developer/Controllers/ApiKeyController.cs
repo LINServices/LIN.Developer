@@ -37,7 +37,7 @@ public class ApiKeyController : Controller
 
 
         // Respuesta
-        var response = await Data.ApiKeys.Create(keyModel);
+        var response = await Data.Keys.Create(keyModel);
 
         return response;
 
@@ -67,7 +67,7 @@ public class ApiKeyController : Controller
         }
 
         // Consulta las llaves
-        var response = await Data.ApiKeys.ReadAll(id);
+        var response = await Data.Keys.ReadAll(id);
 
         return response;
 
@@ -86,7 +86,7 @@ public class ApiKeyController : Controller
         if (key <= 0)
             return new(Responses.InvalidParam);
 
-        var keyModel = await Data.ApiKeys.ReadBy(key);
+        var keyModel = await Data.Keys.Read(key);
 
         if (keyModel.Response != Responses.Success)
         {
@@ -111,7 +111,7 @@ public class ApiKeyController : Controller
         //}
 
 
-        var response = await Data.ApiKeys.UpdateState(key, ApiKeyStatus.Deleted);
+        var response = await Data.Keys.UpdateState(key, ApiKeyStatus.Deleted);
         return response;
     }
 
@@ -129,7 +129,7 @@ public class ApiKeyController : Controller
         if (key <= 0)
             return new(Responses.InvalidParam);
 
-        var keyModel = await Data.ApiKeys.ReadBy(key);
+        var keyModel = await Data.Keys.Read(key);
 
         if (keyModel.Response != Responses.Success)
         {
@@ -153,7 +153,7 @@ public class ApiKeyController : Controller
         //    };
         //}
 
-        var response = await Data.ApiKeys.UpdateState(key, estado);
+        var response = await Data.Keys.UpdateState(key, estado);
         return response;
     }
 

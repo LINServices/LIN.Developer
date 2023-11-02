@@ -50,7 +50,7 @@ public class Firewall
             return new(Responses.Success);
 
         // obtener el ID de un proyecto asociado a un Key
-        var projectID = await Data.ApiKeys.GetProjectID(apiKey, contextConnection);
+        var projectID = await Data.Keys.GetProjectID(apiKey, contextConnection);
 
         // Si hay algún error
         if (projectID.Response != Responses.Success)
