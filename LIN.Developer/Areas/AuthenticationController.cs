@@ -72,17 +72,25 @@ public class AuthenticationController : ControllerBase
     public async Task<HttpReadOneResponse<AuthModel<ProfileDataModel>>> LoginToken([FromQuery] string token)
     {
 
-        // Login en LIN Server
+        // Autenticación en Identity.
         var response = await Access.Auth.Controllers.Authentication.Login(token);
 
+        // Si hubo un error.
         if (response.Response != Responses.Success)
-            return new(response.Response);
+            return new(response.Response)
+            {
+                Message = "Error al autenticar en LIN Identity."
+            };
 
+        // Error de integridad con la cuenta.
         if (response.Model.Estado != AccountStatus.Normal)
-            return new(Responses.NotExistAccount);
+            return new(Responses.NotExistAccount)
+            {
+                Message = "No existe esta cuenta."
+            };
 
 
-
+        // Obtiene el perfil.
         var profile = await Data.Profiles.ReadByUser(response.Model.ID);
 
 
@@ -90,7 +98,6 @@ public class AuthenticationController : ControllerBase
         {
             Response = Responses.Success,
             Message = "Success",
-
         };
 
         if (profile.Response == Responses.Success)

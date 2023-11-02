@@ -28,6 +28,7 @@ public class PayKey : IPayWith
     }
 
 
+
     /// <summary>
     /// Realiza el cobro
     /// </summary>
@@ -53,7 +54,6 @@ public class PayKey : IPayWith
                 Message = evaluation.Message
             };
         }
-
 
         // Modelo del USO
         BillingItemModel uso = new()

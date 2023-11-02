@@ -43,7 +43,7 @@ public class PayToken : IPayWith
     private void Validate()
     {
 
-        var (isValid, account, profile) = Jwt.Validate(this._token);
+        var (isValid, _, profile) = Jwt.Validate(this._token);
 
         if (isValid)
         {

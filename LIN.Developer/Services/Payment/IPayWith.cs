@@ -10,7 +10,7 @@ public interface IPayWith
     /// <summary>
     /// Método Pagar
     /// </summary>
-    public Task<ResponseBase> Pay(TransactionDataModel transaccion);
+    public Task<ResponseBase> Pay(TransactionDataModel transaction);
 
 
 }

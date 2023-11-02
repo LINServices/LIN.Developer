@@ -20,8 +20,6 @@ public class IAController : ControllerBase
         try
         {
 
-            Services.Http.GetPlatform(http);
-
             // Conexión a BD
             var (context, contextKey) = Conexión.GetOneConnection();
 
@@ -111,7 +109,6 @@ public class IAController : ControllerBase
     {
         try
         {
-            Services.Http.GetPlatform(http);
             // Conexión a BD
             var (context, contextKey) = Conexión.GetOneConnection();
 
@@ -199,7 +196,6 @@ Valor = Abstractions.PriceTable.NamesIA
     {
         try
         {
-            Services.Http.GetPlatform(http);
             //Load sample data
             var sampleData = new SentimentIA.ModelInput()
             {
@@ -243,8 +239,6 @@ Valor = Abstractions.PriceTable.NamesIA
     [HttpPost("predict/Vision")]
     public async Task<HttpReadOneResponse<ProductCategories>> VisionPredict([FromBody] byte[] imageByte, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
-
-        Services.Http.GetPlatform(http);
 
         // Conexión a BD
         var (context, contextKey) = Conexión.GetOneConnection();
@@ -324,7 +318,6 @@ Valor = Abstractions.PriceTable.NamesIA
     {
         try
         {
-            Services.Http.GetPlatform(http);
             // Pagar con
             IPayWith payWith = (pay == PayWith.Key)
                                ? new PayKey(access, http)

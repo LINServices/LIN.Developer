@@ -16,13 +16,9 @@ public class Firewall
 
         if (httpContext == null)
             return "";
-
-
+        
         // Obtener la dirección IP del cliente
         var ipAddress = httpContext.Connection.RemoteIpAddress;
-
-        
-
 
         // Verificar si la dirección IP es de IPv4 o IPv6
         if (ipAddress != null)

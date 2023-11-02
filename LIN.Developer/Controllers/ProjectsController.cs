@@ -97,7 +97,7 @@ public class ProjectsController : Controller
 
     //    return new ReadOneResponse<ProjectHttpResponse>()
     //    {
-    //        Model= onj,
+    //        Model = onj,
     //        Response = Responses.Success
     //    };
 
