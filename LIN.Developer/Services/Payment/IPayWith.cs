@@ -1,6 +1,4 @@
-﻿using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Services.Payment;
+﻿namespace LIN.Developer.Services.Payment;
 
 
 public interface IPayWith
