@@ -29,10 +29,10 @@ public class ProfilesController : ControllerBase
 
         // Organización del modelo
         modelo.ID = 0;
-        modelo.Credits = 0;
+        modelo.Credito = 0;
         modelo.Estado = ProfileStatus.Waiting;
         modelo.AccountID = tokenResponse.Model.ID;
-        modelo.Discount = 0;
+        modelo.Discont = 0;
 
 
         if (modelo.Email == null || !LIN.Modules.Mail.Validar(modelo.Email))
@@ -71,10 +71,7 @@ public class ProfilesController : ControllerBase
         {
             Estado = OTPStatus.actived,
             OTP = otpCode,
-            Profile = new()
-            {
-                ID = response.LastID
-            },
+            ProfileID = response.LastID,
             Vencimiento = DateTime.Now.AddMinutes(10),
         };
 
@@ -94,10 +91,7 @@ public class ProfilesController : ControllerBase
             Description = "LIN Gift",
             Valor = defaultCreditos,
             Tipo = TransactionTypes.Gift,
-            Profile = new()
-            {
-                ID = response.LastID
-            },
+            ProfileID = response.LastID,
             Fecha = DateTime.Now
         };
 
@@ -112,7 +106,117 @@ public class ProfilesController : ControllerBase
 
 
 
-   
+    /// <summary>
+    /// Iniciar sesión
+    /// </summary>
+    /// <param name="user">Usuario</param>
+    /// <param name="password">Contraseña</param>
+    [HttpGet("login")]
+    public async Task<HttpReadOneResponse<AuthModel<ProfileDataModel>>> Login([FromQuery] string user, [FromQuery] string password)
+    {
+
+        // Comprobación
+        if (!user.Any() || !password.Any())
+            return new(Responses.InvalidParam);
+
+
+        // Login en LIN Server
+        var response = await Access.Auth.Controllers.Authentication.Login(user, password);
+
+        if (response.Response != Responses.Success)
+            return new(response.Response);
+
+        if (response.Model.Estado != AccountStatus.Normal)
+            return new(Responses.NotExistAccount);
+
+
+
+        var profile = await Data.Profiles.ReadByUser(response.Model.ID);
+
+
+        var httpResponse = new ReadOneResponse<AuthModel<ProfileDataModel>>()
+        {
+            Response = Responses.Success,
+            Message = "Success",
+
+        };
+
+        if (profile.Response == Responses.Success)
+        {
+            // Genera el token
+            var token = Jwt.Generate(profile.Model);
+
+            httpResponse.Token = token;
+            httpResponse.Model.Profile = profile.Model;
+        }
+
+        httpResponse.Model.Account = response.Model;
+        httpResponse.Model.TokenCollection = new()
+        {
+            {"identity", response.Token}
+        };
+
+
+
+
+        return httpResponse;
+
+    }
+
+
+
+
+    /// <summary>
+    /// Iniciar sesión
+    /// </summary>
+    /// <param name="token">Token</param>
+    [HttpGet("login/token")]
+    public async Task<HttpReadOneResponse<AuthModel<ProfileDataModel>>> LoginToken([FromQuery] string token)
+    {
+
+        // Login en LIN Server
+        var response = await Access.Auth.Controllers.Authentication.Login(token);
+
+        if (response.Response != Responses.Success)
+            return new(response.Response);
+
+        if (response.Model.Estado != AccountStatus.Normal)
+            return new(Responses.NotExistAccount);
+
+
+
+        var profile = await Data.Profiles.ReadByUser(response.Model.ID);
+
+
+        var httpResponse = new ReadOneResponse<AuthModel<ProfileDataModel>>()
+        {
+            Response = Responses.Success,
+            Message = "Success",
+
+        };
+
+        if (profile.Response == Responses.Success)
+        {
+            // Genera el token
+            var tokenAcceso = Jwt.Generate(profile.Model);
+
+            httpResponse.Token = tokenAcceso;
+            httpResponse.Model.Profile = profile.Model;
+        }
+
+        httpResponse.Model.Account = response.Model;
+        httpResponse.Model.TokenCollection = new()
+        {
+            {"identity", response.Token}
+        };
+
+        return httpResponse;
+
+    }
+
+
+
+
 
 
 

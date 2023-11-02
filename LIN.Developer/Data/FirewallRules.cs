@@ -15,7 +15,7 @@ public static class FirewallRules
     /// Crea una nueva regla firewall
     /// </summary>
     /// <param name="data">Modelo</param>
-    public async static Task<CreateResponse> Create(FirewallRuleModel data)
+    public async static Task<CreateResponse> Create(FirewallRuleDataModel data)
     {
         // Obtiene la conexión
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
@@ -31,7 +31,7 @@ public static class FirewallRules
     /// Obtiene las reglas asociadas a un proyecto
     /// </summary>
     /// <param name="id">ID del proyecto</param>
-    public async static Task<ReadAllResponse<FirewallRuleModel>> ReadAll(int id)
+    public async static Task<ReadAllResponse<FirewallRuleDataModel>> ReadAll(int id)
     {
         // Obtiene la conexión
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
@@ -66,7 +66,7 @@ public static class FirewallRules
     /// </summary>
     /// <param name="data">Modelo de la regla</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> Create(FirewallRuleModel data, Conexión context)
+    public async static Task<CreateResponse> Create(FirewallRuleDataModel data, Conexión context)
     {
 
         data.ID = 0;
@@ -74,16 +74,14 @@ public static class FirewallRules
         // Ejecución
         try
         {
-
-            context.DataBase.Attach(data.Project);
-            var res = await context.DataBase.FirewallRules.AddAsync(data);
+            var res = await context.DataBase.FirewallRule.AddAsync(data);
             context.DataBase.SaveChanges();
 
             return new(Responses.Success, data.ID);
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -96,7 +94,7 @@ public static class FirewallRules
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadAllResponse<FirewallRuleModel>> ReadAll(int id, Conexión context)
+    public async static Task<ReadAllResponse<FirewallRuleDataModel>> ReadAll(int id, Conexión context)
     {
 
         // Ejecución
@@ -117,7 +115,7 @@ public static class FirewallRules
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -138,7 +136,7 @@ public static class FirewallRules
         {
 
             // IP
-            var ip = await (from IP in context.DataBase.FirewallRules
+            var ip = await (from IP in context.DataBase.FirewallRule
                             where IP.ID == id
                             select IP).FirstOrDefaultAsync();
 
@@ -159,7 +157,7 @@ public static class FirewallRules
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();

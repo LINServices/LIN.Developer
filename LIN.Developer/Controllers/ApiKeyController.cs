@@ -12,11 +12,12 @@ public class ApiKeyController : Controller
     /// <param name="modelo">Modelo</param>
     /// <param name="token">Token de acceso</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] KeyModel modelo, [FromHeader] int Id, [FromHeader] string token)
+    public async Task<HttpCreateResponse> Create([FromBody] ApiKeyDataModel modelo, [FromHeader] string token)
     {
 
+
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(Id, token);
+        var haveAccess = await ProjectsController.HaveAccess(modelo.ProjectID, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -28,16 +29,13 @@ public class ApiKeyController : Controller
             };
         }
 
-        var keyModel = new KeyModel()
-        {
-            Key = KeyGen.Generate(35, "pk."),
-            Status = ApiKeyStatus.Actived,
-            Nombre = modelo.Nombre
-        };
-
+        // Organización del modelo
+        modelo.ID = 0;
+        modelo.Status = ApiKeyStatus.Actived;
+        modelo.Key = KeyGen.Generate(35, "pk.");
 
         // Respuesta
-        var response = await Data.Keys.Create(keyModel);
+        var response = await Data.ApiKeys.Create(modelo);
 
         return response;
 
@@ -50,7 +48,7 @@ public class ApiKeyController : Controller
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     [HttpGet("read/all")]
-    public async Task<HttpReadAllResponse<KeyModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
+    public async Task<HttpReadAllResponse<ApiKeyDataModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
     {
 
         // Verifica el acceso
@@ -59,7 +57,7 @@ public class ApiKeyController : Controller
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
         {
-            return new ReadAllResponse<KeyModel>()
+            return new ReadAllResponse<ApiKeyDataModel>()
             {
                 Message = haveAccess.Message,
                 Response = haveAccess.Response
@@ -67,7 +65,7 @@ public class ApiKeyController : Controller
         }
 
         // Consulta las llaves
-        var response = await Data.Keys.ReadAll(id);
+        var response = await Data.ApiKeys.ReadAll(id);
 
         return response;
 
@@ -86,7 +84,7 @@ public class ApiKeyController : Controller
         if (key <= 0)
             return new(Responses.InvalidParam);
 
-        var keyModel = await Data.Keys.Read(key);
+        var keyModel = await Data.ApiKeys.ReadBy(key);
 
         if (keyModel.Response != Responses.Success)
         {
@@ -98,20 +96,20 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-        //var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
+        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.ProjectID, token);
 
-        //// Si no hay acceso
-        //if (haveAccess.Response != Responses.Success)
-        //{
-        //    return new ReadAllResponse<ApiKeyDataModel>()
-        //    {
-        //        Message = haveAccess.Message,
-        //        Response = haveAccess.Response
-        //    };
-        //}
+        // Si no hay acceso
+        if (haveAccess.Response != Responses.Success)
+        {
+            return new ReadAllResponse<ApiKeyDataModel>()
+            {
+                Message = haveAccess.Message,
+                Response = haveAccess.Response
+            };
+        }
 
 
-        var response = await Data.Keys.UpdateState(key, ApiKeyStatus.Deleted);
+        var response = await Data.ApiKeys.UpdateState(key, ApiKeyStatus.Deleted);
         return response;
     }
 
@@ -129,7 +127,7 @@ public class ApiKeyController : Controller
         if (key <= 0)
             return new(Responses.InvalidParam);
 
-        var keyModel = await Data.Keys.Read(key);
+        var keyModel = await Data.ApiKeys.ReadBy(key);
 
         if (keyModel.Response != Responses.Success)
         {
@@ -141,19 +139,19 @@ public class ApiKeyController : Controller
         }
 
         // Verifica el acceso
-      //  var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.Project.ID, token);
+        var haveAccess = await ProjectsController.HaveAccess(keyModel.Model.ProjectID, token);
 
-        //// Si no hay acceso
-        //if (haveAccess.Response != Responses.Success)
-        //{
-        //    return new ReadAllResponse<ApiKeyDataModel>()
-        //    {
-        //        Message = haveAccess.Message,
-        //        Response = haveAccess.Response
-        //    };
-        //}
+        // Si no hay acceso
+        if (haveAccess.Response != Responses.Success)
+        {
+            return new ReadAllResponse<ApiKeyDataModel>()
+            {
+                Message = haveAccess.Message,
+                Response = haveAccess.Response
+            };
+        }
 
-        var response = await Data.Keys.UpdateState(key, estado);
+        var response = await Data.ApiKeys.UpdateState(key, estado);
         return response;
     }
 

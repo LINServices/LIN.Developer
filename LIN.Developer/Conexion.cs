@@ -89,6 +89,8 @@ public sealed class Conexión
     public Data.Context DataBase { get; private set; }
 
 
+    private ConnectionLogger ConnectionLogger { get; set; }
+
 
     /// <summary>
     /// Nueva conexión
@@ -103,6 +105,13 @@ public sealed class Conexión
 
         _counter++;
         this.ConnectionNumber = _counter;
+
+        ConnectionLogger = new ConnectionLogger()
+        {
+            Number = ConnectionNumber,
+        };
+
+        Services.ServerLogger.LogConnection(ConnectionLogger);
 
         if (CacheConnections.Count <= _cantidad)
             CacheConnections.Add(this);

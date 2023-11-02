@@ -30,8 +30,9 @@ public static class IA
                 _ => Languajes.Undefined,
             };
         }
-        catch 
+        catch (Exception ex)
         {
+            ServerLogger.LogError("Lingua IA: " + ex.Message);
         }
 
         return Languajes.Undefined;
@@ -64,8 +65,9 @@ public static class IA
                 _ => Genders.Undefined,
             };
         }
-        catch 
+        catch (Exception ex)
         {
+            ServerLogger.LogError("Genderize: " + ex.Message);
         }
 
         return Genders.Undefined;
@@ -101,6 +103,7 @@ public static class IA
         }
         catch (Exception ex)
         {
+            ServerLogger.LogError("EmoSense: " + ex.Message);
         }
 
         return Types.Enumerations.Sentiments.Undefined;
@@ -137,6 +140,7 @@ public static class IA
         }
         catch (Exception ex)
         {
+            ServerLogger.LogError("EmoSense: " + ex.Message);
         }
 
         return Types.Enumerations.Sentiments.Undefined;
@@ -194,6 +198,7 @@ public static class IA
         }
         catch (Exception ex)
         {
+            ServerLogger.LogError("Visionary IA: " + ex.Message);
         }
 
         return ProductCategories.Undefined;

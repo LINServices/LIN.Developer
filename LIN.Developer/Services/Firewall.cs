@@ -16,9 +16,13 @@ public class Firewall
 
         if (httpContext == null)
             return "";
-        
+
+
         // Obtener la dirección IP del cliente
         var ipAddress = httpContext.Connection.RemoteIpAddress;
+
+        
+
 
         // Verificar si la dirección IP es de IPv4 o IPv6
         if (ipAddress != null)
@@ -50,7 +54,7 @@ public class Firewall
             return new(Responses.Success);
 
         // obtener el ID de un proyecto asociado a un Key
-        var projectID = await Data.Keys.GetProjectID(apiKey, contextConnection);
+        var projectID = await Data.ApiKeys.GetProjectID(apiKey, contextConnection);
 
         // Si hay algún error
         if (projectID.Response != Responses.Success)
@@ -63,7 +67,7 @@ public class Firewall
         int id = projectID.Model;
 
         // Comprueba si el proyecto tiene reglas firewall para una IP
-        var has = await Data.Resources.HasFirewallFor(id, ip, contextConnection);
+        var has = await Data.Projects.HasFirewallFor(id, ip, contextConnection);
 
         // Evalúa el Has
         if (has.Response != Responses.Success)

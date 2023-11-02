@@ -1,7 +1,7 @@
 ﻿namespace LIN.Developer.Data;
 
 
-public static class Resources
+public static class Projects
 {
 
 
@@ -106,15 +106,17 @@ public static class Resources
         // Ejecución
         try
         {
-            context.DataBase.Attach(data.Profile);
             var res = await context.DataBase.Proyectos.AddAsync(data);
             context.DataBase.SaveChanges();
 
             return new(Responses.Success, data.ID);
         }
-        catch
-        { 
+        catch (Exception ex)
+        {
+            ServerLogger.LogError(ex.Message);
         }
+
+
         return new();
     }
 
@@ -142,9 +144,9 @@ public static class Resources
             return new(Responses.Success, projects);
 
         }
-        catch 
+        catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
 
@@ -167,7 +169,7 @@ public static class Resources
         {
 
             var access = await (from P in context.DataBase.Proyectos
-                                where P.ID == projectID && P.Profile.ID == profileID
+                                where P.ID == projectID && P.ProfileID == profileID
                                 where P.Estado == ProjectStatus.Normal
                                 select P.ID).FirstOrDefaultAsync();
 
@@ -179,7 +181,7 @@ public static class Resources
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
 
@@ -212,7 +214,7 @@ public static class Resources
             var ips = await Query.FirewallRule.ReadAll(project.ID, context).ToListAsync();
 
             // Agrega las IP
-           // project.IPs = ips ?? new();
+            project.IPs = ips ?? new();
 
             // Retorna
             return new(Responses.Success, project);
@@ -220,7 +222,7 @@ public static class Resources
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
 
@@ -243,8 +245,8 @@ public static class Resources
         {
 
             // Consulta
-            var rules = await (from R in context.DataBase.FirewallRules
-                               where R.Project.ID == id
+            var rules = await (from R in context.DataBase.FirewallRule
+                               where R.ProjectID == id
                                where R.Status == FirewallRuleStatus.Normal
                                select R).ToListAsync();
 
@@ -269,7 +271,7 @@ public static class Resources
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
 
@@ -307,18 +309,18 @@ public static class Resources
                 project.Estado = ProjectStatus.Deleted;
 
 
-                //// Obtiene las llaves
-                //var keys = await (from K in context.DataBase.ApiKeys
-                //                  where K.Project.ID == project.ID
-                //                  select K).ToListAsync();
+                // Obtiene las llaves
+                var keys = await (from K in context.DataBase.ApiKeys
+                                  where K.ProjectID == project.ID
+                                  select K).ToListAsync();
 
-                //// Estado de las llaves
-                //foreach (var key in keys)
-                //    key.Status = ApiKeyStatus.Deleted;
+                // Estado de las llaves
+                foreach (var key in keys)
+                    key.Status = ApiKeyStatus.Deleted;
 
-                //// Guarda los cambios
-                //context.DataBase.SaveChanges();
-                //transaction.Commit();
+                // Guarda los cambios
+                context.DataBase.SaveChanges();
+                transaction.Commit();
 
 
                 // Retorna el resultado
@@ -328,7 +330,7 @@ public static class Resources
             catch (Exception ex)
             {
                 transaction.Rollback();
-                
+                ServerLogger.LogError(ex.Message);
             }
         }
 

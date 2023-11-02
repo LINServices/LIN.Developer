@@ -1,4 +1,6 @@
-﻿
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
 namespace LIN.Developer.Data;
 
 
@@ -13,7 +15,7 @@ public static class ApiKeyUses
     /// Genera un uso en una api key
     /// </summary>
     /// <param name="data">Modelo del uso</param>
-    public async static Task<CreateResponse> GenerateUses(BillingItemModel data)
+    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data)
     {
         // Obtiene la conexión
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
@@ -31,7 +33,7 @@ public static class ApiKeyUses
     /// </summary>
     /// <param name="data">Modelo del uso</param>
     /// <param name="key">String de la llave</param>
-    public async static Task<CreateResponse> GenerateUses(BillingItemModel data, string key)
+    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data, string key)
     {
         // Obtiene la conexión
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
@@ -52,7 +54,7 @@ public static class ApiKeyUses
     /// </summary>
     /// <param name="data">Modelo del uso de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> GenerateUses(BillingItemModel data, Conexión context)
+    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data, Conexión context)
     {
 
         // Modelo
@@ -61,95 +63,93 @@ public static class ApiKeyUses
         // Ejecución (Transacción)
         using (var dbTransaction = context.GetTransaction())
         {
-            //try
-            //{
+            try
+            {
 
-            //    var key = await new MongoDBConnection().DBConnection.GetDatabase("Cluster0").GetCollection<KeyModel>("keys").Find(t => t.ID == data.KeyUId).FirstOrDefaultAsync();
+                // Obtiene la llave
+                var key = await context.DataBase.ApiKeys.FindAsync(data.KeyID);
 
-            //    // Evalúa la llave
-            //    if (key == null || key.Status != ApiKeyStatus.Actived)
-            //    {
-            //        dbTransaction.Rollback();
-            //        return new(Responses.InvalidApiKey);
-            //    }
+                // Evalúa la llave
+                if (key == null || key.Status != ApiKeyStatus.Actived)
+                {
+                    dbTransaction.Rollback();
+                    return new(Responses.InvalidApiKey);
+                }
 
-            //    // Obtiene el proyecto
-            //    var project = await context.DataBase.Proyectos.FindAsync(key.Project.ID);
+                // Obtiene el proyecto
+                var project = await context.DataBase.Proyectos.FindAsync(key.ProjectID);
 
-            //    // Si no existe
-            //    if (project == null)
-            //    {
-            //        dbTransaction.Rollback();
-            //        return new(Responses.NotExistProfile);
-            //    }
+                // Si no existe
+                if (project == null)
+                {
+                    dbTransaction.Rollback();
+                    return new(Responses.NotExistProfile);
+                }
 
-            //    var profile = await context.DataBase.Profiles.FindAsync(project.Profile.ID);
+                var profile = await context.DataBase.Profiles.FindAsync(project.ProfileID);
 
-            //    if (profile == null)
-            //    {
-            //        dbTransaction.Rollback();
-            //        return new(Responses.Unauthorized);
-            //    }
+                if (profile == null)
+                {
+                    dbTransaction.Rollback();
+                    return new(Responses.Unauthorized);
+                }
 
-            //    data.Valor = Pricing.Discount(data.Valor, profile.Discont);
+                data.Valor = Pricing.Discount(data.Valor, profile.Discont);
 
-            //    // Si no hay créditos
-            //    if (profile == null || profile.Credito - data.Valor < 0m)
-            //    {
-            //        dbTransaction.Rollback();
-            //        return new(Responses.WithoutCredits);
-            //    }
-
-
-            //    // Nueva transacción
-            //    var transaction = new TransactionDataModel()
-            //    {
-            //        Description = "Usado en un servicio LIN",
-            //        Fecha = DateTime.Now,
-            //        ID = 0,
-            //        Profile = new()
-            //        {
-            //            ID = profile.ID,
-            //        },
-            //        Tipo = TransactionTypes.UsedService,
-            //        Valor = Pricing.ToNegative(data.Valor)
-            //    };
+                // Si no hay créditos
+                if (profile == null || profile.Credito - data.Valor < 0m)
+                {
+                    dbTransaction.Rollback();
+                    return new(Responses.WithoutCredits);
+                }
 
 
-            //    // Transacción
-            //    var responseTransaction = await Transactions.Generate(transaction, context, false);
+                // Nueva transacción
+                var transaction = new TransactionDataModel()
+                {
+                    Description = "Usado en un servicio LIN",
+                    Fecha = DateTime.Now,
+                    ID = 0,
+                    ProfileID = profile.ID,
+                    Tipo = TransactionTypes.UsedService,
+                    Valor = Pricing.ToNegative(data.Valor)
+                };
 
-            //    if (responseTransaction.Response != Responses.Success)
-            //    {
-            //        dbTransaction.Rollback();
-            //        return new();
-            //    }
 
-            //    data.Transaction.ID = responseTransaction.LastID;
+                // Transacción
+                var responseTransaction = await Transactions.Generate(transaction, context, false);
 
-            //    // Agrega el uso
-            //    await context.DataBase.ApiKeyUses.AddAsync(data);
+                if (responseTransaction.Response != Responses.Success)
+                {
+                    dbTransaction.Rollback();
+                    return new();
+                }
 
-            //    // Guarda los cambios
-            //    context.DataBase.SaveChanges();
+                data.TransactionID = responseTransaction.LastID;
 
-            //    // Envía la transacción
-            //    dbTransaction.Commit();
+                // Agrega el uso
+                await context.DataBase.ApikeyUses.AddAsync(data);
 
-            //    // Cierra la conexión
-            //    return new(Responses.Success, data.ID);
+                // Guarda los cambios
+                context.DataBase.SaveChanges();
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    dbTransaction.Rollback();
-            //    if (ex.InnerException != null && ex.InnerException.Message.Contains("Cannot insert explicit value for identity"))
-            //    {
+                // Envía la transacción
+                dbTransaction.Commit();
 
-            //    }
+                // Cierra la conexión
+                return new(Responses.Success, data.ID);
 
-            //    ServerLogger.LogError("AJ" + ex.InnerException);
-            //}
+            }
+            catch (Exception ex)
+            {
+                dbTransaction.Rollback();
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("Cannot insert explicit value for identity"))
+                {
+
+                }
+
+                ServerLogger.LogError("AJ" + ex.InnerException);
+            }
         }
 
         return new();
@@ -163,28 +163,28 @@ public static class ApiKeyUses
     /// <param name="data">Modelo del uso</param>
     /// <param name="key">String de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> GenerateUses(BillingItemModel data, string key, Conexión context)
+    public async static Task<CreateResponse> GenerateUses(ApiKeyUsesDataModel data, string key, Conexión context)
     {
 
         // Ejecución
         try
         {
 
-            //// Obtiene la llave
-            //var apiKey = await Query.ApiKeys.ReadBy(key, context).Select(T => T.ID).FirstOrDefaultAsync();
+            // Obtiene la llave
+            var apiKey = await Query.ApiKeys.ReadBy(key, context).Select(T => T.ID).FirstOrDefaultAsync();
 
-            //// No existe
-            //if (apiKey <= 0)
-            //{
-            //    return new(Responses.InvalidApiKey);
-            //}
+            // No existe
+            if (apiKey <= 0)
+            {
+                return new(Responses.InvalidApiKey);
+            }
 
-            //data.Key.ID = apiKey;
-            //return await GenerateUses(data, context);
+            data.KeyID = apiKey;
+            return await GenerateUses(data, context);
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();

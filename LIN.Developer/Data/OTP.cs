@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data;
 
 
 public static class OTP
@@ -87,7 +90,7 @@ public static class OTP
 
 
     /// <summary>
-    /// Crea un nuevo código OTP.
+    /// Crea un nuevo OTP
     /// </summary>
     /// <param name="data">Modelo</param>
     /// <param name="context">Contexto de conexión</param>
@@ -99,14 +102,13 @@ public static class OTP
         // Ejecución
         try
         {
-
-            context.DataBase.Attach(data.Profile);
             var res = await context.DataBase.OTP.AddAsync(data);
             context.DataBase.SaveChanges();
             return new(Responses.Success, data.ID);
         }
-        catch
+        catch (Exception ex)
         {
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -115,7 +117,7 @@ public static class OTP
 
 
     /// <summary>
-    /// Obtiene los OTP activos de un perfil
+    /// Obtiene los OTP de un perfil
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
@@ -130,8 +132,9 @@ public static class OTP
 
             return new(Responses.Success, lista);
         }
-        catch
+        catch (Exception ex)
         {
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -140,7 +143,7 @@ public static class OTP
 
 
     /// <summary>
-    /// Actualiza el estado.
+    /// Actualiza el estado
     /// </summary>
     /// <param name="id">ID del OTP</param>
     /// <param name="estado">Nuevo estado</param>
@@ -153,16 +156,17 @@ public static class OTP
             var modelo = await context.DataBase.OTP.FindAsync(id);
 
             if (modelo == null)
+            {
                 return new(Responses.NotRows);
-            
+            }
 
             modelo.Estado = estado;
             context.DataBase.SaveChanges();
             return new(Responses.Success);
         }
-        catch
+        catch (Exception ex)
         {
-
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -195,7 +199,7 @@ public static class OTP
         }
         catch (Exception ex)
         {
-
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();

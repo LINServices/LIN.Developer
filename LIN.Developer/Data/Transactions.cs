@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data;
 
 
 public class Transactions
@@ -67,10 +69,8 @@ public class Transactions
             try
             {
 
-      
-
                 // Obtiene el perfil
-                var profile = await context.DataBase.Profiles.FindAsync(data.Profile.ID);
+                var profile = await context.DataBase.Profiles.FindAsync(data.ProfileID);
 
                 // Si no existe
                 if (profile == null)
@@ -85,8 +85,9 @@ public class Transactions
                 // Guarda el origen
                 context.DataBase.SaveChanges();
 
+
                 // Agrega los valores 
-                profile.Credits += data.Valor;
+                profile.Credito += data.Valor;
 
                 // Guarda los cambios
                 context.DataBase.SaveChanges();
@@ -105,6 +106,7 @@ public class Transactions
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("Cannot insert explicit value for identity"))
                 {
                 }
+                ServerLogger.LogError($"{ex.InnerException}");
             }
         
 
@@ -132,8 +134,9 @@ public class Transactions
             return new(Responses.Success, transacciones);
 
         }
-        catch 
+        catch (Exception ex)
         {
+            ServerLogger.LogError("ReadAll transactions" + ex.InnerException);
         }
 
         return new();

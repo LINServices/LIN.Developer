@@ -20,6 +20,8 @@ public class IAController : ControllerBase
         try
         {
 
+            Services.Http.GetPlatform(http);
+
             // Conexión a BD
             var (context, contextKey) = Conexión.GetOneConnection();
 
@@ -42,13 +44,10 @@ public class IAController : ControllerBase
             }
 
             // Modelo del USO
-            BillingItemModel uso = new()
+            ApiKeyUsesDataModel uso = new()
             {
                 ID = 0,
-                Transaction = new()
-                {
-                  Valor = Abstractions.PriceTable.LangIA
-                }
+                Valor = Abstractions.PriceTable.LangIA
             };
 
             // realiza el cobro
@@ -109,6 +108,7 @@ public class IAController : ControllerBase
     {
         try
         {
+            Services.Http.GetPlatform(http);
             // Conexión a BD
             var (context, contextKey) = Conexión.GetOneConnection();
 
@@ -131,14 +131,10 @@ public class IAController : ControllerBase
             }
 
             // Modelo del USO
-            BillingItemModel uso = new()
+            ApiKeyUsesDataModel uso = new()
             {
                 ID = 0,
-                Transaction = new()
-                {
-Valor = Abstractions.PriceTable.NamesIA
-                }
-                
+                Valor = Abstractions.PriceTable.NamesIA
             };
 
             // realiza el cobro
@@ -196,6 +192,7 @@ Valor = Abstractions.PriceTable.NamesIA
     {
         try
         {
+            Services.Http.GetPlatform(http);
             //Load sample data
             var sampleData = new SentimentIA.ModelInput()
             {
@@ -240,6 +237,8 @@ Valor = Abstractions.PriceTable.NamesIA
     public async Task<HttpReadOneResponse<ProductCategories>> VisionPredict([FromBody] byte[] imageByte, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
 
+        Services.Http.GetPlatform(http);
+
         // Conexión a BD
         var (context, contextKey) = Conexión.GetOneConnection();
 
@@ -268,14 +267,10 @@ Valor = Abstractions.PriceTable.NamesIA
         {
 
             // Modelo del USO
-            BillingItemModel uso = new()
+            ApiKeyUsesDataModel uso = new()
             {
                 ID = 0,
-                Transaction = new()
-                {
-  Valor = Abstractions.PriceTable.VisionIA
-                }
-              
+                Valor = Abstractions.PriceTable.VisionIA
             };
 
             // Genera el uso
@@ -295,8 +290,9 @@ Valor = Abstractions.PriceTable.NamesIA
             return new(Responses.Undefined);
 
         }
-        catch
+        catch (Exception ex)
         {
+            ServerLogger.LogError(ex.Message);
         }
 
         return new(Responses.Undefined, ProductCategories.Undefined);
@@ -317,6 +313,7 @@ Valor = Abstractions.PriceTable.NamesIA
     {
         try
         {
+            Services.Http.GetPlatform(http);
             // Pagar con
             IPayWith payWith = (pay == PayWith.Key)
                                ? new PayKey(access, http)

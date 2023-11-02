@@ -13,7 +13,7 @@ public class KeyUsesController : Controller
     /// <param name="apiKey">Llave de acceso</param>
     /// <param name="http">Contexto HTTP</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] BillingItemModel modelo, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
+    public async Task<HttpCreateResponse> Create([FromBody] ApiKeyUsesDataModel modelo, [FromHeader] string apiKey, [FromServices] IHttpContextAccessor http)
     {
 
 
@@ -39,7 +39,7 @@ public class KeyUsesController : Controller
 
         // Organización del modelo
         modelo.ID = 0;
-        modelo.Transaction.ID = 0;
+        modelo.TransactionID = 0;
 
         var response = await Data.ApiKeyUses.GenerateUses(modelo, apiKey, context);
 
@@ -68,7 +68,7 @@ public class KeyUsesController : Controller
             if (modelo == null)
                 return false;
 
-            modelo.Credits = credito;
+            modelo.Credito = credito;
             conexion.DataBase.SaveChanges();
             return true;
 
@@ -99,7 +99,7 @@ public class KeyUsesController : Controller
             {
                 Description = "Regalo",
                 Fecha = DateTime.Now,
-                Profile = new() {ID = id },
+                ProfileID = id,
                 Tipo = TransactionTypes.Recharge,
                 Valor = credito
             };

@@ -11,15 +11,15 @@ public class FirewallRulesController : Controller
     /// </summary>
     /// <param name="modelo">Modelo</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] FirewallRuleModel modelo, [FromHeader] string token)
+    public async Task<HttpCreateResponse> Create([FromBody] FirewallRuleDataModel modelo, [FromHeader] string token)
     {
 
         // Verificación de los parámetros
-        if (modelo.Project.ID <= 0 || !IP.ValidateIPv4(modelo.IPInicio) || !IP.ValidateIPv4(modelo.IPFinal))
+        if (modelo.ProjectID <= 0 || !IP.ValidateIPv4(modelo.IPInicio) || !IP.ValidateIPv4(modelo.IPFinal))
             return new(Responses.InvalidParam);
 
         // Verifica si un perfil tiene acceso a un proyecto
-        var access = await ProjectsController.HaveAccess(modelo.Project.ID, token);
+        var access = await ProjectsController.HaveAccess(modelo.ProjectID, token);
 
         // Respuesta
         if (access.Response != Responses.Success)
@@ -115,7 +115,7 @@ public class FirewallRulesController : Controller
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     [HttpGet("read/all")]
-    public async Task<HttpReadAllResponse<FirewallRuleModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
+    public async Task<HttpReadAllResponse<FirewallRuleDataModel>> ReadAll([FromHeader] int id, [FromHeader] string token)
     {
 
         if (id <= 0)
@@ -127,7 +127,7 @@ public class FirewallRulesController : Controller
         // Respuesta
         if (access.Response != Responses.Success)
         {
-            return new ReadAllResponse<FirewallRuleModel>()
+            return new ReadAllResponse<FirewallRuleDataModel>()
             {
                 Message = access.Message,
                 Response = access.Response

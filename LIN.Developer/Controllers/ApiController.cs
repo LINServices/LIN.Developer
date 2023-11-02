@@ -60,15 +60,42 @@ public class APIVersion : Controller
         {
             Mode = mode,
             Name = name,
-            Version = version
+            Version = version,
+            Open = $" {ServerLogger.OpenDate:HH:mm dd/MM/yyyy}"
         };
 
     }
 
 
 
+    /// <summary>
+    /// Obtiene la lista de errores generados
+    /// </summary>
+    [HttpGet("logErros")]
+    public dynamic Logs()
+    {
+        // Retorna el resultado
+        return new
+        {
+            ServerLogger.Errors
+        };
+
+    }
 
 
+
+    /// <summary>
+    /// Obtiene la lista de conexiones
+    /// </summary>
+    [HttpGet("Conexiones")]
+    public dynamic GetConexiones()
+    {
+        return new
+        {
+            ServerLogger.OpenConnections
+        };
+
+    }
 
 
 }

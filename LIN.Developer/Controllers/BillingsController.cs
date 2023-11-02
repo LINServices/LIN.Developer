@@ -51,10 +51,7 @@ public class BillingsController : Controller
             Fecha = DateTime.Now,
             Valor = amount,
             Tipo = TransactionTypes.UsedService,
-            Profile = new()
-            {
-                ID = profile
-            },
+            ProfileID = profile,
             Description = "Usado en LIN Apps"
         };
         var response = await Data.Transactions.Generate(transaction);

@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Services.Payment;
+﻿using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Services.Payment;
 
 
 public class PayKey : IPayWith
@@ -28,7 +30,6 @@ public class PayKey : IPayWith
     }
 
 
-
     /// <summary>
     /// Realiza el cobro
     /// </summary>
@@ -55,15 +56,12 @@ public class PayKey : IPayWith
             };
         }
 
+
         // Modelo del USO
-        BillingItemModel uso = new()
+        ApiKeyUsesDataModel uso = new()
         {
             ID = 0,
-            Transaction = new()
-            {
-                Valor = transaction.Valor
-            }
-
+            Valor = transaction.Valor
         };
 
         // realiza el cobro

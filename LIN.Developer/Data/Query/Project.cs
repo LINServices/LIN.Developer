@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Data.Query;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data.Query;
 
 
 public static class Project
@@ -14,7 +17,7 @@ public static class Project
     {
 
         var query = from P in context.DataBase.Proyectos
-                    where P.Profile.ID == id && P.Estado == ProjectStatus.Normal
+                    where P.ProfileID == id && P.Estado == ProjectStatus.Normal
                     select P;
 
         return query;

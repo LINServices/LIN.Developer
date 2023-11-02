@@ -1,7 +1,10 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data;
 
 
-public static class Keys
+public static class ApiKeys
 {
 
 
@@ -9,10 +12,10 @@ public static class Keys
 
 
     /// <summary>
-    /// Crea una llave.
+    /// Crea una Api Key en la base de datos
     /// </summary>
-    /// <param name="data">Modelo</param>
-    public async static Task<CreateResponse> Create(KeyModel data)
+    /// <param name="data">Modelo de la llave</param>
+    public async static Task<CreateResponse> Create(ApiKeyDataModel data)
     {
 
         // Obtiene la conexión
@@ -27,10 +30,10 @@ public static class Keys
 
 
     /// <summary>
-    /// Obtiene las llaves asociadas a un proyecto.
+    /// Obtiene las llaves asociadas a un proyecto
     /// </summary>
     /// <param name="id">ID del proyecto</param>
-    public async static Task<ReadAllResponse<KeyModel>> ReadAll(int id)
+    public async static Task<ReadAllResponse<ApiKeyDataModel>> ReadAll(int id)
     {
 
         // Obtiene la conexión
@@ -44,10 +47,10 @@ public static class Keys
 
 
     /// <summary>
-    /// Cambia el estado de una llave
+    /// Cambia el estado de una Key
     /// </summary>
-    /// <param name="key">ID de la llave.</param>
-    /// <param name="estado">Nuevo estado.</param>
+    /// <param name="key">ID de la llave</param>
+    /// <param name="estado">Nuevo estado</param>
     public async static Task<ResponseBase> UpdateState(int key, ApiKeyStatus estado)
     {
 
@@ -63,13 +66,13 @@ public static class Keys
 
 
     /// <summary>
-    /// Obtiene una llave.
+    /// Obtiene una api key
     /// </summary>
     /// <param name="key">String de la llave</param>
-    public async static Task<ReadOneResponse<KeyModel>> Read(string key)
+    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(string key)
     {
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
-        var response = await Read(key, context);
+        var response = await ReadBy(key, context);
         context.CloseActions(connectionKey);
         return response;
     }
@@ -77,13 +80,13 @@ public static class Keys
 
 
     /// <summary>
-    /// Obtiene una llave.
+    /// Obtiene una api key
     /// </summary>
     /// <param name="key">ID de la llave</param>
-    public async static Task<ReadOneResponse<KeyModel>> Read(int key)
+    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(int key)
     {
         (Conexión context, string connectionKey) = Conexión.GetOneConnection();
-        var response = await Read(key, context);
+        var response = await ReadBy(key, context);
         context.CloseActions(connectionKey);
         return response;
     }
@@ -94,11 +97,11 @@ public static class Keys
 
 
     /// <summary>
-    /// Crea una nueva llave.
+    /// Crea una nueva key
     /// </summary>
-    /// <param name="data">Modelo.</param>
-    /// <param name="context">Contexto de conexión.</param>
-    public async static Task<CreateResponse> Create(KeyModel data, Conexión context)
+    /// <param name="data">Modelo del perfil</param>
+    /// <param name="context">Contexto de conexión</param>
+    public async static Task<CreateResponse> Create(ApiKeyDataModel data, Conexión context)
     {
 
         data.ID = 0;
@@ -106,14 +109,13 @@ public static class Keys
         // Ejecución
         try
         {
-            context.DataBase.Attach(data.Project);
-            var res = await context.DataBase.Keys.AddAsync(data);
+            var res = await context.DataBase.ApiKeys.AddAsync(data);
             context.DataBase.SaveChanges();
             return new(Responses.Success, data.ID);
         }
         catch (Exception ex)
         {
-
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -122,24 +124,28 @@ public static class Keys
 
 
     /// <summary>
-    /// Obtiene una llave.
+    /// Obtiene una api key
     /// </summary>
     /// <param name="key">String de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadOneResponse<KeyModel>> Read(string key, Conexión context)
+    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(string key, Conexión context)
     {
         // Ejecución
         try
         {
+
             var res = await Query.ApiKeys.ReadBy(key, context).FirstOrDefaultAsync();
 
             if (res == null)
+            {
                 return new(Responses.InvalidApiKey);
+            }
 
             return new(Responses.Success, res);
         }
-        catch
+        catch (Exception ex)
         {
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -148,11 +154,11 @@ public static class Keys
 
 
     /// <summary>
-    /// Obtiene una llave.
+    /// Obtiene una api key
     /// </summary>
     /// <param name="id">ID de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadOneResponse<KeyModel>> Read(int id, Conexión context)
+    public async static Task<ReadOneResponse<ApiKeyDataModel>> ReadBy(int id, Conexión context)
     {
         // Ejecución
         try
@@ -160,12 +166,15 @@ public static class Keys
             var res = await Query.ApiKeys.ReadBy(id, context).FirstOrDefaultAsync();
 
             if (res == null)
+            {
                 return new(Responses.InvalidApiKey);
-            
+            }
+
             return new(Responses.Success, res);
         }
-        catch
+        catch (Exception ex)
         {
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -174,11 +183,11 @@ public static class Keys
 
 
     /// <summary>
-    /// Obtiene las llaves asociadas a un proyecto.
+    /// Obtiene las llaves asociadas a un proyecto
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadAllResponse<KeyModel>> ReadAll(int id, Conexión context)
+    public async static Task<ReadAllResponse<ApiKeyDataModel>> ReadAll(int id, Conexión context)
     {
 
         // Ejecución
@@ -189,8 +198,9 @@ public static class Keys
 
             return new(Responses.Success, lista);
         }
-        catch
+        catch (Exception ex)
         {
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -199,7 +209,7 @@ public static class Keys
 
 
     /// <summary>
-    /// Cambia el estado de una llave.
+    /// Cambia el estado de una llave
     /// </summary>
     /// <param name="key">ID de la llave</param>
     /// <param name="estado">Nuevo estado de la llave</param>
@@ -209,7 +219,7 @@ public static class Keys
         // Ejecución
         try
         {
-            var modelo = await context.DataBase.Keys.FindAsync(key);
+            var modelo = await context.DataBase.ApiKeys.FindAsync(key);
 
             if (modelo == null)
             {
@@ -222,7 +232,7 @@ public static class Keys
         }
         catch (Exception ex)
         {
-
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -243,6 +253,7 @@ public static class Keys
 
             var id = await Query.ApiKeys.GetProjectID(key, context).FirstOrDefaultAsync();
 
+
             // Si es un ID invalido
             if (id <= 0)
                 return new(Responses.NotRows, 0)
@@ -256,7 +267,7 @@ public static class Keys
         }
         catch (Exception ex)
         {
-
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();

@@ -1,4 +1,7 @@
-﻿namespace LIN.Developer.Data.Query;
+﻿using LIN.Types.Developer.Enumerations;
+using LIN.Types.Developer.Models;
+
+namespace LIN.Developer.Data.Query;
 
 
 public static class ApiKeys
@@ -10,12 +13,12 @@ public static class ApiKeys
     /// </summary>
     /// <param name="key">String de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<KeyModel> ReadBy(string key, Conexión context)
+    public static IQueryable<ApiKeyDataModel> ReadBy(string key, Conexión context)
     {
 
-        var query = (from A in context.DataBase.Keys
-                     where A.Key == key && A.Status != ApiKeyStatus.Deleted
-                     select A).Take(1);
+        var query = (from A in context.DataBase.ApiKeys
+                    where A.Key == key && A.Status != ApiKeyStatus.Deleted
+                    select A).Take(1);
 
         return query;
     }
@@ -27,12 +30,12 @@ public static class ApiKeys
     /// </summary>
     /// <param name="key">ID de la llave</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<KeyModel> ReadBy(int id, Conexión context)
+    public static IQueryable<ApiKeyDataModel> ReadBy(int id, Conexión context)
     {
 
-        var query = (from A in context.DataBase.Keys
-                     where A.ID == id && A.Status != ApiKeyStatus.Deleted
-                     select A).Take(1);
+        var query = (from A in context.DataBase.ApiKeys
+                    where A.ID == id && A.Status != ApiKeyStatus.Deleted
+                    select A).Take(1);
 
         return query;
 
@@ -45,11 +48,11 @@ public static class ApiKeys
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<KeyModel> ReadAll(int id, Conexión context)
+    public static IQueryable<ApiKeyDataModel> ReadAll(int id, Conexión context)
     {
 
-        var query = from AK in context.DataBase.Keys
-                    where AK.Project.ID == id && AK.Status != ApiKeyStatus.Deleted
+        var query = from AK in context.DataBase.ApiKeys
+                    where AK.ProjectID == id && AK.Status != ApiKeyStatus.Deleted
                     select AK;
 
         return query;
@@ -66,9 +69,9 @@ public static class ApiKeys
     public static IQueryable<int> GetProjectID(string key, Conexión context)
     {
 
-        var query = (from K in context.DataBase.Keys
+        var query = (from K in context.DataBase.ApiKeys
                      where K.Key == key && K.Status == ApiKeyStatus.Actived
-                     select K.ProjectId).Take(1);
+                     select K.ProjectID).Take(1);
 
         return query;
     }

@@ -15,7 +15,7 @@ public class ProjectsController : Controller
     {
 
         // Validaciones
-        if (modelo.Nombre.Length <= 0)
+        if (modelo.ProfileID <= 0 || modelo.Nombre.Length <= 0)
             return new(Responses.InvalidParam);
 
         // Validación de token
@@ -33,15 +33,12 @@ public class ProjectsController : Controller
 
         // Organización del modelo
         modelo.ID = 0;
-        modelo.Creation = DateTime.Now;
+        modelo.Creacion = DateTime.Now;
         modelo.Estado = ProjectStatus.Normal;
-        modelo.Profile = new()
-        {
-            ID = profile
-        };
+        modelo.ProfileID = profile;
 
         // Respuesta
-        var response = await Data.Resources.Create(modelo);
+        var response = await Data.Projects.Create(modelo);
 
         return response;
 
@@ -49,59 +46,33 @@ public class ProjectsController : Controller
 
 
 
-    ///// <summary>
-    ///// Obtiene los proyectos asociados a un perfil
-    ///// </summary>
-    ///// <param name="token">Token de acceso</param>
-    //[HttpGet("read/all")]
-    //public async Task<HttpReadOneResponse<ProjectHttpResponse>> ReadAll([FromHeader] string token, [FromHeader] string tokenAuth)
-    //{
+    /// <summary>
+    /// Obtiene los proyectos asociados a un perfil
+    /// </summary>
+    /// <param name="token">Token de acceso</param>
+    [HttpGet("read/all")]
+    public async Task<HttpReadAllResponse<ProjectDataModel>> ReadAll([FromHeader] string token)
+    {
 
-    //    var (isValid, _, profile) = Jwt.Validate(token);
+        var (isValid, _, profile) = Jwt.Validate(token);
 
-    //    if (!isValid)
-    //        return new(Responses.Unauthorized);
+        if (!isValid)
+            return new(Responses.Unauthorized);
 
-    //    if (profile <= 0 || token.IsNullOrEmpty())
-    //        return new(Responses.InvalidParam);
-
-
-    //    // Obtener apps
-    //    var apps = await Access.Auth.Controllers.Applications.ReadAll(tokenAuth);
+        if (profile <= 0 || token.IsNullOrEmpty())
+            return new(Responses.InvalidParam);
 
 
 
-    //    var onj = new LIN.Types.Developer.Models.ProjectHttpResponse
-    //    {
-    //        Applications = new()
-    //    };
+        // Token invalido
+        if (!isValid)
+            return new(Responses.Unauthorized);
 
+        var response = await Data.Projects.ReadAll(profile);
 
-    //    foreach (var app in apps.Models)
-    //    {
+        return response;
 
-    //        onj.Applications.Add(new ProjectApplication()
-    //        {
-    //            AppKey = app.Key,
-    //            Name = app.Name,
-    //            ID = app.ID.ToString()
-    //        });
-    //    }
-
-
-    //    // Token invalido
-    //    if (!isValid)
-    //        return new(Responses.Unauthorized);
-
-    //    var response = await Data.Projects.ReadAll(profile);
-
-    //    return new ReadOneResponse<ProjectHttpResponse>()
-    //    {
-    //        Model = onj,
-    //        Response = Responses.Success
-    //    };
-
-    //}
+    }
 
 
 
@@ -136,7 +107,7 @@ public class ProjectsController : Controller
         (_, _, int profile) = Jwt.Validate(token);
 
         // Obtiene los proyectos
-        var response = await Data.Resources.Read(id, profile);
+        var response = await Data.Projects.Read(id, profile);
 
         return response;
 
@@ -167,7 +138,7 @@ public class ProjectsController : Controller
         }
 
         // Respuesta
-        var response = await Data.Resources.Delete(id);
+        var response = await Data.Projects.Delete(id);
 
         return response;
 
@@ -204,7 +175,7 @@ public class ProjectsController : Controller
             };
 
         // Tiene acceso al proyecto
-        var have = await Data.Resources.HaveAuthorization(project, profile);
+        var have = await Data.Projects.HaveAuthorization(project, profile);
 
         // Si no tubo acceso
         if (have.Response != Responses.Success)

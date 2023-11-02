@@ -57,6 +57,27 @@ public class ProfileController : ControllerBase
             return new(Responses.NotExistProfile);
         }
 
+
+        // Evaluación de Promoción
+        if (Services.Promocion.Promocion.IsPromotionMail(profile.Model.Email ?? ""))
+        {
+
+            // Modelo
+            var promotion = new TransactionDataModel()
+            {
+                ID = 0,
+                Description = "Bonus",
+                Valor = 300m,
+                Tipo = TransactionTypes.Bonus,
+                ProfileID = id,
+                Fecha = DateTime.Now
+            };
+
+            _ = Data.Transactions.Generate(promotion, context,  true);
+
+        }
+
+
         // Correcto
         return new(Responses.Success);
 
@@ -122,10 +143,7 @@ public class ProfileController : ControllerBase
             ID = 0,
             OTP = KeyGen.GenerateOTP(5),
             Vencimiento = DateTime.Now.AddMinutes(10),
-            Profile = new()
-            {
-               ID = data.Model.ID
-            },
+            ProfileID = data.Model.ID,
             Estado = OTPStatus.actived
         };
 

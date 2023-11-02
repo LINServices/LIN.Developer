@@ -1,17 +1,27 @@
+global using LIN.Developer;
+global using LIN.Developer.Services;
+global using LIN.Types.Developer.Enumerations;
+global using LIN.Types.Developer.Models;
+global using LIN.Types.Enumerations;
+global using LIN.Types.Responses;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using LIN.Modules;
+global using LIN.Developer.Data.Query;
+global using Http.ResponsesList;
+global using LIN.Types.Auth.Abstracts;
+global using LIN.Types.Auth.Models;
+global using LIN.Types.Auth.Enumerations;
+
+
 try
 {
 
-    // Crear el constructor.
     var builder = WebApplication.CreateBuilder(args);
 
-    // Servicios.
     builder.Services.AddSignalR();
-    builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.AddHttpContextAccessor();
 
-    // CORS.
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowAnyOrigin",
@@ -23,28 +33,47 @@ try
             });
     });
 
-    // Conexión SQL.
+
+
+
+    // Add services to the container.
+    string sqlConnection = "";
+
+#if RELEASE
+    sqlConnection = builder.Configuration["ConnectionStrings:Somee"] ?? "";
+#elif AZURE
+    sqlConnection = builder.Configuration["ConnectionStrings:Azure"] ?? "";
+#endif
+
+    Conexión.SetStringConnection(sqlConnection);
+
+    LIN.Access.Auth.Build.SetAuth(builder.Configuration["lin:app"] ?? "");
+    try
     {
-
-        // Conexión SQL.
-        string sqlConnection = string.Empty;
-
-        // Obtiene la cadena de conexión.
-        sqlConnection = builder.Configuration["ConnectionStrings:Somee"] ?? "";
-
-        // Establecer.
-        Conexión.SetStringConnection(sqlConnection);
-
+        // SQL Server
+        builder.Services.AddDbContext<LIN.Developer.Data.Context>(options =>
+        {
+            options.UseSqlServer(sqlConnection);
+        });
+    }
+    catch (Exception ex)
+    {
+        ServerLogger.LogError("Error" + ex.Message);
     }
 
-    // Llave de la app en Identity.
-    LIN.Access.Auth.Build.SetAuth(builder.Configuration["lin:app"] ?? "");
-   
 
-    // Crea la aplicación.
+
+
+    builder.Services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Services.AddHttpContextAccessor();
+
+
     var app = builder.Build();
 
-    // Asegura la creación de la base de datos.
+
     try
     {
         // Si la base de datos no existe
@@ -52,23 +81,35 @@ try
         var dataContext = scope.ServiceProvider.GetRequiredService<LIN.Developer.Data.Context>();
         var res = dataContext.Database.EnsureCreated();
     }
-    catch 
+    catch (Exception ex)
+    {
+        ServerLogger.LogError("Error" + ex.Message);
+    }
+
+
+
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
     {
     }
 
-    // Uso de Swagger.
+
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    // Otras políticas.
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseCors("AllowAnyOrigin");
+
     app.UseAuthorization();
+
     app.MapControllers();
 
     // Inicia las conexiones
     _ = Conexión.StartConnections();
+
+    // Estado del servidor
+    ServerLogger.OpenDate = DateTime.Now;
 
     app.Run();
 }

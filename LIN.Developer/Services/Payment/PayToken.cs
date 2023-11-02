@@ -43,7 +43,7 @@ public class PayToken : IPayWith
     private void Validate()
     {
 
-        var (isValid, _, profile) = Jwt.Validate(this._token);
+        var (isValid, account, profile) = Jwt.Validate(this._token);
 
         if (isValid)
         {
@@ -76,10 +76,7 @@ public class PayToken : IPayWith
 
        
         // ID del perfil
-        transacción.Profile = new()
-        {
-            ID = _profile,
-        };
+        transacción.ProfileID = _profile;
         transacción.Valor = Pricing.ToNegative(transacción.Valor);
 
         // Efectúa

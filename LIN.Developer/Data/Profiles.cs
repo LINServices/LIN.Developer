@@ -154,7 +154,7 @@ public static class Profiles
             if (ex.InnerException!.Message.Contains("Cannot insert duplicate key row in object"))
                 return new(Responses.ExistAccount);
 
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -184,7 +184,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -216,7 +216,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -257,7 +257,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -286,7 +286,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new(Responses.Undefined, false);
@@ -319,7 +319,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new(Responses.Undefined, false);
@@ -353,7 +353,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+            ServerLogger.LogError(ex.Message);
         }
 
         return new(Responses.Undefined);
