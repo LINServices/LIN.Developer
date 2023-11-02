@@ -114,7 +114,7 @@ public static class Projects
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
 
@@ -147,7 +147,7 @@ public static class Projects
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
 
@@ -182,7 +182,7 @@ public static class Projects
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
 
@@ -223,7 +223,7 @@ public static class Projects
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
 
@@ -272,7 +272,7 @@ public static class Projects
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
 
@@ -331,7 +331,7 @@ public static class Projects
             catch (Exception ex)
             {
                 transaction.Rollback();
-                ServerLogger.LogError(ex.Message);
+                
             }
         }
 

@@ -184,7 +184,7 @@ public static class ApiKeyUses
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();

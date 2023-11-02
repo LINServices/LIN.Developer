@@ -108,7 +108,7 @@ public static class OTP
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();
@@ -134,7 +134,7 @@ public static class OTP
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();
@@ -166,7 +166,7 @@ public static class OTP
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();
@@ -199,7 +199,7 @@ public static class OTP
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();

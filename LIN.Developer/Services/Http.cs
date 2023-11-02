@@ -22,9 +22,7 @@ public class Http
         var userAgent = http.HttpContext.Request.Headers["User-Agent"].ToString().ToLower();
 
         var pl = http.HttpContext.Request.Headers["sec-ch-ua-platform"].ToString().ToLower();
-        ServerLogger.LogError("PL" + pl);
-        ServerLogger.LogError("UA" + userAgent);
-
+        
         if (userAgent.Contains("windows"))
             return Platforms.Windows;
 

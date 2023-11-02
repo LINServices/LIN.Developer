@@ -115,7 +115,7 @@ public static class ApiKeys
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();
@@ -145,7 +145,7 @@ public static class ApiKeys
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();
@@ -172,9 +172,9 @@ public static class ApiKeys
 
             return new(Responses.Success, res);
         }
-        catch (Exception ex)
+        catch
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();
@@ -198,9 +198,8 @@ public static class ApiKeys
 
             return new(Responses.Success, lista);
         }
-        catch (Exception ex)
+        catch
         {
-            ServerLogger.LogError(ex.Message);
         }
 
         return new();
@@ -232,7 +231,7 @@ public static class ApiKeys
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();
@@ -267,7 +266,7 @@ public static class ApiKeys
         }
         catch (Exception ex)
         {
-            ServerLogger.LogError(ex.Message);
+            
         }
 
         return new();

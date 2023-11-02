@@ -52,11 +52,9 @@ try
         var dataContext = scope.ServiceProvider.GetRequiredService<LIN.Developer.Data.Context>();
         var res = dataContext.Database.EnsureCreated();
     }
-    catch (Exception ex)
+    catch 
     {
-        ServerLogger.LogError("Error" + ex.Message);
     }
-
 
     // Uso de Swagger.
     app.UseSwagger();
@@ -71,9 +69,6 @@ try
 
     // Inicia las conexiones
     _ = Conexión.StartConnections();
-
-    // Estado del servidor
-    ServerLogger.OpenDate = DateTime.Now;
 
     app.Run();
 }

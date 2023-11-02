@@ -106,7 +106,6 @@ public class Transactions
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("Cannot insert explicit value for identity"))
                 {
                 }
-                ServerLogger.LogError($"{ex.InnerException}");
             }
         
 
@@ -134,9 +133,8 @@ public class Transactions
             return new(Responses.Success, transacciones);
 
         }
-        catch (Exception ex)
+        catch 
         {
-            ServerLogger.LogError("ReadAll transactions" + ex.InnerException);
         }
 
         return new();

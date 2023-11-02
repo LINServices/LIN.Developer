@@ -295,9 +295,8 @@ Valor = Abstractions.PriceTable.NamesIA
             return new(Responses.Undefined);
 
         }
-        catch (Exception ex)
+        catch
         {
-            ServerLogger.LogError(ex.Message);
         }
 
         return new(Responses.Undefined, ProductCategories.Undefined);
