@@ -126,10 +126,10 @@ public class ProjectsController : Controller
         //}
 
         // Obtiene el profile
-        (_, _, int profile) = Jwt.Validate(token);
+        (_, int account, int profile) = Jwt.Validate(token);
 
         // Obtiene los proyectos
-        var response = await Data.Resources.Read(id, profile);
+        var response = await Data.Resources.Read(id, account);
 
         return response;
 

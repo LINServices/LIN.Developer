@@ -1,4 +1,5 @@
-﻿using LIN.Types.Developer.Interfaces;
+﻿using LIN.Developer.Data;
+using LIN.Types.Developer.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -36,11 +37,8 @@ public class MongoService
     public MongoService()
     {
 
-        DbContextOptionsBuilder<Data.MongoContext> optionsBuilder = new();
-        optionsBuilder.UseMongoDB(ConnectionString, "cluster0");
-
         MongoClient = new MongoClient(ConnectionString);
-        Context = new(optionsBuilder.Options);
+        Context = MongoContext.Create(MongoClient.GetDatabase("Cluster0"));
     }
 
 

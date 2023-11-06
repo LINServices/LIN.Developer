@@ -1,6 +1,4 @@
-﻿using LIN.Types.Developer.Models.Projects;
-
-namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data;
 
 
 public static class Resources
@@ -21,7 +19,7 @@ public static class Resources
         var context = MongoService.GetOneConnection();
 
         var res = await Create(data, context);
-        
+
         return res;
     }
 
@@ -37,7 +35,7 @@ public static class Resources
         var context = MongoService.GetOneConnection();
 
         var response = await ReadAll(id, context);
-        
+
         return response;
     }
 
@@ -54,7 +52,7 @@ public static class Resources
         var context = MongoService.GetOneConnection();
 
         var response = await HaveAuthorization(id, profile, context);
-        
+
         return response;
     }
 
@@ -71,7 +69,7 @@ public static class Resources
         var context = MongoService.GetOneConnection();
 
         var response = await Read(id, profile, context);
-        
+
         return response;
     }
 
@@ -85,7 +83,7 @@ public static class Resources
     {
         var context = MongoService.GetOneConnection();
         var response = await Delete(id, context);
-        
+
         return response;
     }
 
@@ -122,7 +120,7 @@ public static class Resources
             };
         }
         catch
-        { 
+        {
         }
         return new();
     }
@@ -151,9 +149,9 @@ public static class Resources
             return new(Responses.Success, projects);
 
         }
-        catch 
+        catch
         {
-            
+
         }
 
 
@@ -183,12 +181,12 @@ public static class Resources
 
             //return (access <= 0) ? new(Responses.Unauthorized, false)
             //                     : new(Responses.Success, true);
-               
+
 
         }
         catch (Exception ex)
         {
-            
+
         }
 
 
@@ -209,7 +207,6 @@ public static class Resources
         try
         {
 
-            // Obtiene el proyecto
             var project = await Query.Project.ReadOne(id, account, context).FirstOrDefaultAsync();
 
             // Si hubo un error
@@ -218,10 +215,10 @@ public static class Resources
 
 
             // Lista de IP
-           // var ips = await Query.FirewallRule.ReadAll(project.Id, context).ToListAsync();
+            // var ips = await Query.FirewallRule.ReadAll(project.Id, context).ToListAsync();
 
             // Agrega las IP
-           // project.IPs = ips ?? new();
+            // project.IPs = ips ?? new();
 
             // Retorna
             return new(Responses.Success, project);
@@ -229,7 +226,7 @@ public static class Resources
         }
         catch (Exception ex)
         {
-            
+
         }
 
 
@@ -278,7 +275,7 @@ public static class Resources
         }
         catch (Exception ex)
         {
-            
+
         }
 
 
@@ -337,7 +334,7 @@ public static class Resources
         //    catch (Exception ex)
         //    {
         //        transaction.Rollback();
-                
+
         //    }
         //}
 
