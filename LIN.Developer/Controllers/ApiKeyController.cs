@@ -18,7 +18,7 @@ public class ApiKeyController : Controller
     {
 
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(Id, token);
+        var haveAccess = await ResourcesController.HaveAccess(Id, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)
@@ -56,7 +56,7 @@ public class ApiKeyController : Controller
     {
 
         // Verifica el acceso
-        var haveAccess = await ProjectsController.HaveAccess(id, token);
+        var haveAccess = await ResourcesController.HaveAccess(id, token);
 
         // Si no hay acceso
         if (haveAccess.Response != Responses.Success)

@@ -15,7 +15,7 @@ public static class Resources
     /// Crea un nuevo proyecto
     /// </summary>
     /// <param name="data">Modelo</param>
-    public async static Task<CreateResponse> Create(ProjectModel data)
+    public async static Task<CreateResponse> Create(ResourceModel data)
     {
         // Obtiene la conexión
         var context = MongoService.GetOneConnection();
@@ -31,7 +31,7 @@ public static class Resources
     /// Obtiene los proyectos asociados a un perfil
     /// </summary>
     /// <param name="id">ID del perfil</param>
-    public async static Task<ReadAllResponse<ProjectModel>> ReadAll(int id)
+    public async static Task<ReadAllResponse<ResourceModel>> ReadAll(int id)
     {
         // Obtiene la conexión
         var context = MongoService.GetOneConnection();
@@ -65,7 +65,7 @@ public static class Resources
     /// </summary>
     /// <param name="id">ID del proyecto</param>
     /// <param name="profile">ID del perfil</param>
-    public async static Task<ReadOneResponse<ProjectModel>> Read(string id, int profile)
+    public async static Task<ReadOneResponse<ResourceModel>> Read(string id, int profile)
     {
         // Obtiene la conexión
         var context = MongoService.GetOneConnection();
@@ -100,7 +100,7 @@ public static class Resources
     /// </summary>
     /// <param name="data">Modelo de proyecto</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<CreateResponse> Create(ProjectModel data, MongoService context)
+    public async static Task<CreateResponse> Create(ResourceModel data, MongoService context)
     {
 
         // Ejecución
@@ -134,7 +134,7 @@ public static class Resources
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadAllResponse<ProjectModel>> ReadAll(int id, MongoService context)
+    public async static Task<ReadAllResponse<ResourceModel>> ReadAll(int id, MongoService context)
     {
 
         // Ejecución
@@ -202,7 +202,7 @@ public static class Resources
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadOneResponse<ProjectModel>> Read(string id, int profile, MongoService context)
+    public async static Task<ReadOneResponse<ResourceModel>> Read(string id, int profile, MongoService context)
     {
 
         // Ejecución

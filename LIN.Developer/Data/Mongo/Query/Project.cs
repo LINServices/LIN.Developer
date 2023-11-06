@@ -10,7 +10,7 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ProjectModel> ReadAll(int id, MongoService context)
+    public static IQueryable<ResourceModel> ReadAll(int id, MongoService context)
     {
 
         var query = from P in context.Context.Projects
@@ -29,7 +29,7 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ProjectModel> ReadOne(string id, int profile, MongoService context)
+    public static IQueryable<ResourceModel> ReadOne(string id, int profile, MongoService context)
     {
 
         // Consulta
@@ -46,7 +46,7 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ProjectModel> ReadOne(int id, MongoService context)
+    public static IQueryable<ResourceModel> ReadOne(int id, MongoService context)
     {
 
         //var query = (from P in context.DataBase.Proyectos

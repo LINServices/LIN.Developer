@@ -1,44 +1,44 @@
-﻿using LIN.Developer.Data.Mongo;
-
-namespace LIN.Developer.Controllers;
+﻿namespace LIN.Developer.Controllers;
 
 
-[Route("project")]
-public class ProjectsController : Controller
+[Route("resources")]
+public class ResourcesController : Controller
 {
 
 
     /// <summary>
-    /// Crea un nuevo proyecto 
+    /// Crea un nuevo recurso. 
     /// </summary>
     /// <param name="modelo">Modelo</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] ProjectModel modelo, [FromHeader] string token)
+    public async Task<HttpCreateResponse> Create([FromBody] ResourceModel modelo, [FromHeader] string token)
     {
 
-        // Validaciones
+        // Validaciones del modelo.
         if (modelo.Name.Length <= 0)
-            return new(Responses.InvalidParam);
+            return new(Responses.InvalidParam)
+            {
+                Message = "Parámetros inválidos."
+            };
 
         // Validación de token
         var (isValid, _, profile) = Jwt.Validate(token);
 
         // Si es invalido
         if (!isValid)
-        {
             return new CreateResponse()
             {
                 Message = "Token invalido",
                 Response = Responses.Unauthorized
             };
-        }
+
 
         // Organización del modelo.
         modelo.ProfileId = profile;
         modelo.Status = ProjectStatus.Normal;
 
         // Respuesta
-        var response = await Resources.Create(modelo);
+        var response = await Data.Mongo.Resources.Create(modelo);
 
         return response;
 
@@ -47,26 +47,27 @@ public class ProjectsController : Controller
 
 
     /// <summary>
-    /// Obtiene los proyectos asociados a un perfil
+    /// Obtiene los recursos asociados a un perfil.
     /// </summary>
-    /// <param name="token">Token de acceso</param>
+    /// <param name="token">Token de acceso.</param>
     [HttpGet("read/all")]
-    public async Task<HttpReadAllResponse<ProjectModel>> ReadAll([FromHeader] string token)
+    public async Task<HttpReadAllResponse<ResourceModel>> ReadAll([FromHeader] string token)
     {
 
+        // Información del token.
         var (isValid, _, profile) = Jwt.Validate(token);
 
+        // Si el token es invalido.
         if (!isValid)
-            return new(Responses.Unauthorized);
+            return new(Responses.Unauthorized)
+            {
+                Message = "Token invalido."
+            };
 
+        // Validar parámetros.
         if (profile <= 0 || token.IsNullOrEmpty())
             return new(Responses.InvalidParam);
 
-
-
-        // Token invalido
-        if (!isValid)
-            return new(Responses.Unauthorized);
 
         var response = await Data.Mongo.Resources.ReadAll(profile);
 
@@ -77,37 +78,33 @@ public class ProjectsController : Controller
 
 
     /// <summary>
-    /// Obtiene un proyecto
+    /// Obtiene un recurso.
     /// </summary>
-    /// <param name="id">ID del proyecto</param>
+    /// <param name="id">ID del recurso</param>
     /// <param name="token">Token de acceso</param>
     [HttpGet("read")]
-    public async Task<HttpReadOneResponse<ProjectModel>> Read([FromHeader] string id, [FromHeader] string token)
+    public async Task<HttpReadOneResponse<ResourceModel>> Read([FromHeader] string id, [FromHeader] string token)
     {
 
-        // Validaciones
+        // Validaciones.
         if (id.Trim().Length <= 0 || token.Length <= 0)
             return new(Responses.InvalidParam);
 
-        // Valida el token
-        //var access = await HaveAccess(id, token);
+        // Información del token.
+        var (isValid, _, profile) = Jwt.Validate(token);
+
+        // Validación del token.
+        if (!isValid)
+            return new(Responses.Unauthorized)
+            {
+                Message = "Token invalido."
+            };
+
+        // Validar acceso IAM.
 
 
-        //// Si es invalido
-        //if (access.Response != Responses.Success)
-        //{
-        //    return new ReadOneResponse<ProjectModel>
-        //    {
-        //        Message = access.Message,
-        //        Response = access.Response
-        //    };
-        //}
-
-        // Obtiene el profile
-        (_,  _, int profile) = Jwt.Validate(token);
-
-        // Obtiene los proyectos
-        var response = await Resources.Read(id, profile);
+        // Obtiene el recurso.
+        var response = await Data.Mongo.Resources.Read(id, profile);
 
         return response;
 
@@ -116,9 +113,9 @@ public class ProjectsController : Controller
 
 
     /// <summary>
-    /// Elimina un proyecto
+    /// Elimina un recurso.
     /// </summary>
-    /// <param name="id">ID del proyecto</param>
+    /// <param name="id">ID del recurso</param>
     /// <param name="token">Token de acceso</param>
     [HttpDelete("delete")]
     public async Task<HttpReadOneResponse<bool>> Delete([FromHeader] int id, [FromHeader] string token)
@@ -138,13 +135,11 @@ public class ProjectsController : Controller
         }
 
         // Respuesta
-        var response = await Resources.Delete(id);
+        var response = await Data.Mongo.Resources.Delete(id);
 
         return response;
 
     }
-
-
 
 
 
@@ -153,6 +148,7 @@ public class ProjectsController : Controller
     /// </summary>
     /// <param name="project">ID del proyecto</param>
     /// <param name="token">Token de acceso</param>
+    [Obsolete("Este método debe ser eliminado en favor de LIN IAM")]
     public static async Task<ResponseBase> HaveAccess(int project, string token)
     {
 
@@ -175,7 +171,7 @@ public class ProjectsController : Controller
             };
 
         // Tiene acceso al proyecto
-        var have = await Resources.HaveAuthorization(project, profile);
+        var have = await Data.Mongo.Resources.HaveAuthorization(project, profile);
 
         // Si no tubo acceso
         if (have.Response != Responses.Success)
@@ -189,8 +185,6 @@ public class ProjectsController : Controller
         return new ResponseBase(Responses.Success);
 
     }
-
-
 
 
 

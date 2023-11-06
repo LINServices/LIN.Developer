@@ -7,7 +7,7 @@ namespace LIN.Developer.Data.Mongo;
 public class MongoContext : DbContext
 {
 
-    public DbSet<ProjectModel> Projects { get; init; }
+    public DbSet<ResourceModel> Projects { get; init; }
 
 
     public MongoContext(DbContextOptions options)
@@ -27,7 +27,7 @@ public class MongoContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<ProjectModel>().ToCollection("projects");
+        modelBuilder.Entity<ResourceModel>().ToCollection("projects");
     }
 
 
