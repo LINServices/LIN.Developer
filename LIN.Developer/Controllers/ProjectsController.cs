@@ -33,7 +33,9 @@ public class ProjectsController : Controller
             };
         }
 
-        // Organización del modelo
+        // Organización del modelo.
+        modelo.ProfileId = profile;
+        modelo.Status = ProjectStatus.Normal;
 
         // Respuesta
         var response = await Resources.Create(modelo);
@@ -49,7 +51,7 @@ public class ProjectsController : Controller
     /// </summary>
     /// <param name="token">Token de acceso</param>
     [HttpGet("read/all")]
-    public async Task<HttpReadOneResponse<ProjectHttpResponse>> ReadAll([FromHeader] string token, [FromHeader] string tokenAuth)
+    public async Task<HttpReadAllResponse<ProjectModel>> ReadAll([FromHeader] string token)
     {
 
         var (isValid, _, profile) = Jwt.Validate(token);
@@ -61,40 +63,14 @@ public class ProjectsController : Controller
             return new(Responses.InvalidParam);
 
 
-        // Obtener apps
-        var apps = await Access.Auth.Controllers.Applications.ReadAll(tokenAuth);
-
-
-
-        var onj = new LIN.Types.Developer.Models.ProjectHttpResponse
-        {
-            Applications = new()
-        };
-
-
-        foreach (var app in apps.Models)
-        {
-
-            onj.Applications.Add(new ProjectApplication()
-            {
-                AppKey = app.Key,
-                Name = app.Name,
-                ID = app.ID.ToString()
-            });
-        }
-
 
         // Token invalido
         if (!isValid)
             return new(Responses.Unauthorized);
 
-        var response = await Data.Projects.ReadAll(profile);
+        var response = await Data.Mongo.Resources.ReadAll(profile);
 
-        return new ReadOneResponse<ProjectHttpResponse>()
-        {
-            Model = onj,
-            Response = Responses.Success
-        };
+        return response;
 
     }
 
@@ -128,10 +104,10 @@ public class ProjectsController : Controller
         //}
 
         // Obtiene el profile
-        (_, int account, int profile) = Jwt.Validate(token);
+        (_,  _, int profile) = Jwt.Validate(token);
 
         // Obtiene los proyectos
-        var response = await Resources.Read(id, account);
+        var response = await Resources.Read(id, profile);
 
         return response;
 

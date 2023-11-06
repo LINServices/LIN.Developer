@@ -14,7 +14,7 @@ public static class Project
     {
 
         var query = from P in context.Context.Projects
-                    where P.AccountId == id
+                    where P.ProfileId == id
                     && P.Status == ProjectStatus.Normal
                     select P;
 
@@ -29,11 +29,11 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ProjectModel> ReadOne(string id, int account, MongoService context)
+    public static IQueryable<ProjectModel> ReadOne(string id, int profile, MongoService context)
     {
 
         // Consulta
-        var query = ReadAll(account, context).Where(T => T.Id == new ObjectId(id)).Take(1);
+        var query = ReadAll(profile, context).Where(T => T.Id == new ObjectId(id)).Take(1);
 
         return query;
 

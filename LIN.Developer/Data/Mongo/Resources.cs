@@ -202,14 +202,14 @@ public static class Resources
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public async static Task<ReadOneResponse<ProjectModel>> Read(string id, int account, MongoService context)
+    public async static Task<ReadOneResponse<ProjectModel>> Read(string id, int profile, MongoService context)
     {
 
         // Ejecución
         try
         {
 
-            var project = await Project.ReadOne(id, account, context).FirstOrDefaultAsync();
+            var project = await Project.ReadOne(id, profile, context).FirstOrDefaultAsync();
 
             // Si hubo un error
             if (project == null)
