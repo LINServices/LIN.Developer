@@ -1,7 +1,7 @@
 ﻿using LIN.Types.Developer.Enumerations;
 using LIN.Types.Developer.Models;
 
-namespace LIN.Developer.Data.Query;
+namespace LIN.Developer.Data.Sql.Query;
 
 
 public static class Profiles
@@ -16,8 +16,8 @@ public static class Profiles
     {
 
         var query = (from D in context.DataBase.Profiles
-                    where D.AccountID == id && D.Estado == ProfileStatus.Normal
-                    select D).Take(1);
+                     where D.AccountID == id && D.Estado == ProfileStatus.Normal
+                     select D).Take(1);
 
         return query;
 
@@ -34,7 +34,7 @@ public static class Profiles
     {
 
         var query = (from D in context.DataBase.Profiles
-                    where D.AccountID == id
+                     where D.AccountID == id
                      select D).Take(1);
 
         return query;

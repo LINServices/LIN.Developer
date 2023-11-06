@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Developer.Data.Sql;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("billing")]
@@ -22,7 +24,7 @@ public class BillingsController : Controller
             return new(Responses.Unauthorized);
 
         // Obtiene el usuario
-        var response = await Data.Transactions.ReadAll(profile);
+        var response = await Transactions.ReadAll(profile);
 
         // Retorna el resultado
         return response;
@@ -57,7 +59,7 @@ public class BillingsController : Controller
             },
             Description = "Usado en LIN Apps"
         };
-        var response = await Data.Transactions.Generate(transaction);
+        var response = await Transactions.Generate(transaction);
 
         // Retorna el resultado
         return response;

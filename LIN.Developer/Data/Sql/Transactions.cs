@@ -1,4 +1,4 @@
-﻿namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data.Sql;
 
 
 public class Transactions
@@ -63,50 +63,50 @@ public class Transactions
 
         // Ejecución (Transacción)
         var transaction = context.GetTransaction();
-        
-            try
-            {
 
-      
+        try
+        {
 
-                // Obtiene el perfil
-                var profile = await context.DataBase.Profiles.FindAsync(data.Profile.ID);
 
-                // Si no existe
-                if (profile == null)
-                {
-                    if (confirm) transaction.Rollback();
-                    return new(Responses.NotExistProfile);
-                }
 
-                // Agrega la transacción
-                context.DataBase.Transactions.Add(data);
+            // Obtiene el perfil
+            var profile = await context.DataBase.Profiles.FindAsync(data.Profile.ID);
 
-                // Guarda el origen
-                context.DataBase.SaveChanges();
-
-                // Agrega los valores 
-                profile.Credits += data.Valor;
-
-                // Guarda los cambios
-                context.DataBase.SaveChanges();
-
-                // Envía la transacción
-                if (confirm) transaction.Commit();
-
-                // Cierra la conexión
-                return new(Responses.Success, data.ID);
-
-            }
-            catch (Exception ex)
+            // Si no existe
+            if (profile == null)
             {
                 if (confirm) transaction.Rollback();
-
-                if (ex.InnerException != null && ex.InnerException.Message.Contains("Cannot insert explicit value for identity"))
-                {
-                }
+                return new(Responses.NotExistProfile);
             }
-        
+
+            // Agrega la transacción
+            context.DataBase.Transactions.Add(data);
+
+            // Guarda el origen
+            context.DataBase.SaveChanges();
+
+            // Agrega los valores 
+            profile.Credits += data.Valor;
+
+            // Guarda los cambios
+            context.DataBase.SaveChanges();
+
+            // Envía la transacción
+            if (confirm) transaction.Commit();
+
+            // Cierra la conexión
+            return new(Responses.Success, data.ID);
+
+        }
+        catch (Exception ex)
+        {
+            if (confirm) transaction.Rollback();
+
+            if (ex.InnerException != null && ex.InnerException.Message.Contains("Cannot insert explicit value for identity"))
+            {
+            }
+        }
+
 
         return new();
     }
@@ -132,7 +132,7 @@ public class Transactions
             return new(Responses.Success, transacciones);
 
         }
-        catch 
+        catch
         {
         }
 

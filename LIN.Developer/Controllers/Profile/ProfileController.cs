@@ -1,3 +1,5 @@
+using LIN.Developer.Data.Sql;
+
 namespace LIN.Developer.Controllers.Profile;
 
 
@@ -24,7 +26,7 @@ public class ProfileController : ControllerBase
         var (context, connectionKey) = Conexión.GetOneConnection();
 
         // Cambia el estado del código OTP
-        var otpRes = await Data.OTP.UpdateState(id, otp, context);
+        var otpRes = await OTP.UpdateState(id, otp, context);
 
         // Valida la respuesta
         if (otpRes.Response != Responses.Success)
@@ -35,7 +37,7 @@ public class ProfileController : ControllerBase
 
 
         // Cambia el estado del perfil desarrollador
-        var perfilRes = await Data.Profiles.UpdateState(id, ProfileStatus.Normal);
+        var perfilRes = await Profiles.UpdateState(id, ProfileStatus.Normal);
 
 
         // Valida la respuesta
@@ -47,7 +49,7 @@ public class ProfileController : ControllerBase
 
 
         // Perfil desarrollador
-        var profile = await Data.Profiles.ReadBy(id);
+        var profile = await Profiles.ReadBy(id);
 
 
         // Evaluación de la respuesta
@@ -82,7 +84,7 @@ public class ProfileController : ControllerBase
         var (context, connectionKey) = Conexión.GetOneConnection();
 
         // Obtiene la data
-        var data = await Data.Profiles.ReadBy(id, context);
+        var data = await Profiles.ReadBy(id, context);
 
         // Valida
         if (data.Response != Responses.Success)
@@ -101,7 +103,7 @@ public class ProfileController : ControllerBase
 
 
         // Actualiza el email
-        var updateRes = await Data.Profiles.UpdateMail(data.Model.ID, newEmail, context);
+        var updateRes = await Profiles.UpdateMail(data.Model.ID, newEmail, context);
 
 
         // Respuesta
@@ -131,7 +133,7 @@ public class ProfileController : ControllerBase
 
 
         // Guarda el OTP
-        var saveOTP = await Data.OTP.Create(otpModel, context);
+        var saveOTP = await OTP.Create(otpModel, context);
 
 
         // Evalúa

@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Areas;
+﻿using LIN.Developer.Data.Sql;
+
+namespace LIN.Developer.Areas;
 
 
 [Route("authentication")]
@@ -31,7 +33,7 @@ public class AuthenticationController : ControllerBase
             return new(authResponse.Response);
 
         // Obtiene el perfil.
-        var profile = await Data.Profiles.ReadByUser(authResponse.Model.ID);
+        var profile = await Profiles.ReadByUser(authResponse.Model.ID);
 
         // Respuesta final.
         var httpResponse = new ReadOneResponse<AuthModel<ProfileDataModel>>()
@@ -91,7 +93,7 @@ public class AuthenticationController : ControllerBase
 
 
         // Obtiene el perfil.
-        var profile = await Data.Profiles.ReadByUser(response.Model.ID);
+        var profile = await Profiles.ReadByUser(response.Model.ID);
 
 
         var httpResponse = new ReadOneResponse<AuthModel<ProfileDataModel>>()

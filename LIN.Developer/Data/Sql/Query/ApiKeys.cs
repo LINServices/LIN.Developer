@@ -1,4 +1,4 @@
-﻿namespace LIN.Developer.Data.Query;
+﻿namespace LIN.Developer.Data.Sql.Query;
 
 
 public static class ApiKeys

@@ -1,3 +1,5 @@
+using LIN.Developer.Data.Sql;
+
 namespace LIN.Developer.Controllers;
 
 
@@ -39,7 +41,7 @@ public class ProfilesController : ControllerBase
             return new CreateResponse(Responses.InvalidParam);
 
 
-        var response = await Data.Profiles.Create(modelo);
+        var response = await Profiles.Create(modelo);
 
 
         switch (response.Response)
@@ -78,7 +80,7 @@ public class ProfilesController : ControllerBase
             Vencimiento = DateTime.Now.AddMinutes(10),
         };
 
-        var otpResponse = await Data.OTP.Create(otpModel);
+        var otpResponse = await OTP.Create(otpModel);
 
         if (otpResponse.Response == Responses.Success)
         {
@@ -101,7 +103,7 @@ public class ProfilesController : ControllerBase
             Fecha = DateTime.Now
         };
 
-        _ = Data.Transactions.Generate(creditos);
+        _ = Transactions.Generate(creditos);
 
 
 
@@ -137,7 +139,7 @@ public class ProfilesController : ControllerBase
     {
 
         // Obtiene el usuario
-        var response = await Data.Profiles.ReadByUser(id);
+        var response = await Profiles.ReadByUser(id);
 
         if (response.Response != Responses.Success)
             return response;
@@ -157,7 +159,7 @@ public class ProfilesController : ControllerBase
     {
 
         // Obtiene el usuario
-        var response = await Data.Profiles.FindByUser(id);
+        var response = await Profiles.FindByUser(id);
 
         if (response.Response != Responses.Success)
             return response;
@@ -177,7 +179,7 @@ public class ProfilesController : ControllerBase
     {
 
         // Obtiene el usuario
-        var response = await Data.Profiles.HasProfile(id);
+        var response = await Profiles.HasProfile(id);
 
         // Retorna el resultado
         return response;

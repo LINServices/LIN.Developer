@@ -1,4 +1,4 @@
-﻿namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data.Sql;
 
 
 public static class OTP
@@ -154,7 +154,7 @@ public static class OTP
 
             if (modelo == null)
                 return new(Responses.NotRows);
-            
+
 
             modelo.Estado = estado;
             context.DataBase.SaveChanges();

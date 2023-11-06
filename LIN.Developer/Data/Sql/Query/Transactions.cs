@@ -1,6 +1,6 @@
 ﻿using LIN.Types.Developer.Models;
 
-namespace LIN.Developer.Data.Query;
+namespace LIN.Developer.Data.Sql.Query;
 
 
 internal static class Transactions

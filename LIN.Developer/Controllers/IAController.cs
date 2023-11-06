@@ -1,3 +1,4 @@
+using LIN.Developer.Data.Sql;
 using LIN.Developer.Services.Payment;
 using LIN.Types.Inventory.Enumerations;
 namespace LIN.Developer.Controllers;
@@ -52,7 +53,7 @@ public class IAController : ControllerBase
             };
 
             // realiza el cobro
-            var result = await Data.ApiKeyUses.GenerateUses(uso, apiKey, context);
+            var result = await ApiKeyUses.GenerateUses(uso, apiKey, context);
 
             // Cierra la conexión
             context.CloseActions(contextKey);
@@ -142,7 +143,7 @@ Valor = Abstractions.PriceTable.NamesIA
             };
 
             // realiza el cobro
-            var result = await Data.ApiKeyUses.GenerateUses(uso, apiKey, context);
+            var result = await ApiKeyUses.GenerateUses(uso, apiKey, context);
 
             context.CloseActions(contextKey);
 
@@ -279,7 +280,7 @@ Valor = Abstractions.PriceTable.NamesIA
             };
 
             // Genera el uso
-            var cobro = await Data.ApiKeyUses.GenerateUses(uso, apiKey);
+            var cobro = await ApiKeyUses.GenerateUses(uso, apiKey);
 
 
             // Si no se realizo el cobro

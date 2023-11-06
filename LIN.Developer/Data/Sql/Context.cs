@@ -1,4 +1,4 @@
-﻿namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data.Sql;
 
 
 public class Context : DbContext
@@ -62,7 +62,7 @@ public class Context : DbContext
            .WithMany()
            .HasForeignKey(t => t.TransactionId)
            .OnDelete(DeleteBehavior.NoAction);
-        
+
 
 
 
@@ -89,7 +89,7 @@ public class Context : DbContext
         .WithMany()
         .HasForeignKey(t => t.ProfileID)
         .OnDelete(DeleteBehavior.NoAction);
-        
+
 
         // Nombres de las tablas.
         modelBuilder.Entity<BillingItemModel>().ToTable("BILLING_ITEMS");

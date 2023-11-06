@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Developer.Data.Sql;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("key/uses")]
@@ -41,7 +43,7 @@ public class KeyUsesController : Controller
         modelo.ID = 0;
         modelo.Transaction.ID = 0;
 
-        var response = await Data.ApiKeyUses.GenerateUses(modelo, apiKey, context);
+        var response = await ApiKeyUses.GenerateUses(modelo, apiKey, context);
 
         context.CloseActions(contextKey);
 
@@ -104,7 +106,7 @@ public class KeyUsesController : Controller
                 Valor = credito
             };
 
-            return await Data.Transactions.Generate(transaccion);
+            return await Transactions.Generate(transaccion);
 
         }
         catch

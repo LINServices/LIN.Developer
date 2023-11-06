@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using MongoDB.EntityFrameworkCore.Extensions;
 
-namespace LIN.Developer.Data;
+namespace LIN.Developer.Data.Mongo;
 
 public class MongoContext : DbContext
 {

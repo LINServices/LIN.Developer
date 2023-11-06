@@ -1,4 +1,4 @@
-﻿namespace LIN.Developer.Data.Query;
+﻿namespace LIN.Developer.Data.Mongo.Query;
 
 
 public static class Project

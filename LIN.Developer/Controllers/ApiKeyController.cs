@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Developer.Data.Mongo;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("apiKey")]
@@ -37,7 +39,7 @@ public class ApiKeyController : Controller
 
 
         // Respuesta
-        var response = await Data.Keys.Create(keyModel);
+        var response = await Keys.Create(keyModel);
 
         return response;
 
@@ -67,7 +69,7 @@ public class ApiKeyController : Controller
         }
 
         // Consulta las llaves
-        var response = await Data.Keys.ReadAll(id);
+        var response = await Keys.ReadAll(id);
 
         return response;
 
@@ -86,7 +88,7 @@ public class ApiKeyController : Controller
         if (key <= 0)
             return new(Responses.InvalidParam);
 
-        var keyModel = await Data.Keys.Read(key);
+        var keyModel = await Keys.Read(key);
 
         if (keyModel.Response != Responses.Success)
         {
@@ -111,7 +113,7 @@ public class ApiKeyController : Controller
         //}
 
 
-        var response = await Data.Keys.UpdateState(key, ApiKeyStatus.Deleted);
+        var response = await Keys.UpdateState(key, ApiKeyStatus.Deleted);
         return response;
     }
 
@@ -129,7 +131,7 @@ public class ApiKeyController : Controller
         if (key <= 0)
             return new(Responses.InvalidParam);
 
-        var keyModel = await Data.Keys.Read(key);
+        var keyModel = await Keys.Read(key);
 
         if (keyModel.Response != Responses.Success)
         {
@@ -153,7 +155,7 @@ public class ApiKeyController : Controller
         //    };
         //}
 
-        var response = await Data.Keys.UpdateState(key, estado);
+        var response = await Keys.UpdateState(key, estado);
         return response;
     }
 

@@ -1,3 +1,5 @@
+using LIN.Developer.Data.Sql;
+
 try
 {
 
@@ -30,7 +32,7 @@ try
         string sqlConnection = string.Empty;
 
         // Servicio.
-        builder.Services.AddDbContext<LIN.Developer.Data.Context>(options =>
+        builder.Services.AddDbContext<Context>(options =>
                 {
                     options.UseSqlServer(sqlConnection);
                 });
@@ -65,7 +67,7 @@ try
     {
         // Si la base de datos no existe
         using var scope = app.Services.CreateScope();
-        var dataContext = scope.ServiceProvider.GetRequiredService<LIN.Developer.Data.Context>();
+        var dataContext = scope.ServiceProvider.GetRequiredService<Context>();
         var res = dataContext.Database.EnsureCreated();
     }
     catch

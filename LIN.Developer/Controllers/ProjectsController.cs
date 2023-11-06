@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Controllers;
+﻿using LIN.Developer.Data.Sql;
+
+namespace LIN.Developer.Controllers;
 
 
 [Route("project")]
@@ -34,7 +36,7 @@ public class ProjectsController : Controller
         // Organización del modelo
 
         // Respuesta
-        var response = await Data.Resources.Create(modelo);
+        var response = await Resources.Create(modelo);
 
         return response;
 
@@ -129,7 +131,7 @@ public class ProjectsController : Controller
         (_, int account, int profile) = Jwt.Validate(token);
 
         // Obtiene los proyectos
-        var response = await Data.Resources.Read(id, account);
+        var response = await Resources.Read(id, account);
 
         return response;
 
@@ -160,7 +162,7 @@ public class ProjectsController : Controller
         }
 
         // Respuesta
-        var response = await Data.Resources.Delete(id);
+        var response = await Resources.Delete(id);
 
         return response;
 
@@ -197,7 +199,7 @@ public class ProjectsController : Controller
             };
 
         // Tiene acceso al proyecto
-        var have = await Data.Resources.HaveAuthorization(project, profile);
+        var have = await Resources.HaveAuthorization(project, profile);
 
         // Si no tubo acceso
         if (have.Response != Responses.Success)

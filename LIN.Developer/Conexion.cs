@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer;
+﻿using LIN.Developer.Data.Sql;
+
+namespace LIN.Developer;
 
 
 /// <summary>
@@ -86,7 +88,7 @@ public sealed class Conexión
     /// <summary>
     /// Obtiene la base de datos
     /// </summary>
-    public Data.Context DataBase { get; private set; }
+    public Context DataBase { get; private set; }
 
 
 
@@ -96,7 +98,7 @@ public sealed class Conexión
     private Conexión()
     {
 
-        DbContextOptionsBuilder<Data.Context> optionsBuilder = new();
+        DbContextOptionsBuilder<Context> optionsBuilder = new();
         optionsBuilder.UseSqlServer(_connection);
 
         DataBase = new Data.Context(optionsBuilder.Options);

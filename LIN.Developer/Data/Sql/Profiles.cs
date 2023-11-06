@@ -1,4 +1,4 @@
-﻿namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data.Sql;
 
 
 public static class Profiles
@@ -151,7 +151,7 @@ public static class Profiles
             if (ex.InnerException!.Message.Contains("Cannot insert duplicate key row in object"))
                 return new(Responses.ExistAccount);
 
-            
+
         }
 
         return new();
@@ -181,7 +181,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+
         }
 
         return new();
@@ -213,7 +213,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+
         }
 
         return new();
@@ -254,7 +254,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+
         }
 
         return new();
@@ -283,7 +283,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+
         }
 
         return new(Responses.Undefined, false);
@@ -316,7 +316,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+
         }
 
         return new(Responses.Undefined, false);
@@ -350,7 +350,7 @@ public static class Profiles
         }
         catch (Exception ex)
         {
-            
+
         }
 
         return new(Responses.Undefined);

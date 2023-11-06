@@ -1,7 +1,7 @@
 ﻿using LIN.Types.Developer.Enumerations;
 using LIN.Types.Developer.Models;
 
-namespace LIN.Developer.Data.Query;
+namespace LIN.Developer.Data.Sql.Query;
 
 
 public class BlockedIPs

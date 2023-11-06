@@ -1,4 +1,5 @@
-﻿using LIN.Types.Developer.Models;
+﻿using LIN.Developer.Data.Sql;
+using LIN.Types.Developer.Models;
 
 namespace LIN.Developer.Services.Payment;
 
@@ -83,7 +84,7 @@ public class PayToken : IPayWith
         transacción.Valor = Pricing.ToNegative(transacción.Valor);
 
         // Efectúa
-        var res = await Data.Transactions.Generate(transacción);
+        var res = await Transactions.Generate(transacción);
 
 
         // Validación

@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Services.Payment;
+﻿using LIN.Developer.Data.Sql;
+
+namespace LIN.Developer.Services.Payment;
 
 
 public class PayKey : IPayWith
@@ -67,7 +69,7 @@ public class PayKey : IPayWith
         };
 
         // realiza el cobro
-        var result = await Data.ApiKeyUses.GenerateUses(uso, _key, context);
+        var result = await ApiKeyUses.GenerateUses(uso, _key, context);
 
         // Evalúa el cobro
         if (result.Response != Responses.Success)

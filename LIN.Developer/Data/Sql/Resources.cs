@@ -1,4 +1,6 @@
-﻿namespace LIN.Developer.Data;
+﻿using LIN.Developer.Data.Mongo.Query;
+
+namespace LIN.Developer.Data.Sql;
 
 
 public static class Resources
@@ -139,7 +141,7 @@ public static class Resources
         try
         {
 
-            var projects = await Query.Project.ReadAll(id, context).ToListAsync();
+            var projects = await Project.ReadAll(id, context).ToListAsync();
 
             // Si hubo un error
             if (projects == null)
@@ -207,7 +209,7 @@ public static class Resources
         try
         {
 
-            var project = await Query.Project.ReadOne(id, account, context).FirstOrDefaultAsync();
+            var project = await Project.ReadOne(id, account, context).FirstOrDefaultAsync();
 
             // Si hubo un error
             if (project == null)

@@ -1,4 +1,4 @@
-﻿namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data.Mongo;
 
 
 public static class Keys
@@ -161,7 +161,7 @@ public static class Keys
 
             if (res == null)
                 return new(Responses.InvalidApiKey);
-            
+
             return new(Responses.Success, res);
         }
         catch

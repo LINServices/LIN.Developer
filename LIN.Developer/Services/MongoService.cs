@@ -1,4 +1,4 @@
-﻿using LIN.Developer.Data;
+﻿using LIN.Developer.Data.Mongo;
 using LIN.Types.Developer.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -27,7 +27,7 @@ public class MongoService
     /// <summary>
     /// Contexto.
     /// </summary>
-    public Data.MongoContext Context { get; set; }
+    public MongoContext Context { get; set; }
 
 
 
