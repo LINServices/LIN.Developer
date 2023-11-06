@@ -11,11 +11,11 @@ public class ProjectsController : Controller
     /// </summary>
     /// <param name="modelo">Modelo</param>
     [HttpPost("create")]
-    public async Task<HttpCreateResponse> Create([FromBody] ProjectDataModel modelo, [FromHeader] string token)
+    public async Task<HttpCreateResponse> Create([FromBody] ProjectModel modelo, [FromHeader] string token)
     {
 
         // Validaciones
-        if (modelo.Nombre.Length <= 0)
+        if (modelo.Name.Length <= 0)
             return new(Responses.InvalidParam);
 
         // Validación de token
@@ -32,13 +32,6 @@ public class ProjectsController : Controller
         }
 
         // Organización del modelo
-        modelo.ID = 0;
-        modelo.Creation = DateTime.Now;
-        modelo.Estado = ProjectStatus.Normal;
-        modelo.Profile = new()
-        {
-            ID = profile
-        };
 
         // Respuesta
         var response = await Data.Resources.Create(modelo);
@@ -111,26 +104,26 @@ public class ProjectsController : Controller
     /// <param name="id">ID del proyecto</param>
     /// <param name="token">Token de acceso</param>
     [HttpGet("read")]
-    public async Task<HttpReadOneResponse<ProjectDataModel>> Read([FromHeader] int id, [FromHeader] string token)
+    public async Task<HttpReadOneResponse<ProjectModel>> Read([FromHeader] string id, [FromHeader] string token)
     {
 
         // Validaciones
-        if (id <= 0 || token.Length <= 0)
+        if (id.Trim().Length <= 0 || token.Length <= 0)
             return new(Responses.InvalidParam);
 
         // Valida el token
-        var access = await HaveAccess(id, token);
+        //var access = await HaveAccess(id, token);
 
 
-        // Si es invalido
-        if (access.Response != Responses.Success)
-        {
-            return new ReadOneResponse<ProjectDataModel>
-            {
-                Message = access.Message,
-                Response = access.Response
-            };
-        }
+        //// Si es invalido
+        //if (access.Response != Responses.Success)
+        //{
+        //    return new ReadOneResponse<ProjectModel>
+        //    {
+        //        Message = access.Message,
+        //        Response = access.Response
+        //    };
+        //}
 
         // Obtiene el profile
         (_, _, int profile) = Jwt.Validate(token);

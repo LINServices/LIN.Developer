@@ -106,10 +106,10 @@ public static class Keys
         // Ejecución
         try
         {
-            context.DataBase.Attach(data.Project);
-            var res = await context.DataBase.Keys.AddAsync(data);
-            context.DataBase.SaveChanges();
-            return new(Responses.Success, data.ID);
+            //context.DataBase.Attach(data.Project);
+            //var res = await context.DataBase.Keys.AddAsync(data);
+            //context.DataBase.SaveChanges();
+            //return new(Responses.Success, data.ID);
         }
         catch (Exception ex)
         {
@@ -209,16 +209,16 @@ public static class Keys
         // Ejecución
         try
         {
-            var modelo = await context.DataBase.Keys.FindAsync(key);
+            //var modelo = await context.DataBase.Keys.FindAsync(key);
 
-            if (modelo == null)
-            {
-                return new(Responses.NotRows);
-            }
+            //if (modelo == null)
+            //{
+            //    return new(Responses.NotRows);
+            //}
 
-            modelo.Status = estado;
-            context.DataBase.SaveChanges();
-            return new(Responses.Success);
+            //modelo.Status = estado;
+            //context.DataBase.SaveChanges();
+            //return new(Responses.Success);
         }
         catch (Exception ex)
         {

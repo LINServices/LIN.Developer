@@ -1,7 +1,4 @@
-﻿using LIN.Types.Developer.Enumerations;
-using LIN.Types.Developer.Models;
-
-namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data;
 
 
 public static class Profiles

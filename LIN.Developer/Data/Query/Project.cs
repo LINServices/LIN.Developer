@@ -10,13 +10,15 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ProjectDataModel> ReadAll(int id, Conexión context)
+    public static IQueryable<ProjectModel> ReadAll(int id, MongoService context)
     {
 
-        var query = from P in context.DataBase.Proyectos
-                    where P.Profile.ID == id && P.Estado == ProjectStatus.Normal
+        var query = from P in context.Context.Projects
+                    where P.AccountId == id
+                    && P.Status == ProjectStatus.Normal
                     select P;
 
+        //return query;
         return query;
     }
 
@@ -27,11 +29,11 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ProjectDataModel> ReadOne(int id, int profile, Conexión context)
+    public static IQueryable<ProjectModel> ReadOne(string id, int account, MongoService context)
     {
 
         // Consulta
-        var query = ReadAll(profile, context).Where(T => T.ID == id).Take(1);
+        var query = ReadAll(account, context).Where(T => T.Id == new ObjectId(id)).Take(1);
 
         return query;
 
@@ -44,15 +46,15 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ProjectDataModel> ReadOne(int id, Conexión context)
+    public static IQueryable<ProjectModel> ReadOne(int id, MongoService context)
     {
 
-        var query = (from P in context.DataBase.Proyectos
-                     where P.ID == id && P.Estado == ProjectStatus.Normal
-                     select P).Take(1);
+        //var query = (from P in context.DataBase.Proyectos
+        //             where P.ID == id && P.Estado == ProjectStatus.Normal
+        //             select P).Take(1);
 
-        return query;
-
+        //return query;
+        return null;
     }
 
 

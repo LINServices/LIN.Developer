@@ -44,7 +44,7 @@ public class Jwt
 
 
     /// <summary>
-    /// Valida un token JSON
+    /// Valida un token JSON.
     /// </summary>
     /// <param name="token">Token a validar.</param>
     internal static (bool isValid, int account, int profile) Validate(string token)

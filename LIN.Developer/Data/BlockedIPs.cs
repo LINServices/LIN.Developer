@@ -76,10 +76,10 @@ public class BlockedIPs
         // Ejecución
         try
         {
-            var res = await context.DataBase.FirewallBlockLogs.AddAsync(data);
-            context.DataBase.SaveChanges();
+            //var res = await context.DataBase.FirewallBlockLogs.AddAsync(data);
+            //context.DataBase.SaveChanges();
             
-            return new(Responses.Success, data.ID);
+            //return new(Responses.Success, data.ID);
         }
         catch
         {

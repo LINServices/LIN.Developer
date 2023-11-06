@@ -29,6 +29,12 @@ try
         // Conexión SQL.
         string sqlConnection = string.Empty;
 
+        // Servicio.
+        builder.Services.AddDbContext<LIN.Developer.Data.Context>(options =>
+                {
+                    options.UseSqlServer(sqlConnection);
+                });
+
         // Obtiene la cadena de conexión.
         sqlConnection = builder.Configuration["ConnectionStrings:Somee"] ?? "";
 
@@ -37,9 +43,19 @@ try
 
     }
 
+    // Conexión Mongo.
+    {
+        string mongoConnection = builder.Configuration["ConnectionStrings:mongo"] ?? "";
+
+        // Establecer la conexión.
+        LIN.Developer.Services.MongoService.SetConnection(mongoConnection);
+
+    }
+
+
     // Llave de la app en Identity.
     LIN.Access.Auth.Build.SetAuth(builder.Configuration["lin:app"] ?? "");
-   
+
 
     // Crea la aplicación.
     var app = builder.Build();
@@ -52,7 +68,7 @@ try
         var dataContext = scope.ServiceProvider.GetRequiredService<LIN.Developer.Data.Context>();
         var res = dataContext.Database.EnsureCreated();
     }
-    catch 
+    catch
     {
     }
 

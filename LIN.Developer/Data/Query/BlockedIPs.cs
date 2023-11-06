@@ -16,12 +16,13 @@ public class BlockedIPs
     public static IQueryable<FirewallBlockLogDataModel> ReadAll(int id, Conexión context)
     {
 
-        // Consulta
-        var query = from FR in context.DataBase.FirewallBlockLogs
-                    where FR.ProyectoID == id && FR.Estado == FirewallBlockStatus.Normal
-                    select FR;
+        //// Consulta
+        //var query = from FR in context.DataBase.FirewallBlockLogs
+        //            where FR.ProyectoID == id && FR.Estado == FirewallBlockStatus.Normal
+        //            select FR;
 
-        return query;
+        //return query;
+        return null;
     }
 
 

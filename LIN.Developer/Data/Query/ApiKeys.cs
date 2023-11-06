@@ -13,11 +13,12 @@ public static class ApiKeys
     public static IQueryable<KeyModel> ReadBy(string key, Conexión context)
     {
 
-        var query = (from A in context.DataBase.Keys
-                     where A.Key == key && A.Status != ApiKeyStatus.Deleted
-                     select A).Take(1);
+        //var query = (from A in context.DataBase.Keys
+        //             where A.Key == key && A.Status != ApiKeyStatus.Deleted
+        //             select A).Take(1);
 
-        return query;
+        //return query;
+        return null;
     }
 
 
@@ -30,12 +31,12 @@ public static class ApiKeys
     public static IQueryable<KeyModel> ReadBy(int id, Conexión context)
     {
 
-        var query = (from A in context.DataBase.Keys
-                     where A.ID == id && A.Status != ApiKeyStatus.Deleted
-                     select A).Take(1);
+        //var query = (from A in context.DataBase.Keys
+        //             where A.ID == id && A.Status != ApiKeyStatus.Deleted
+        //             select A).Take(1);
 
-        return query;
-
+        //return query;
+        return null;
     }
 
 
@@ -48,12 +49,12 @@ public static class ApiKeys
     public static IQueryable<KeyModel> ReadAll(int id, Conexión context)
     {
 
-        var query = from AK in context.DataBase.Keys
-                    where AK.Project.ID == id && AK.Status != ApiKeyStatus.Deleted
-                    select AK;
+        //var query = from AK in context.DataBase.Keys
+        //            where AK.Project.ID == id && AK.Status != ApiKeyStatus.Deleted
+        //            select AK;
 
-        return query;
-
+        //return query;
+        return null;
     }
 
 
@@ -66,11 +67,12 @@ public static class ApiKeys
     public static IQueryable<int> GetProjectID(string key, Conexión context)
     {
 
-        var query = (from K in context.DataBase.Keys
-                     where K.Key == key && K.Status == ApiKeyStatus.Actived
-                     select K.ProjectId).Take(1);
+        //var query = (from K in context.DataBase.Keys
+        //             where K.Key == key && K.Status == ApiKeyStatus.Actived
+        //             select K.ProjectId).Take(1);
 
-        return query;
+        //return query;
+        return null;
     }
 
 

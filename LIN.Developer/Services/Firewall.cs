@@ -45,53 +45,53 @@ public class Firewall
     public static async Task<ResponseBase> EvaluateFirewall(string apiKey, Conexión contextConnection, string ip)
     {
 
-        // Si el cliente es el servidor
-        if (ip == "::1")
-            return new(Responses.Success);
+        //// Si el cliente es el servidor
+        //if (ip == "::1")
+        //    return new(Responses.Success);
 
-        // obtener el ID de un proyecto asociado a un Key
-        var projectID = await Data.Keys.GetProjectID(apiKey, contextConnection);
+        //// obtener el ID de un proyecto asociado a un Key
+        //var projectID = await Data.Keys.GetProjectID(apiKey, contextConnection);
 
-        // Si hay algún error
-        if (projectID.Response != Responses.Success)
-            return new(Responses.Unauthorized)
-            {
-                Message = projectID.Message
-            };
+        //// Si hay algún error
+        //if (projectID.Response != Responses.Success)
+        //    return new(Responses.Unauthorized)
+        //    {
+        //        Message = projectID.Message
+        //    };
 
-        // Recupera el ID
-        int id = projectID.Model;
+        //// Recupera el ID
+        //int id = projectID.Model;
 
-        // Comprueba si el proyecto tiene reglas firewall para una IP
-        var has = await Data.Resources.HasFirewallFor(id, ip, contextConnection);
+        //// Comprueba si el proyecto tiene reglas firewall para una IP
+        //var has = await Data.Resources.HasFirewallFor(id, ip, contextConnection);
 
-        // Evalúa el Has
-        if (has.Response != Responses.Success)
-        {
+        //// Evalúa el Has
+        //if (has.Response != Responses.Success)
+        //{
 
-            if (IP.ValidateIPv4(ip))
-            {
-                // Registra el acceso rechazado
-                _ = Data.BlockedIPs.Create(new()
-                {
-                    IPv4 = ip,
-                    ProyectoID = id,
-                    Estado = FirewallBlockStatus.Normal
-                });
+        //    if (IP.ValidateIPv4(ip))
+        //    {
+        //        // Registra el acceso rechazado
+        //        _ = Data.BlockedIPs.Create(new()
+        //        {
+        //            IPv4 = ip,
+        //            ProyectoID = id,
+        //            Estado = FirewallBlockStatus.Normal
+        //        });
 
-                return new(Responses.FirewallBlocked)
-                {
-                    Message = $"La IP '{ip}' no esta permitida en este proyecto, revisa la configuración del firewall de tu proyecto."
-                };
+        //        return new(Responses.FirewallBlocked)
+        //        {
+        //            Message = $"La IP '{ip}' no esta permitida en este proyecto, revisa la configuración del firewall de tu proyecto."
+        //        };
 
-            }
+        //    }
 
-            return new(Responses.FirewallBlocked)
-            {
-                Message = $"No se logro validar la IP del cliente."
-            };
+        //    return new(Responses.FirewallBlocked)
+        //    {
+        //        Message = $"No se logro validar la IP del cliente."
+        //    };
 
-        }
+        //}
 
         return new(Responses.Success);
 

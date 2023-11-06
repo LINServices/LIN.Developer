@@ -9,6 +9,7 @@ global using LIN.Developer.Services;
 
 // Módulos.
 global using LIN.Modules;
+global using MongoDB.Bson;
 
 // Tipos.
 global using LIN.Types.Enumerations;
@@ -21,3 +22,4 @@ global using LIN.Types.Auth.Enumerations;
 // Tipos locales.
 global using LIN.Types.Developer.Enumerations;
 global using LIN.Types.Developer.Models;
+global using LIN.Types.Developer.Models.Projects;

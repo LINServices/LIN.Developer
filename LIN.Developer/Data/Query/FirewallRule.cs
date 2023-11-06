@@ -16,12 +16,13 @@ public static class FirewallRule
     public static IQueryable<FirewallRuleModel> ReadAll(int id, Conexión context)
     {
 
-        // Lista de IP
-        var query = from IP in context.DataBase.FirewallRules
-                         where IP.Project.ID == id && IP.Status == FirewallRuleStatus.Normal
-                         select IP;
+        //// Lista de IP
+        //var query = from IP in context.DataBase.FirewallRules
+        //                 where IP.Project.ID == id && IP.Status == FirewallRuleStatus.Normal
+        //                 select IP;
 
-        return query;
+        //return query;
+        return null;
     }
 
 

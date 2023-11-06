@@ -75,11 +75,11 @@ public static class FirewallRules
         try
         {
 
-            context.DataBase.Attach(data.Project);
-            var res = await context.DataBase.FirewallRules.AddAsync(data);
-            context.DataBase.SaveChanges();
+            //context.DataBase.Attach(data.Project);
+            //var res = await context.DataBase.FirewallRules.AddAsync(data);
+            //context.DataBase.SaveChanges();
 
-            return new(Responses.Success, data.ID);
+            //return new(Responses.Success, data.ID);
         }
         catch (Exception ex)
         {
@@ -137,24 +137,24 @@ public static class FirewallRules
         try
         {
 
-            // IP
-            var ip = await (from IP in context.DataBase.FirewallRules
-                            where IP.ID == id
-                            select IP).FirstOrDefaultAsync();
+            //// IP
+            //var ip = await (from IP in context.DataBase.FirewallRules
+            //                where IP.ID == id
+            //                select IP).FirstOrDefaultAsync();
 
-            // Comprueba errores
-            if (ip == null)
-            {
-                return new(Responses.Undefined);
-            }
+            //// Comprueba errores
+            //if (ip == null)
+            //{
+            //    return new(Responses.Undefined);
+            //}
 
-            // Cambia el estado
-            ip.Status = FirewallRuleStatus.Deleted;
-            context.DataBase.SaveChanges();
+            //// Cambia el estado
+            //ip.Status = FirewallRuleStatus.Deleted;
+            //context.DataBase.SaveChanges();
 
 
-            // Retorna
-            return new(Responses.Success);
+            //// Retorna
+            //return new(Responses.Success);
 
         }
         catch (Exception ex)

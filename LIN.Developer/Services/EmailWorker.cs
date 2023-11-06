@@ -3,6 +3,8 @@ using System.Net.Mail;
 
 namespace LIN.Developer.Services;
 
+
+[Obsolete("Este método debe de der reemplazado por un proveedor de mails valido.")]
 public class EmailWorker
 {
 
@@ -38,7 +40,7 @@ public class EmailWorker
     {
         // Configurar los detalles del correo
         string remitente = "giraldojhon055@hotmail.com";
-        string contraseña = "Lucifer343434";
+        string contraseña = "";
         string destinatario = to ?? "";
         string cuerpo = body ?? "";
 
