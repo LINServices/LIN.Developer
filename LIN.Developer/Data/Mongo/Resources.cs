@@ -1,6 +1,6 @@
 ﻿using LIN.Developer.Data.Mongo.Query;
 
-namespace LIN.Developer.Data.Sql;
+namespace LIN.Developer.Data.Mongo;
 
 
 public static class Resources

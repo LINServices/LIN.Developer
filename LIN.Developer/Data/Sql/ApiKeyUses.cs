@@ -1,5 +1,4 @@
-﻿
-namespace LIN.Developer.Data;
+﻿namespace LIN.Developer.Data.Sql;
 
 
 public static class ApiKeyUses
@@ -184,7 +183,7 @@ public static class ApiKeyUses
         }
         catch (Exception ex)
         {
-            
+
         }
 
         return new();
