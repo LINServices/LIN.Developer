@@ -16,34 +16,43 @@ public class ProfilesController : ControllerBase
     public async Task<HttpCreateResponse> Generate([FromBody] ProfileDataModel modelo, [FromHeader] string token)
     {
 
+        // Validación de parámetros.
         if (modelo == null)
-            return new(Responses.InvalidParam);
+            return new()
+            {
+                Response = Responses.InvalidParam,
+                Message = "Parámetros inválidos."
+            };
 
-        // Respuesta de LIN Auth
+        // Validación del Email.
+        if (modelo.Email == null || !Mail.Validar(modelo.Email))
+            return new CreateResponse(Responses.InvalidParam)
+            {
+                Message = $"El email '{modelo.Email ?? ""}' es invalido."
+            };
+
+        // Respuesta de LIN Auth.
         var tokenResponse = await Access.Auth.Controllers.Authentication.Login(token);
 
-        // Validación de la respuesta
+        // Validación de la respuesta de LIN Auth.
         if (tokenResponse.Response != Responses.Success)
             return new(Responses.Unauthorized);
 
-        // General
-        decimal defaultCreditos = 500m;
+        // Créditos.
+        decimal defaultCredits = 500m;
 
-        // Organización del modelo
+        // Organización del modelo.
         modelo.ID = 0;
         modelo.Credits = 0;
         modelo.Estado = ProfileStatus.Waiting;
         modelo.AccountID = tokenResponse.Model.ID;
         modelo.Discount = 0;
+        modelo.Transactions = new();
 
-
-        if (modelo.Email == null || !LIN.Modules.Mail.Validar(modelo.Email))
-            return new CreateResponse(Responses.InvalidParam);
-
-
+        // Crear el perfil.
         var response = await Profiles.Create(modelo);
 
-
+        // Respuesta.
         switch (response.Response)
         {
             case Responses.ExistAccount:
@@ -59,42 +68,42 @@ public class ProfilesController : ControllerBase
                 return new CreateResponse()
                 {
                     Response = response.Response,
-                    Message = "Hubo un error"
+                    Message = "Hubo un error al crear el perfil."
                 };
 
         }
 
-
-
-
-        var otpCode = KeyGen.GenerateOTP(5);
-
-        var otpModel = new OTPDataModel
+        // Código OTP.
+        OTPDataModel otp = new()
         {
             Estado = OTPStatus.actived,
-            OTP = otpCode,
+            OTP = KeyGen.GenerateOTP(5),
             Profile = new()
             {
                 ID = response.LastID
             },
-            Vencimiento = DateTime.Now.AddMinutes(10),
+            Vencimiento = DateTime.Now.AddMinutes(10)
         };
 
-        var otpResponse = await OTP.Create(otpModel);
+        // Respuesta.
+        var otpResponse = await OTP.Create(otp);
 
-        if (otpResponse.Response == Responses.Success)
+        // Si no se guardo el código.
+        if (otpResponse.Response != Responses.Success)
         {
-            EmailWorker.SendCode(modelo.Email, otpCode);
+            // Informar sobre el error.
+        }
+        else
+        {
+            // Enviar el correo.
         }
 
-
-
-        // Da los creditos por defecto
-        var creditos = new TransactionDataModel()
+        // Establecer los créditos de regalo.
+        var credits = new TransactionDataModel
         {
             ID = 0,
-            Description = "LIN Gift",
-            Valor = defaultCreditos,
+            Description = "Regalo de LIN",
+            Valor = defaultCredits,
             Tipo = TransactionTypes.Gift,
             Profile = new()
             {
@@ -103,8 +112,8 @@ public class ProfilesController : ControllerBase
             Fecha = DateTime.Now
         };
 
-        _ = Transactions.Generate(creditos);
-
+        // Generar la transacción.
+        _ = Transactions.Generate(credits);
 
 
         return response;
@@ -114,7 +123,7 @@ public class ProfilesController : ControllerBase
 
 
 
-   
+
 
 
 

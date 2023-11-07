@@ -26,7 +26,6 @@ public class MongoService
     private MongoClient MongoClient { get; set; }
 
 
-
     /// <summary>
     /// Base de datos de MongoDB.
     /// </summary>
