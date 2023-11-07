@@ -20,7 +20,7 @@ public class MongoService
     /// <summary>
     /// Cliente de Mongo.
     /// </summary>
-    private MongoClient MongoClient { get; set; }
+    public MongoClient MongoClient { get; set; }
 
 
 

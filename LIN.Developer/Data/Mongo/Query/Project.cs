@@ -16,7 +16,14 @@ public static class Project
         var query = from P in context.Context.Projects
                     where P.ProfileId == id
                     && P.Status == ProjectStatus.Normal
-                    select P;
+                    select new ResourceModel
+                    {
+                        Status = P.Status,
+                        Id = P.Id,
+                        Name = P.Name,
+                        ProfileId = P.ProfileId,
+                        Type = P.Type
+                    };
 
         //return query;
         return query;
@@ -29,11 +36,14 @@ public static class Project
     /// </summary>
     /// <param name="id">ID del perfil</param>
     /// <param name="context">Contexto de conexión</param>
-    public static IQueryable<ResourceModel> ReadOne(string id, int profile, MongoService context)
+    public static IQueryable<ResourceModel> ReadOne(string id, MongoService context)
     {
 
         // Consulta
-        var query = ReadAll(profile, context).Where(T => T.Id == new ObjectId(id)).Take(1);
+        var query = (from P in context.Context.Projects
+                    where P.Id == new ObjectId(id)
+                    && P.Status == ProjectStatus.Normal
+                    select P).Take(1);
 
         return query;
 

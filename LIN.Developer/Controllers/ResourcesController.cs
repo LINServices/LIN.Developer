@@ -36,6 +36,14 @@ public class ResourcesController : Controller
         // Organización del modelo.
         modelo.ProfileId = profile;
         modelo.Status = ProjectStatus.Normal;
+        modelo.Allowed = new List<AccessModel>()
+        {
+            new()
+            {
+                IamLevel = IamLevels.Privileged,
+                Profile = profile
+            }
+        };
 
         // Respuesta
         var response = await Data.Mongo.Resources.Create(modelo);
@@ -101,10 +109,24 @@ public class ResourcesController : Controller
             };
 
         // Validar acceso IAM.
+        var iam = await Services.Iam.Resource.Validate(profile, id);
 
+        // Validación de respuesta Iam.
+        if (iam.Response != Responses.Success)
+            return new(Responses.NotRows)
+            {
+                Message = $"No se encontró el recurso '{id}'."
+            };
+
+        // No autorizado por Iam.
+        if (iam.Model == IamLevels.NotAccess)
+            return new(Responses.NotRows)
+            {
+                Message = $"No tienes acceso a este recurso."
+            };
 
         // Obtiene el recurso.
-        var response = await Data.Mongo.Resources.Read(id, profile);
+        var response = await Data.Mongo.Resources.Read(id);
 
         return response;
 
