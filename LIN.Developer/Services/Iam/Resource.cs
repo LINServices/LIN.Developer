@@ -18,11 +18,11 @@ public class Resource
             var mongo = MongoService.GetOneConnection();
 
             // Obtiene la colección.
-            var collection = mongo.MongoClient.GetDatabase("Cluster0").GetCollection<ResourceModel>("projects");
+            var collection = mongo.DataBase.GetCollection<ResourceModel>("projects");
 
-            // Filtros .
-            var filter = Builders<ResourceModel>.Filter.Eq("_id", new ObjectId(resourceId)); // Reemplaza el valor del _id según tus necesidades
-            var projection = Builders<ResourceModel>.Projection.ElemMatch(r => r.Allowed, a => a.Profile == profile); // Reemplaza 1 por el valor de profile_id que estás buscando
+            // Filtros.
+            var filter = Builders<ResourceModel>.Filter.Eq("_id", new ObjectId(resourceId)); 
+            var projection = Builders<ResourceModel>.Projection.ElemMatch(r => r.Allowed, a => a.Profile == profile);
 
             // Resultado.
             var result = await collection.Find(filter).Project(projection).FirstOrDefaultAsync();
@@ -48,11 +48,12 @@ public class Resource
                 Model = access.IamLevel
             };
         }
-        catch
+        catch (Exception ex)
         {
             return new()
             {
-                Response = Responses.Undefined
+                Response = Responses.Undefined,
+                Message = ex.Message,
             };
         }
 

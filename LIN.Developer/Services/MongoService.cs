@@ -1,7 +1,5 @@
 ﻿using LIN.Developer.Data.Mongo;
 using LIN.Types.Developer.Interfaces;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace LIN.Developer.Services;
 
@@ -16,11 +14,23 @@ public class MongoService
     private static string ConnectionString { get; set; } = string.Empty;
 
 
+    /// <summary>
+    /// Nombre de la base de datos.
+    /// </summary>
+    private static string DataBaseName { get; set; } = "Cluster0";
+
 
     /// <summary>
     /// Cliente de Mongo.
     /// </summary>
-    public MongoClient MongoClient { get; set; }
+    private MongoClient MongoClient { get; set; }
+
+
+
+    /// <summary>
+    /// Base de datos de MongoDB.
+    /// </summary>
+    public IMongoDatabase DataBase => MongoClient.GetDatabase(DataBaseName);
 
 
 
@@ -31,12 +41,12 @@ public class MongoService
 
 
 
+
     /// <summary>
     /// Nuevo MongoDB.
     /// </summary>
     public MongoService()
     {
-
         MongoClient = new MongoClient(ConnectionString);
         Context = MongoContext.Create(MongoClient.GetDatabase("Cluster0"));
     }
@@ -51,36 +61,40 @@ public class MongoService
 
 
 
-
+    /// <summary>
+    /// Insertar un elemento en una colección.
+    /// </summary>
+    /// <typeparam name="T">Elemento.</typeparam>
+    /// <param name="element">Elemento.</param>
+    /// <param name="collectionName">Nombre de la colección.</param>
     public async Task<(string id, bool success)> Insert<T>(T element, string collectionName) where T : IMongoBase
     {
-
         try
         {
-            var client = MongoClient;
-            var db = client.GetDatabase("Cluster0");
+            // Obtener la colección.
+            var collection = DataBase.GetCollection<T>(collectionName);
 
-
-            var collection = db.GetCollection<T>(collectionName);
-
+            // Agregar el elemento,
             await collection.InsertOneAsync(element);
 
+            // Retornar el Id.
             return (element.Id.ToString(), true);
         }
         catch
         {
-
         }
-
         return ("", false);
-
     }
 
 
 
+    /// <summary>
+    /// Obtener una conexión con MongoDB.
+    /// </summary>
     public static MongoService GetOneConnection()
     {
         return new();
     }
+
 
 }
