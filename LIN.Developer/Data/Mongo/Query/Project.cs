@@ -41,7 +41,7 @@ public static class Project
 
         // Consulta
         var query = (from P in context.Context.Projects
-                    where P.Id == new ObjectId(id)
+                    where P.Id == new ObjectId( id)
                     && P.Status == ProjectStatus.Normal
                     select P).Take(1);
 
