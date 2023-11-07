@@ -10,6 +10,7 @@ global using LIN.Developer.Services;
 // Módulos.
 global using LIN.Modules;
 global using MongoDB.Bson;
+global using MongoDB.Driver;
 
 // Tipos.
 global using LIN.Types.Enumerations;

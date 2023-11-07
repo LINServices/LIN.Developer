@@ -1,6 +1,4 @@
-﻿using MongoDB.Driver;
-
-namespace LIN.Developer.Services.Iam;
+﻿namespace LIN.Developer.Services.Iam;
 
 
 public class Resource
@@ -34,8 +32,7 @@ public class Resource
 
             // Modelo de acceso.
             AccessModel? access = System.Text.Json.JsonSerializer.Deserialize<AccessModel>(allowedElement);
-
-
+            
             // Si no existe el acceso.
             if (access == null)
                 return new()
