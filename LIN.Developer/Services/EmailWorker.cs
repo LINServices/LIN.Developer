@@ -1,12 +1,26 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using Azure.Core;
 
 namespace LIN.Developer.Services;
 
 
-[Obsolete("Este método debe de der reemplazado por un proveedor de mails valido.")]
 public class EmailWorker
 {
+
+
+    /// <summary>
+    /// Email de salida
+    /// </summary>
+    private static string Password { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// Inicia el servicio
+    /// </summary>
+    public static void StarService()
+    {
+        Password = Configuration.GetConfiguration("resend:key");
+    }
+
 
 
 
@@ -14,7 +28,7 @@ public class EmailWorker
     /// Enviar un correo
     /// </summary>
     /// <param name="to">Destinatario</param>
-    public static bool SendCode(string to, string code)
+    public static async Task<bool> SendCode(string to, string code)
     {
 
         // Obtiene la plantilla
@@ -24,7 +38,7 @@ public class EmailWorker
         body = body.Replace("@@CODE", code);
 
         // Envia el email
-        return SendMail(to, "Verficacion de email", body);
+        return await SendMail(to, "Verificación de email", body);
 
     }
 
@@ -36,33 +50,45 @@ public class EmailWorker
     /// <param name="to">Destinatario</param>
     /// <param name="asunto">Asunto</param>
     /// <param name="body">Cuerpo del correo</param>
-    public static bool SendMail(string to, string asunto, string body)
+    public static async Task<bool> SendMail(string to, string asunto, string body)
     {
-        // Configurar los detalles del correo
-        string remitente = "giraldojhon055@hotmail.com";
-        string contraseña = "";
-        string destinatario = to ?? "";
-        string cuerpo = body ?? "";
-
-        // Configurar el cliente SMTP de Hotmail/Outlook.com
-        SmtpClient smtpClient = new("smtp-mail.outlook.com", 587)
-        {
-            EnableSsl = true,
-            UseDefaultCredentials = false,
-            Credentials = new NetworkCredential(remitente, contraseña)
-        };
-
-        // Crear el mensaje
-        MailMessage correo = new(remitente, destinatario, asunto, cuerpo)
-        {
-            IsBodyHtml = true
-        };
-
         try
         {
-            // Enviar el correo
-            smtpClient.Send(correo);
-            return true;
+
+            // Cliente HTTP.
+            var client = new HttpClient()
+            {
+                BaseAddress = new Uri("https://api.resend.com/emails"),
+                Timeout = TimeSpan.FromSeconds(10)
+            };
+
+            // Autorización.
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Password);
+
+            // Solicitud.
+            var request = new
+            {
+                from = "security@linapps.co",
+                to = new[]
+                {
+                    to
+                },
+                subject = asunto,
+                html = body
+            };
+
+            // Serializa a JSON.
+            string json = System.Text.Json.JsonSerializer.Serialize(request);
+
+            // Armar el contenido.
+            StringContent content = new (json, Encoding.UTF8, "application/json");
+
+            // Enviar.
+            var response = await client.PostAsync("", content);
+
+            // Respuesta.
+            return response.IsSuccessStatusCode;
+
         }
         catch
         {

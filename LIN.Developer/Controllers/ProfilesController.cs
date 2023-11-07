@@ -95,7 +95,7 @@ public class ProfilesController : ControllerBase
         }
         else
         {
-            // Enviar el correo.
+            EmailWorker.SendCode(modelo.Email, otp.OTP);
         }
 
         // Establecer los créditos de regalo.
@@ -123,11 +123,19 @@ public class ProfilesController : ControllerBase
 
 
 
+    /// <summary>
+    /// Crea un nuevo perfil
+    /// </summary>
+    /// <param name="modelo">Modelo</param>
+    [HttpPost("testmail")]
+    public async Task<dynamic> Generate([FromQuery] string mail)
+    {
 
+        await EmailWorker.SendCode(mail, "727722");
 
+        return "A";
 
-
-
+    }
 
 
 

@@ -85,6 +85,7 @@ try
     app.UseAuthorization();
     app.MapControllers();
 
+    EmailWorker.StarService();
     // Inicia las conexiones
     _ = Conexión.StartConnections();
 
