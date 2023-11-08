@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+.idea/
+.idea/*
 
 ./LIN.Developer/appsettings.json
 LIN.Developer/appsettings.json
