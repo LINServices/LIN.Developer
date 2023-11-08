@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-
-namespace LIN.Developer.Services;
+﻿namespace LIN.Developer.Services;
 
 
 public class EmailWorker
@@ -34,10 +32,10 @@ public class EmailWorker
         // Obtiene la plantilla
         var body = File.ReadAllText("wwwroot/Plantillas/Code.html");
 
-        // Remplaza
+        // Remplaza.
         body = body.Replace("@@CODE", code);
 
-        // Envia el email
+        // Envía el email.
         return await SendMail(to, "Verificación de email", body);
 
     }

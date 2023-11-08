@@ -21,7 +21,7 @@ public class Resource
             var collection = mongo.DataBase.GetCollection<ResourceModel>("projects");
 
             // Filtros.
-            var filter = Builders<ResourceModel>.Filter.Eq("_id", new ObjectId(resourceId)); 
+            var filter = Builders<ResourceModel>.Filter.Eq("_id", new ObjectId(resourceId));
             var projection = Builders<ResourceModel>.Projection.ElemMatch(r => r.Allowed, a => a.Profile == profile);
 
             // Resultado.
@@ -32,7 +32,7 @@ public class Resource
 
             // Modelo de acceso.
             AccessModel? access = System.Text.Json.JsonSerializer.Deserialize<AccessModel>(allowedElement);
-            
+
             // Si no existe el acceso.
             if (access == null)
                 return new()
@@ -47,13 +47,14 @@ public class Resource
                 Response = Responses.Success,
                 Model = access.IamLevel
             };
+
         }
         catch (Exception ex)
         {
             return new()
             {
                 Response = Responses.Undefined,
-                Message = ex.Message,
+                Message = ex.Message
             };
         }
 
